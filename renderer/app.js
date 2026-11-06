@@ -4,7 +4,7 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const num = (v) => Number(String(v).replace(/[^\d.-]/g, '')) || 0;
-let DB = null, VIEW = 'dash', FILTER = '';
+let DB = null, VIEW = 'dash', FILTER = '', LOGO = '';
 const cur = () => DB.settings.currency || 'LKR';
 const money = (n) => cur() + ' ' + Number(n || 0).toLocaleString('en-US');
 const nice = (d) => { if (!d) return '–'; const x = new Date(d + 'T00:00:00'); return isNaN(x) ? d : x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
@@ -87,6 +87,9 @@ function settings() {
   <h2>Backups</h2><div class="card"><p class="muted" style="margin:0">Your data stays on this computer. Once a day (and when you close the app) a copy goes to every folder below: another drive, your Google Drive folder, a USB drive. The newest ${esc(s.backupKeep)} copies are kept.</p>
   <table style="margin-top:8px">${(s.backupDirs || []).map((d, i) => `<tr><td>${esc(d)}</td><td class="n"><button class="btn sm red" data-act="delDir" data-i="${i}">Remove</button></td></tr>`).join('') || '<tr><td class="muted">No backup folder yet.</td></tr>'}</table>
   <div class="bar" style="margin-top:10px"><button class="btn" data-act="addDir">+ Add backup folder</button><button class="btn" data-act="backupNow">Back up now</button><button class="btn" data-act="restore">Restore from a backup…</button><span class="muted">Last backup: ${s.lastBackup ? new Date(s.lastBackup).toLocaleString() : 'never'}</span></div></div>
+  <h2>Logo</h2><div class="card"><div class="bar">${LOGO ? `<img class="logoprev" src="${LOGO}">` : '<span class="muted">No logo yet.</span>'}<button class="btn" data-act="pickLogo">Choose logo…</button><span class="muted">PNG or JPG. It goes on every invoice and in the app.</span></div></div>
+  <h2>WhatsApp</h2><div class="card"><div class="row"><div><label>Open invoices in</label><select id="w_app"><option value="app"${(s.wa || {}).app !== 'web' ? ' selected' : ''}>WhatsApp app on this computer</option><option value="web"${(s.wa || {}).app === 'web' ? ' selected' : ''}>WhatsApp Web (browser)</option></select></div><div><label>Country code for local numbers</label><input id="w_cc" value="${esc((s.wa || {}).country || '94')}"></div></div>
+  <p class="muted" style="margin:8px 0 0">The WhatsApp button opens the client's chat with the message typed in and copies the invoice PDF. Paste it into the chat with <b>⌘V</b> (Mac) or <b>Ctrl+V</b> (Windows), then press Enter.</p></div>
   <h2>Admin PIN</h2><div class="card"><div class="row">${f('p_pin', 'PIN to open the app (leave empty for none)', s.pin, 'password')}<div></div></div></div>
   <div class="bar" style="margin-top:16px"><button class="btn gold" data-act="saveSettings">Save settings</button></div>`;
 }
@@ -196,8 +199,16 @@ const ACT = {
   pdf: () => guard(async () => { await api.pdf(modal.inv.id); toast('PDF saved in Documents › Endora Invoices.'); }),
   print: () => guard(() => api.print(modal.inv.id)),
   email: () => guard(async () => { await api.email(modal.inv.id); if (modal.inv.status === 'Draft') await saveInv({ status: 'Sent' }); invoiceView(modal.inv.id); render(); toast('Email sent to ' + modal.inv.client.email); }),
-  wa: () => guard(async () => { await api.whatsapp(modal.inv.id); if (modal.inv.status === 'Draft') await saveInv({ status: 'Sent' }); invoiceView(modal.inv.id); render(); toast('WhatsApp opened. Drag the PDF from the folder into the chat.'); }),
+  wa: () => guard(async () => { const r = await api.whatsapp(modal.inv.id); toast(r.pasted ? 'WhatsApp opened on ' + modal.inv.client.name + "'s chat. Press " + (navigator.platform.startsWith('Mac') ? '⌘V' : 'Ctrl+V') + ' to paste the invoice PDF, then Enter.' : 'WhatsApp opened. Drag the PDF from the folder into the chat.'); if (modal.inv.status === 'Draft') await saveInv({ status: 'Sent' }); invoiceView(modal.inv.id); render(); }),
   pdfFolder: () => api.openPdfFolder(),
+  pickLogo: () => guard(async () => { const u = await api.pickLogo(); if (!u) return; LOGO = u; brand(); if (!DB.settings.setupDone) { const m = $('#s_name') && $('#s_name').closest('.mbox').querySelector('.bar .muted'); if (m) m.textContent = '✓ Logo added'; } else render(); }),
+  finishSetup: () => guard(async () => {
+    const v = (id) => $('#' + id).value.trim();
+    if (!v('s_name')) { $('#sErr').textContent = 'Add your company name.'; return; }
+    await api.settings({ company: { name: v('s_name'), tagline: v('s_tag'), phone: v('s_phone'), email: v('s_email'), website: v('s_web'), address: v('s_addr') }, bank: { bank: v('s_bank'), branch: v('s_branch'), accName: v('s_acc'), accNo: v('s_no') }, invoicePrefix: v('s_pre') || 'INV-', currency: v('s_cur') || 'LKR', setupDone: true });
+    if ($('#s_samples').checked) await api.loadSamples();
+    closeModal(); await reload(); brand(); toast('All set. Add your packages, then your first booking.');
+  }),
   editPackage: (el) => packageForm(el.dataset.id),
   savePackage: async () => {
     const p = Object.assign(modal.pk, { group: $('#pk_g').value.trim() || 'Other', name: $('#pk_n').value.trim(), tagline: $('#pk_t').value, hours: $('#pk_h').value, moments: lines($('#pk_m').value), includes: lines($('#pk_i').value), delivery: lines($('#pk_d').value), priceHD: num($('#pk_hd').value), price4K: num($('#pk_4k').value), note: $('#pk_note').value, active: $('#pk_a').value === '1' });
@@ -215,7 +226,7 @@ const ACT = {
       bank: { bank: v('b_bank'), branch: v('b_branch'), accName: v('b_name'), accNo: v('b_no') },
       invoicePrefix: v('i_pre'), nextInvoiceNo: Math.max(1, num(v('i_next'))), currency: v('i_cur') || 'LKR', advance: num(v('i_adv')), terms: lines(v('i_terms')),
       smtp: Object.assign({}, DB.settings.smtp, { user: v('m_user'), pass: v('m_pass'), host: v('m_host') || 'smtp.gmail.com', port: num(v('m_port')) || 465, secure: num(v('m_port')) !== 587 }),
-      pin: v('p_pin'),
+      pin: v('p_pin'), wa: { app: v('w_app'), country: v('w_cc').replace(/\D/g, '') || '94' },
     });
     await reload(); toast('Settings saved.');
   },
@@ -226,6 +237,7 @@ const ACT = {
 };
 
 document.addEventListener('click', (e) => {
+  if (e.target.id === 'modal' && !DB.settings.setupDone) return;
   const n = e.target.closest('#nav a'); if (n) { VIEW = n.dataset.v; FILTER = ''; render(); return; }
   if (e.target.id === 'modal') return closeModal();
   const a = e.target.closest('[data-act]'); if (!a) return;
@@ -243,6 +255,25 @@ document.addEventListener('change', (e) => {
 document.addEventListener('input', (e) => { if (e.target.dataset.in === 'filter') { FILTER = e.target.value; render(); } });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal(); });
 
+/* ---------------- Branding & first-run setup ---------------- */
+function brand() {
+  const c = DB.settings.company;
+  ['#bLogo', '#lLogo'].forEach((s) => { const i = $(s); if (LOGO) { i.src = LOGO; i.classList.remove('hidden'); } else i.classList.add('hidden'); });
+  $('#bName').textContent = c.name || 'Invoice'; $('#bSub').textContent = 'INVOICES'; $('#lName').textContent = c.name || 'Invoice';
+  document.title = (c.name ? c.name + ' – ' : '') + 'Invoices';
+}
+function setupWizard() {
+  const f = (id, label, ph = '') => `<div><label>${label}</label><input id="${id}" placeholder="${esc(ph)}"></div>`;
+  modal(`<h1>Welcome 👋</h1><p class="lead">Add your business details once. They go on every invoice. You can change them later in Settings.</p>
+  <div class="row">${f('s_name', 'Company name *', 'e.g. Lumière Studio')}${f('s_tag', 'Tagline', 'e.g. Wedding photography')}</div>
+  <div class="row">${f('s_phone', 'Phone / WhatsApp')}${f('s_email', 'Email')}${f('s_web', 'Website')}</div>${f('s_addr', 'Address')}
+  <h2>Bank (printed on invoices)</h2><div class="row">${f('s_bank', 'Bank')}${f('s_branch', 'Branch')}${f('s_acc', 'Account name')}${f('s_no', 'Account no')}</div>
+  <div class="row">${f('s_pre', 'Invoice number prefix', 'INV-')}${f('s_cur', 'Currency', 'LKR')}</div>
+  <div class="bar" style="margin-top:12px"><button class="btn" data-act="pickLogo">Choose logo…</button><span class="muted">${LOGO ? '✓ Logo added' : 'PNG or JPG'}</span></div>
+  <label style="text-transform:none;letter-spacing:0;font-size:13px;color:var(--text)"><input type="checkbox" id="s_samples" style="width:auto"> Start with a sample price list (wedding videography packages) that I can edit</label>
+  <div class="err" id="sErr"></div><div class="bar"><span class="sp"></span><button class="btn gold" data-act="finishSetup">Start</button></div>`);
+}
+
 /* ---------------- Start ---------------- */
 (async function start() {
   DB = await api.db();
@@ -251,7 +282,9 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#mod
     $('#lock').classList.remove('hidden'); $('#pinIn').focus();
     $('#pinIn').addEventListener('input', (e) => { if (e.target.value === DB.settings.pin) $('#lock').classList.add('hidden'); else if (e.target.value.length >= DB.settings.pin.length) $('#pinErr').textContent = 'Wrong PIN'; });
   }
+  LOGO = await api.logoUrl(); brand();
   render();
+  if (!DB.settings.setupDone) setupWizard();
   api.on('update', (u) => {
     const el = $('#upd'); el.classList.remove('hidden');
     if (u.state === 'ready') el.innerHTML = `Version ${esc(u.version)} is ready.<button class="btn sm gold" id="updBtn">Restart & update</button>`;

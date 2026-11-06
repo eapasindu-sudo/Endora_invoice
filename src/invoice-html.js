@@ -16,7 +16,7 @@ function invoiceHtml(inv, settings, logoDataUrl) {
 @page{size:A4;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Helvetica,Arial,sans-serif;color:#2a2420;font-size:12px}
 .pg{width:210mm;min-height:297mm;padding:16mm 16mm 14mm;position:relative}
 .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #c8a96a;padding-bottom:12px}
-.brand{display:flex;gap:12px;align-items:center}.brand img{height:58px}.brand .nm{font-family:Georgia,serif;font-size:22px;letter-spacing:.32em;color:#2a2420}.brand .sub{font-size:9px;letter-spacing:.42em;color:#a88a4d;margin-top:3px}
+.brand{display:flex;gap:12px;align-items:center}.brand img{height:58px}.brand .nm{font-family:Georgia,serif;font-size:21px;letter-spacing:.06em;color:#2a2420}.brand .sub{font-size:10px;letter-spacing:.12em;color:#a88a4d;margin-top:3px}
 .co{text-align:right;font-size:11px;line-height:1.6;color:#5b5048}
 h1{font-family:Georgia,serif;font-weight:normal;font-size:30px;letter-spacing:.2em;color:#7a1f2b;margin:18px 0 4px}
 .meta{display:flex;justify-content:space-between;gap:20px;margin-top:6px}.box{background:#faf6ee;border-radius:8px;padding:10px 12px;flex:1;line-height:1.6}
@@ -29,7 +29,7 @@ td{padding:8px;border-bottom:1px solid #eee3d0;vertical-align:top}.n{text-align:
 .thanks{text-align:center;font-family:Georgia,serif;font-style:italic;color:#a88a4d;margin-top:18px;font-size:14px}
 .stamp{position:absolute;top:70mm;right:22mm;border:3px solid #1f7a3f;color:#1f7a3f;font-size:30px;font-weight:800;letter-spacing:.2em;padding:6px 16px;transform:rotate(-12deg);opacity:.8;border-radius:8px}
 </style></head><body><div class="pg">${stamp}
-<div class="top"><div class="brand">${logoDataUrl ? `<img src="${logoDataUrl}">` : ''}<div><div class="nm">ENDORA</div><div class="sub">WEDDING FILMS</div></div></div>
+<div class="top"><div class="brand">${logoDataUrl ? `<img src="${logoDataUrl}">` : ''}<div><div class="nm">${esc(c.name)}</div>${c.tagline ? `<div class="sub">${esc(c.tagline)}</div>` : ''}</div></div>
 <div class="co"><b>${esc(c.name)}</b><br>${esc(c.address)}<br>${esc(c.phone)}<br>${esc(c.email)}<br>${esc(c.website)}</div></div>
 <h1>INVOICE</h1>
 <div class="meta"><div class="box"><b class="l">Billed to</b><b>${esc(inv.client.name)}${inv.client.partner ? ' &amp; ' + esc(inv.client.partner) : ''}</b><br>${esc(inv.client.phone || '')}${inv.client.email ? '<br>' + esc(inv.client.email) : ''}${inv.client.address ? '<br>' + esc(inv.client.address) : ''}</div>

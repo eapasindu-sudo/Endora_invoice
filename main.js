@@ -1,5 +1,5 @@
 'use strict';
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, clipboard } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { Store, totals } = require('./src/store');
@@ -12,8 +12,33 @@ const isMac = process.platform === 'darwin';
 if (!app.requestSingleInstanceLock()) app.quit();
 app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
 
+// The company logo chosen in Settings (copied into the app's data folder).
 function logoDataUrl() {
-  try { return 'data:image/png;base64,' + fs.readFileSync(path.join(__dirname, 'renderer', 'logo.png')).toString('base64'); } catch (e) { return ''; }
+  const f = store && store.all().settings.logo;
+  if (!f) return '';
+  try {
+    const ext = path.extname(f).slice(1).toLowerCase();
+    const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : ext === 'svg' ? 'image/svg+xml' : ext === 'webp' ? 'image/webp' : 'image/png';
+    return 'data:' + mime + ';base64,' + fs.readFileSync(path.join(store.dir, f)).toString('base64');
+  } catch (e) { return ''; }
+}
+
+// Put the PDF file on the clipboard so it can be pasted straight into the chat (⌘V / Ctrl+V).
+function copyFileToClipboard(file) {
+  try {
+    if (isMac) {
+      const plist = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><array><string>' + file.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</string></array></plist>';
+      clipboard.writeBuffer('NSFilenamesPboardType', Buffer.from(plist));
+      return true;
+    }
+    if (process.platform === 'win32') {
+      // CF_HDROP: DROPFILES header (20 bytes, wide chars) + file list, double-null terminated
+      const header = Buffer.alloc(20); header.writeUInt32LE(20, 0); header.writeUInt32LE(1, 16);
+      clipboard.writeBuffer('CF_HDROP', Buffer.concat([header, Buffer.from(file + '\0\0', 'utf16le')]));
+      return true;
+    }
+  } catch (e) {}
+  return false;
 }
 
 function createWindow() {
@@ -74,18 +99,35 @@ async function sendEmail(id) {
   return true;
 }
 
-// ---------- WhatsApp (opens WhatsApp with the message ready; the PDF is shown in its folder to attach) ----------
+// ---------- WhatsApp ----------
+// Opens the WhatsApp app (or WhatsApp Web) straight on the client's chat with the message typed in,
+// and puts the invoice PDF on the clipboard: paste it into the chat with ⌘V (Mac) / Ctrl+V (Windows).
+function waNumber(raw, country) {
+  let ph = String(raw || '').replace(/\D/g, '');
+  const cc = String(country || '94').replace(/\D/g, '');
+  if (ph.startsWith('00')) ph = ph.slice(2);
+  else if (ph.startsWith('0')) ph = cc + ph.slice(1);
+  else if (ph.length <= 9) ph = cc + ph;
+  return ph;
+}
 async function whatsapp(id) {
   const s = store.all().settings, inv = store.all().invoices.find((x) => x.id === id);
+  const ph = waNumber(inv.client.phone, (s.wa || {}).country);
+  if (ph.length < 9) throw new Error('This client has no phone number.');
   const file = await makePdf(id);
-  const t = totals(inv);
-  let ph = String(inv.client.phone || '').replace(/\D/g, '');
-  if (ph.startsWith('0')) ph = '94' + ph.slice(1);
-  if (ph.length === 9) ph = '94' + ph;
-  const msg = `Hi ${inv.client.name} 💍\n\nYour invoice ${inv.no} from ${s.company.name} is attached.\nTotal: ${s.currency} ${t.total.toLocaleString('en-US')}\nBalance due: ${s.currency} ${t.due.toLocaleString('en-US')}\n\n${s.bank.bank} (${s.bank.branch}) – ${s.bank.accName} – ${s.bank.accNo}\n\nAfter paying, please send a photo of the bank slip here. Thank you!`;
-  shell.showItemInFolder(file);
-  await shell.openExternal((ph ? 'https://wa.me/' + ph : 'https://wa.me/') + '?text=' + encodeURIComponent(msg));
-  return file;
+  const t = totals(inv), cur = s.currency || 'LKR', c = s.company, b = s.bank;
+  const lines = [`Hi ${inv.client.name},`, '', `Your invoice ${inv.no}${c.name ? ' from ' + c.name : ''} is attached.`, `Total: ${cur} ${t.total.toLocaleString('en-US')}`, `Balance due: ${cur} ${t.due.toLocaleString('en-US')}`];
+  if (b.accNo) lines.push('', `${b.bank}${b.branch ? ' (' + b.branch + ')' : ''} – ${b.accName} – ${b.accNo}`, 'After paying, please send a photo of the bank slip here.');
+  lines.push('', 'Thank you!');
+  const msg = encodeURIComponent(lines.join('\n'));
+  const pasted = copyFileToClipboard(file);
+  if (!pasted) shell.showItemInFolder(file);
+  const useApp = (s.wa || {}).app !== 'web';
+  if (useApp) {
+    try { await shell.openExternal(`whatsapp://send?phone=${ph}&text=${msg}`); return { file, pasted, app: true }; } catch (e) { /* app not installed: fall back to the web */ }
+  }
+  await shell.openExternal(`https://web.whatsapp.com/send?phone=${ph}&text=${msg}`);
+  return { file, pasted, app: false };
 }
 
 // ---------- Updates ----------
@@ -115,6 +157,17 @@ app.whenReady().then(() => {
   ipcMain.handle('remove', (e, kind, id) => store.remove(kind, id));
   ipcMain.handle('invoice-from-booking', (e, id) => store.invoiceFromBooking(id));
   ipcMain.handle('replace-packages', (e, list) => store.replacePackages(list));
+  ipcMain.handle('load-samples', () => store.loadSamplePackages());
+  ipcMain.handle('logo-url', () => logoDataUrl());
+  ipcMain.handle('pick-logo', async () => {
+    const r = await dialog.showOpenDialog(win, { filters: [{ name: 'Logo', extensions: ['png', 'jpg', 'jpeg', 'svg', 'webp'] }], properties: ['openFile'] });
+    if (r.canceled) return '';
+    const name = 'logo' + path.extname(r.filePaths[0]).toLowerCase();
+    for (const f of fs.readdirSync(store.dir)) if (/^logo\./.test(f)) fs.unlinkSync(path.join(store.dir, f));
+    fs.copyFileSync(r.filePaths[0], path.join(store.dir, name));
+    store.setSettings({ logo: name });
+    return logoDataUrl();
+  });
   ipcMain.handle('pdf', async (e, id) => { const f = await makePdf(id); shell.openPath(f); return f; });
   ipcMain.handle('print', async (e, id) => {
     const inv = store.all().invoices.find((x) => x.id === id);

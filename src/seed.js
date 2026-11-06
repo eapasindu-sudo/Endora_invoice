@@ -1,5 +1,5 @@
 'use strict';
-// First-run data: Endora's own details, packages (from the 2026–2028 price guide) and add-ons.
+// First-run data. Company details are filled in on the first start; the sample packages (Endora's 2026–2028 price guide) are optional.
 // Everything here can be changed later in the app (Settings / Packages).
 
 const L = (s) => s.split('\n').map((x) => x.trim()).filter(Boolean);
@@ -71,31 +71,25 @@ const addons = [
 ];
 
 const settings = {
-  company: {
-    name: 'Endora Wedding Films',
-    tagline: 'Cinematic wedding films from Sri Lanka',
-    phone: '+94 71 822 6666',
-    email: 'endoraweddingfilms@gmail.com',
-    website: 'www.endoraweddingfilms.com',
-    address: 'Sri Lanka',
-  },
-  bank: { bank: 'Bank of Ceylon', branch: 'Dondra', accName: 'Endora Wedding Film', accNo: '96344809' },
+  company: { name: '', tagline: '', phone: '', email: '', website: '', address: '' },
+  bank: { bank: '', branch: '', accName: '', accNo: '' },
   currency: 'LKR',
-  invoicePrefix: 'EWF-INV-',
+  invoicePrefix: 'INV-',
   nextInvoiceNo: 1,
   advance: 20000,
   terms: [
-    'A non-refundable advance of LKR 20,000 confirms your date. Pencil bookings are held for 7 days.',
+    'An advance payment confirms your date. The advance is non-refundable.',
     'The balance must be settled one week before the event.',
     'Travel and lodging beyond the package are charged separately.',
-    'Extra hours: weddings LKR 20,000, homecoming LKR 12,000, engagement & pre-shoot LKR 10,000 per hour.',
-    'Location booking charges are not included.',
   ],
   smtp: { host: 'smtp.gmail.com', port: 465, secure: true, user: '', pass: '', from: '' },
   backupDirs: [],
   backupKeep: 30,
   lastBackup: '',
   pin: '',
+  logo: '',
+  setupDone: false,
+  wa: { app: 'app', country: '94' },
 };
 
 module.exports = { packages, addons, settings };

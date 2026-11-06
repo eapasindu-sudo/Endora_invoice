@@ -15,7 +15,7 @@ class Store {
     if (fs.existsSync(this.file)) {
       this.db = JSON.parse(fs.readFileSync(this.file, 'utf8'));
     } else {
-      this.db = { version: 1, settings: JSON.parse(JSON.stringify(seed.settings)), packages: seed.packages, addons: seed.addons, bookings: [], invoices: [] };
+      this.db = { version: 1, settings: JSON.parse(JSON.stringify(seed.settings)), packages: [], addons: [], bookings: [], invoices: [] };
       this.save();
     }
     for (const k of ['packages', 'addons', 'bookings', 'invoices']) this.db[k] = this.db[k] || [];
@@ -73,6 +73,9 @@ class Store {
     this.save();
     return saved;
   }
+
+  // First-run setup: optionally add the sample price list (Endora's packages and add-ons).
+  loadSamplePackages() { this.db.packages = JSON.parse(JSON.stringify(seed.packages)); this.db.addons = JSON.parse(JSON.stringify(seed.addons)); this.save(); }
 
   // Replace the package list (e.g. after an import), keeping nothing old.
   replacePackages(list) { this.db.packages = list; this.save(); }
