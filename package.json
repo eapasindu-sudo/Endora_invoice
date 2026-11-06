@@ -1,0 +1,33 @@
+{
+  "name": "endora-invoice",
+  "productName": "Endora Invoice",
+  "version": "1.0.0",
+  "description": "Endora Wedding Films – bookings and invoices on your own computer",
+  "main": "main.js",
+  "author": "Endora Wedding Films",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish always",
+    "test": "node test/test.js"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9",
+    "nodemailer": "^6.9.16"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.endoraweddingfilms.invoice",
+    "productName": "Endora Invoice",
+    "files": ["main.js", "preload.js", "src/**", "renderer/**", "build/icon.png"],
+    "directories": { "output": "dist", "buildResources": "build" },
+    "publish": [{ "provider": "github", "owner": "eapasindu-sudo", "repo": "endora-invoice", "releaseType": "release" }],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "build/icon.ico", "artifactName": "Endora-Invoice-Setup-${version}.${ext}" },
+    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "shortcutName": "Endora Invoice" },
+    "mac": { "target": [{ "target": "dmg", "arch": ["universal"] }, { "target": "zip", "arch": ["universal"] }], "icon": "build/icon.png", "category": "public.app-category.business", "identity": null, "artifactName": "Endora-Invoice-${version}-mac.${ext}" }
+  }
+}
