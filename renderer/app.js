@@ -290,7 +290,7 @@ function setupWizard() {
     if (u.state === 'ready') el.innerHTML = `Version ${esc(u.version)} is ready.<button class="btn sm gold" id="updBtn">Restart & update</button>`;
     else if (u.state === 'mac') el.innerHTML = `Version ${esc(u.version)} is out.<button class="btn sm gold" id="updBtn">Download</button>`;
     else el.textContent = `Downloading version ${u.version}…`;
-    const b = $('#updBtn'); if (b) b.onclick = () => u.state === 'ready' ? api.installUpdate() : api.openUrl('https://github.com/eapasindu-sudo/endora-invoice/releases/latest');
+    const b = $('#updBtn'); if (b) b.onclick = () => u.state === 'ready' ? api.installUpdate() : api.openUrl('https://github.com/eapasindu-sudo/Endora_invoice/releases/latest');
   });
   api.on('backup-done', (r) => { if (r.some((x) => !x.ok)) toast('Backup failed for: ' + r.filter((x) => !x.ok).map((x) => x.dir).join(', '), true); });
 })();
