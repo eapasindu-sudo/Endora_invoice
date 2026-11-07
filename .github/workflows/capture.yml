@@ -1,0 +1,15 @@
+name: Capture website for promo video
+on:
+  push:
+    branches: [promo-capture]
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i playwright@1.48.2 && npx playwright install --with-deps chromium
+      - run: node capture.js
+      - uses: actions/upload-artifact@v4
+        with: { name: shots, path: out/ }
