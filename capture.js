@@ -12,6 +12,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const full = async (n) => { await wait(500); await p.screenshot({ path: `out/${n}.jpg`, type: 'jpeg', quality: 88, fullPage: true }); console.log('full', n); };
   const reveal = () => p.evaluate(() => document.querySelectorAll('.reveal').forEach((e) => e.classList.add('is-visible', 'visible', 'in')));
   const to = async (sel, off = 80) => { await p.evaluate(([s, o]) => { const e = document.querySelector(s); if (e) window.scrollTo(0, e.getBoundingClientRect().top + window.scrollY - o); }, [sel, off]); await wait(900); };
+  const setv = (sel, v) => p.evaluate(([s, v]) => { const e = document.querySelector(s); if (!e) return; e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('change', { bubbles: true })); }, [sel, v]);
   const safe = async (name, fn) => { try { await fn(); } catch (e) { console.log('skip', name, e.message); } };
 
   // Home
@@ -49,9 +50,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await safe('form', async () => {
     await to('[data-bk-form]', 40); await shot('11_form_empty');
     const d = new Date(); d.setMonth(d.getMonth() + 10); d.setDate(14); const iso = d.toISOString().slice(0, 10);
-    await p.fill('#bk_wedding_date', iso); await p.dispatchEvent('#bk_wedding_date', 'change'); await wait(2000); await shot('12_form_date');
-    await p.fill('#bk_p1', 'Kasun'); await p.fill('#bk_p2', 'Nimesha'); await to('#bk_p1', 140); await shot('13_form_names');
-    await p.fill('#bk_email', 'kasun.nimesha@gmail.com'); await p.fill('#bk_phone', '+94 77 123 4567'); await p.fill('#bk_city', 'Kandy'); await p.fill('#bk_venue', 'Earl\'s Regency'); await to('#bk_email', 140); await shot('14_form_contact');
+    await setv('#bk_wedding_date', iso); await wait(2000); await shot('12_form_date');
+    await setv('#bk_p1', 'Kasun'); await setv('#bk_p2', 'Nimesha'); await to('#bk_p1', 140); await shot('13_form_names');
+    await setv('#bk_email', 'kasun.nimesha@gmail.com'); await setv('#bk_phone', '+94 77 123 4567'); await setv('#bk_city', 'Kandy'); await setv('#bk_venue', 'Earl\'s Regency'); await to('#bk_email', 140); await shot('14_form_contact');
     const sel = await p.$('.bk-pkg-grid select'); if (sel) { const opts = await sel.$$eval('option', (o) => o.map((x) => x.value).filter(Boolean)); if (opts[2] || opts[0]) await sel.selectOption(opts[2] || opts[0]); }
     await to('.bk-pkg-grid', 120); await shot('15_form_package');
     await to('.bk-terms', 300); await shot('16_form_terms');

@@ -2,6 +2,8 @@ name: Capture website for promo video
 on:
   push:
     branches: [promo-capture]
+permissions:
+  contents: write
 jobs:
   capture:
     runs-on: ubuntu-latest
@@ -11,5 +13,9 @@ jobs:
         with: { node-version: 22 }
       - run: npm i playwright@1.48.2 && npx playwright install --with-deps chromium
       - run: node capture.js
-      - uses: actions/upload-artifact@v4
-        with: { name: shots, path: out/ }
+      - name: Save the screenshots to the promo-shots branch
+        run: |
+          cd out
+          git init -q -b promo-shots && git add -A
+          git -c user.name=capture -c user.email=capture@users.noreply.github.com commit -qm shots
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" promo-shots
