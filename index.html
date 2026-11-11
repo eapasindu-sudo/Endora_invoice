@@ -1,6 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
-</head><body>
 <title>Endora Live Tools</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex,nofollow">
@@ -77,6 +76,7 @@ dialog.lb{width:min(1200px,calc(100% - 32px));background:#000}dialog.lb img{disp
 .ok{color:var(--pvw);font-size:14px}
 .sug{font:600 10px var(--mono);letter-spacing:.08em;color:var(--amber);text-transform:uppercase}
 </style>
+</head><body>
 
 <div class="wrap" id="app"></div>
 
@@ -107,9 +107,9 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const lkr=n=>'LKR '+n.toLocaleString('en-US');
 const t=k=>T[L][k];
 const langBar=()=>`<div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="${L==='en'}">English</button><button type="button" data-lang="si" aria-pressed="${L==='si'}">සිංහල</button></div>`;
-const top=()=>`<div class="top"><a class="tally" href="#"><i class="p"></i>PGM <i class="v"></i>PVW <span>· ${t('eyebrow')}</span></a>${langBar()}</div>`;
+const topBar=()=>`<div class="top"><a class="tally" href="#"><i class="p"></i>PGM <i class="v"></i>PVW <span>· ${t('eyebrow')}</span></a>${langBar()}</div>`;
 function list(){
-  $('#app').innerHTML=`${top()}<header style="display:flex;flex-direction:column;gap:12px"><h1>${t('h')}</h1><p class="lead">${t('lead')}</p></header>
+  $('#app').innerHTML=`${topBar()}<header style="display:flex;flex-direction:column;gap:12px"><h1>${t('h')}</h1><p class="lead">${t('lead')}</p></header>
   <div class="filters" role="group" aria-label="Filter">${['all','atem','vmix','biz'].map(k=>`<button type="button" data-f="${k}" aria-pressed="${F===k}">${t(k)}</button>`).join('')}</div>
   <div class="grid">${APPS.filter(a=>F==='all'||a.k===F).map(a=>`<a class="mod" href="#${a.id}"><div class="thumb"><video src="${a.v}" muted loop playsinline preload="metadata"></video><b class="bug ${a.bug}">${a.bug}</b></div><div class="mb"><h2>${esc(a.n)}</h2><p>${esc(a[L].s)}</p><div class="row"><div class="price">${lkr(a.price)}<small>${t('sug')}</small></div><span class="more">${t('more')}</span></div></div></a>`).join('')}</div>
   <div class="how">${[1,2,3,4].map(i=>`<div><div class="k">STEP ${i}</div><h3>${t('s'+i)}</h3><p>${t('s'+i+'d')}</p></div>`).join('')}</div>
@@ -118,7 +118,7 @@ function list(){
 }
 function detail(a){
   const d=a[L];
-  $('#app').innerHTML=`${top()}<a class="back" href="#">${t('back')}</a>
+  $('#app').innerHTML=`${topBar()}<a class="back" href="#">${t('back')}</a>
   <div class="hero"><div class="player"><video src="${a.v}" controls autoplay muted playsinline loop></video></div>
   <div class="side"><b class="bug ${a.bug}" style="position:static;align-self:flex-start">${a.bug}</b><h1>${esc(a.n)}</h1><p style="margin:0;color:var(--muted)">${esc(d.s)}</p><div class="spec">${a.plat.map(x=>`<b>${esc(x)}</b>`).join('')}</div>
   <div class="big">${lkr(a.price)}<small>${t('sug')} · ${t('once')}</small></div>
