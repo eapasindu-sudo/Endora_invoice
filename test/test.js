@@ -19,3 +19,9 @@ const bdir = fs.mkdtempSync(path.join(os.tmpdir(), 'einvb-'));
 for (let k = 0; k < 3; k++) { const r = backupNow(s.file, null, [bdir], 30); assert.ok(r[0].ok); }
 assert.ok(fs.readdirSync(path.join(bdir, 'Endora Invoice Backups')).some((f) => f.endsWith('.json')));
 console.log('All tests passed');
+
+// price-list PDF import: the text parser
+const { parsePackages } = require('../src/pdf-import');
+const pk = parsePackages(['WEDDING 2027', 'SILVER PACKAGE', 'Rs. 85,000', '• 1 photographer', 'GOLD PACKAGE', 'Rs. 125,000 /-', '• 2 photographers', '• Album']);
+assert.deepStrictEqual(pk.map((p) => [p.name, p.priceHD, p.includes.length]), [['SILVER PACKAGE', 85000, 1], ['GOLD PACKAGE', 125000, 2]]);
+console.log('PDF import parser OK');

@@ -6,6 +6,6 @@ contextBridge.exposeInMainWorld('api', {
   invoiceFromBooking: call('invoice-from-booking'), replacePackages: call('replace-packages'),
   pdf: call('pdf'), print: call('print'), email: call('email'), whatsapp: call('whatsapp'), openPdfFolder: call('open-pdf-folder'),
   pickFolder: call('pick-folder'), backupNow: call('backup-now'), restore: call('restore'), openUrl: call('open-url'),
-  installUpdate: call('update-install'), loadSamples: call('load-samples'), logoUrl: call('logo-url'), pickLogo: call('pick-logo'),
+  installUpdate: call('update-install'), loadSamples: call('load-samples'), importPdf: call('import-pdf'), logoUrl: call('logo-url'), pickLogo: call('pick-logo'),
   on: (ch, fn) => ipcRenderer.on(ch, (e, d) => fn(d)),
 });

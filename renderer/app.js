@@ -70,7 +70,7 @@ function invoices() {
 function packages() {
   const groups = [...new Set(DB.packages.map((p) => p.group))];
   return `<h1>Packages</h1><p class="lead">Your price list. Bookings pick from here and fill the invoice by themselves.</p>
-  <div class="bar"><span class="sp"></span><button class="btn gold" data-act="editPackage">+ Add package</button></div>
+  <div class="bar"><span class="sp"></span><button class="btn" data-act="importPdf">Import from PDF…</button><button class="btn gold" data-act="editPackage">+ Add package</button></div>
   ${groups.map((g) => `<h2>${esc(g)}</h2><div class="pk">${DB.packages.filter((p) => p.group === g).map((p) => `<div class="card" style="${p.active === false ? 'opacity:.5' : ''}"><div class="grp">${esc(p.group)}${p.active === false ? ' · hidden' : ''}</div><h3>${esc(p.name)}</h3><div class="tag">${esc(p.tagline || '')}${p.hours ? '<br>' + esc(p.hours) : ''}</div><ul>${(p.includes || []).slice(0, 5).map((x) => `<li>${esc(x)}</li>`).join('')}${(p.includes || []).length > 5 ? `<li class="muted">+${p.includes.length - 5} more</li>` : ''}</ul><div class="pr"><span>Full HD ${money(p.priceHD)}</span><span>4K ${money(p.price4K)}</span></div><div style="margin-top:10px"><button class="btn sm" data-act="editPackage" data-id="${p.id}">Edit</button></div></div>`).join('')}</div>`).join('')}
   <h2>Add-ons</h2><div class="card"><table>${DB.addons.map((a) => `<tr><td>${esc(a.name)}</td><td class="n">${money(a.price)}</td><td class="n"><button class="btn sm" data-act="editAddon" data-id="${a.id}">Edit</button></td></tr>`).join('')}</table><div style="margin-top:10px"><button class="btn sm" data-act="editAddon">+ Add-on</button></div></div>`;
 }
@@ -171,6 +171,29 @@ const pkgDetail = (p) => [p.hours].concat(p.includes || []).concat(p.delivery ||
 /* ---------------- Actions ---------------- */
 const ACT = {
   close: closeModal,
+  importPdf: async () => {
+    toast('Reading the PDF…');
+    const r = await api.importPdf();
+    if (r.cancelled) return;
+    if (!r.ok) return toast(r.error, true);
+    modal.imp = r.packages;
+    modal(`<h1>Import packages</h1><p class="lead">Found ${r.packages.length} package${r.packages.length > 1 ? 's' : ''}. Check the names and prices, untick any you don't want, then press Add.</p>
+    <label>Group for these packages</label><input id="imp_g" value="Wedding" style="max-width:280px">
+    <table class="items" style="margin-top:12px"><tr><th></th><th>Name</th><th>What's included (one per line)</th><th class="n">Price</th><th class="n">4K / 2nd price</th></tr>
+    ${r.packages.map((p, i) => `<tr><td><input type="checkbox" id="imp_on${i}" checked style="width:auto"></td><td><input id="imp_n${i}" value="${esc(p.name)}"></td><td><textarea id="imp_i${i}" rows="3">${esc(p.includes.join('\n'))}</textarea></td><td><input id="imp_p${i}" type="number" value="${esc(p.priceHD)}" style="width:120px"></td><td><input id="imp_q${i}" type="number" value="${esc(p.price4K)}" style="width:120px"></td></tr>`).join('')}</table>
+    <div class="bar" style="margin-top:14px"><span class="sp"></span><button class="btn" data-act="close">Cancel</button><button class="btn gold" data-act="saveImport">Add packages</button></div>`);
+  },
+  saveImport: async () => {
+    const g = $('#imp_g').value.trim() || 'Packages';
+    let n = 0;
+    for (let i = 0; i < modal.imp.length; i++) {
+      if (!$('#imp_on' + i).checked || !$('#imp_n' + i).value.trim()) continue;
+      const hd = Number($('#imp_p' + i).value) || 0;
+      await api.upsert('packages', { group: g, name: $('#imp_n' + i).value.trim(), tagline: '', hours: '', moments: [], includes: lines($('#imp_i' + i).value), delivery: [], priceHD: hd, price4K: Number($('#imp_q' + i).value) || hd, active: true });
+      n++;
+    }
+    closeModal(); await reload(); toast(n + ' package' + (n === 1 ? '' : 's') + ' added. Open each one to add details.');
+  },
   newBooking: () => bookingForm(null),
   openBooking: (el) => bookingForm(DB.bookings.find((x) => x.id === el.dataset.id)),
   openInvoice: (el) => invoiceView(el.dataset.id),

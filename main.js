@@ -158,6 +158,11 @@ app.whenReady().then(() => {
   ipcMain.handle('invoice-from-booking', (e, id) => store.invoiceFromBooking(id));
   ipcMain.handle('replace-packages', (e, list) => store.replacePackages(list));
   ipcMain.handle('load-samples', () => store.loadSamplePackages());
+  ipcMain.handle('import-pdf', async () => {
+    const r = await dialog.showOpenDialog(win, { title: 'Choose your price list PDF', properties: ['openFile'], filters: [{ name: 'PDF', extensions: ['pdf'] }] });
+    if (r.canceled || !r.filePaths[0]) return { ok: false, cancelled: true };
+    try { return await require('./src/pdf-import').importPdf(r.filePaths[0]); } catch (e) { return { ok: false, error: 'Could not read this PDF: ' + e.message }; }
+  });
   ipcMain.handle('logo-url', () => logoDataUrl());
   ipcMain.handle('pick-logo', async () => {
     const r = await dialog.showOpenDialog(win, { filters: [{ name: 'Logo', extensions: ['png', 'jpg', 'jpeg', 'svg', 'webp'] }], properties: ['openFile'] });
