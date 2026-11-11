@@ -1,0 +1,150 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head><body>
+<title>Endora Live Tools</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&family=Noto+Sans+Sinhala:wght@400;600;700&display=swap">
+<style>
+/* Layout: control-room rack. List view = product modules in a grid; detail view = monitor (video) + spec column, then bilingual description and screenshot strip. Single dark look. */
+:root{--bg:#0d0f12;--panel:#15191f;--panel2:#1c2129;--line:#2a313b;--fg:#e9edf2;--muted:#8b95a3;--pgm:#ff3b30;--pvw:#34c759;--amber:#ffb020;--vmix:#2f7cf6;
+--display:"Archivo","Noto Sans Sinhala","Helvetica Neue",Arial,sans-serif;--body:"Inter","Noto Sans Sinhala",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto;padding-block:24px 60px;display:flex;flex-direction:column;gap:26px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tally{display:flex;gap:8px;align-items:center;font:600 11px var(--mono);letter-spacing:.14em;color:var(--muted);text-decoration:none}
+.tally i{width:10px;height:10px;border-radius:50%;display:inline-block}.tally .p{background:var(--pgm);box-shadow:0 0 10px var(--pgm)}.tally .v{background:var(--pvw)}
+.lang{display:flex;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.lang button{font:600 12px var(--body);background:var(--panel);color:var(--muted);border:0;padding:8px 12px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--panel2);color:var(--fg);box-shadow:inset 0 -2px 0 var(--pvw)}
+h1{font:800 clamp(32px,6vw,56px)/1.05 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance;max-width:18ch}
+.lead{color:var(--muted);max-width:62ch;margin:0;font-size:16px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--muted);border:1px solid var(--line);padding:9px 14px;border-radius:4px;cursor:pointer}
+.filters button[aria-pressed="true"]{color:var(--fg);border-color:var(--pvw);box-shadow:inset 0 -2px 0 var(--pvw)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:18px}
+.mod{background:var(--panel);border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;overflow:hidden;min-width:0;color:inherit;text-decoration:none;transition:border-color .2s}
+.mod:hover{border-color:#3d4654}
+.thumb{aspect-ratio:16/9;max-width:100%;background:#000;position:relative;border-bottom:1px solid var(--line)}
+.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.bug{position:absolute;top:10px;left:10px;font:600 10px var(--mono);letter-spacing:.1em;padding:4px 7px;border-radius:3px;background:var(--pgm);color:#fff}
+.bug.vmix,.bug.LED,.bug.LIVE{background:var(--vmix)}.bug.BIZ{background:var(--amber);color:#1a1200}
+.mb{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.mb h2{font:800 21px/1.2 var(--display);margin:0}.mb p{margin:0;color:var(--muted)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.price{font:600 15px var(--mono);font-variant-numeric:tabular-nums}.price small{display:block;color:var(--muted);font:400 11px var(--body)}
+.more{font:600 13px var(--body);color:var(--pvw)}
+.btn{font:600 14px var(--body);border-radius:5px;padding:11px 16px;cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--fg);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.go{background:var(--pgm);border-color:var(--pgm);color:#fff}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+.how div{border-top:2px solid var(--line);padding-top:12px}.how h3{font:700 15px var(--display);margin:0 0 4px}.how p{margin:0;color:var(--muted);font-size:14px}.how .k{font:600 11px var(--mono);color:var(--pvw);letter-spacing:.1em}
+/* detail */
+.back{font:600 13px var(--body);color:var(--muted);text-decoration:none;align-self:flex-start}
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.player{aspect-ratio:16/9;max-width:100%;background:#000;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.player video{width:100%;height:100%;display:block}
+.side{display:flex;flex-direction:column;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;min-width:0}
+.side h1{font-size:clamp(28px,4vw,40px)}
+.spec{display:flex;flex-wrap:wrap;gap:6px}.spec b{font:500 11px var(--mono);background:var(--panel2);border:1px solid var(--line);padding:4px 8px;border-radius:3px}
+.big{font:600 26px var(--mono);font-variant-numeric:tabular-nums}.big small{display:block;font:400 12px var(--body);color:var(--muted)}
+.cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.desc p{font-size:16px;max-width:65ch;margin:0 0 14px}
+.desc h3,.shots h3{font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.feat{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.feat li{display:flex;gap:10px}.feat li::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--pvw);margin-top:8px}
+.strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.strip button{padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#000;cursor:zoom-in;aspect-ratio:16/10}
+.strip img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.noss{color:var(--muted);font-size:14px;border:1px dashed var(--line);border-radius:6px;padding:14px}
+footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;width:min(560px,calc(100% - 32px));padding:0;max-height:calc(100% - 32px)}
+dialog::backdrop{background:#000c}
+dialog.lb{width:min(1200px,calc(100% - 32px));background:#000}dialog.lb img{display:block;width:100%}
+.dlg{padding:22px;display:flex;flex-direction:column;gap:14px}
+.dlg h3{font:800 20px var(--display);margin:0}
+.dlg label{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.dlg input,.dlg select{font:15px var(--body);background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:10px}
+.payrow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:480px){.payrow{grid-template-columns:1fr}}
+.qr{background:#fff;border-radius:8px;padding:8px;width:150px}.qr img{display:block;width:100%}
+.qr small{display:block;text-align:center;color:#333;font:600 10px var(--mono);margin-top:4px}
+.bank{font:14px/1.7 var(--body);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.bank b{font-family:var(--mono);font-size:15px}.bank .t{font:600 11px var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.ok{color:var(--pvw);font-size:14px}
+.sug{font:600 10px var(--mono);letter-spacing:.08em;color:var(--amber);text-transform:uppercase}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<dialog id="dlg"><form class="dlg" id="f">
+  <h3 id="dT">Buy</h3>
+  <label for="lic"><span data-t="lic"></span><select id="lic"></select></label>
+  <label for="nm"><span data-t="name"></span><input id="nm" required autocomplete="name"></label>
+  <label for="ph"><span data-t="wa"></span><input id="ph" required inputmode="tel" placeholder="07X XXX XXXX"></label>
+  <div class="payrow">
+    <div class="qr"><img src="qr.svg" alt="LankaQR code for Endora Wedding Films"><small>LANKAQR</small></div>
+    <div class="bank"><div class="t" data-t="bankt"></div>Bank of Ceylon (BOC) · Dondra<br>Endora Wedding Film<br>Account no: <b>96344809</b><div style="color:var(--muted);font-size:13px;margin-top:6px" data-t="banknote"></div></div>
+  </div>
+  <label for="slip"><span data-t="slip"></span><input id="slip" type="file" accept="image/*,application/pdf"></label>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn go" type="submit" data-t="send"></button><button class="btn" type="button" id="cx" data-t="cancel"></button></div>
+  <div class="ok" id="ok" hidden data-t="ok"></div>
+</form></dialog>
+<dialog id="lb" class="lb"><img id="lbi" alt=""></dialog>
+
+<script src="data.js"></script>
+<script>
+const T={en:{eyebrow:'ENDORA LIVE TOOLS',h:'Software we built for our own live productions',lead:'Tools for ATEM switchers, vMix, live cricket and photo studios, used on real weddings and match days in Sri Lanka. Try any of them free for 14 days, then buy a licence.',all:'All',atem:'Built for ATEM',vmix:'vMix & live graphics',biz:'Business',more:'Details →',trial:'Free trial',buy:'Buy',back:'← All software',about:'About',feat:'Features',shots:'Screenshots',noss:'Screenshots will be added soon. Watch the demo video above.',once:'one-time, 1 year of updates',s1:'Try it free',s1d:'Download and use the full app for 14 days.',s2:'Pay',s2d:'Scan our LankaQR or transfer to our BOC account.',s3:'Get your licence key',s3d:'Sent to your WhatsApp after we confirm the payment.',s4:'Updates',s4d:'The app updates itself while your licence is active.',lic:'Licence',name:'Name or company',wa:'WhatsApp number',bankt:'Pay by bank transfer',banknote:'Use your name as the reference.',slip:'Payment slip',send:'Send order',cancel:'Cancel',ok:'Sample only. On the live page this creates an invoice in our CRM, and the licence key is sent on WhatsApp once the payment is confirmed.',sug:'Suggested price',foot:'Endora Wedding Films · Shared by private link only. Not listed on search engines.',l1:'1 computer · one-time + 1 year updates',l2:'2 computers · one-time + 1 year updates',l3:'Yearly subscription (updates included)'},
+si:{eyebrow:'ENDORA LIVE TOOLS',h:'අපේම live productions වලට අපි හදපු software',lead:'ATEM switchers, vMix, live cricket සහ photo studios සඳහා tools. ලංකාවේ ඇත්ත weddings සහ match days වල පාවිච්චි කරපු ඒවා. ඕනෑම එකක් දින 14ක් free try කරලා, ඊට පස්සේ licence එකක් ගන්න.',all:'සියල්ල',atem:'ATEM සඳහා',vmix:'vMix සහ live graphics',biz:'Business',more:'විස්තර →',trial:'Free trial',buy:'මිලදී ගන්න',back:'← සියලු software',about:'විස්තරය',feat:'Features',shots:'Screenshots',noss:'Screenshots ළඟදීම එකතු කරනවා. උඩ තියෙන demo video එක බලන්න.',once:'එක් වරක්, අවුරුද්දක updates',s1:'Free try කරන්න',s1d:'සම්පූර්ණ app එක දින 14ක් download කරලා පාවිච්චි කරන්න.',s2:'Payment',s2d:'අපේ LankaQR එක scan කරන්න, නැත්නම් BOC account එකට transfer කරන්න.',s3:'Licence key එක ගන්න',s3d:'Payment එක confirm කළාම ඔබේ WhatsApp එකට එවනවා.',s4:'Updates',s4d:'Licence එක active ව තියෙනකම් app එක auto update වෙනවා.',lic:'Licence',name:'නම හෝ company එක',wa:'WhatsApp number',bankt:'Bank transfer',banknote:'Reference එකට ඔබේ නම දාන්න.',slip:'Payment slip එක',send:'Order එක යවන්න',cancel:'Cancel',ok:'මේක sample එකක් විතරයි. ඇත්ත page එකේ මේකෙන් CRM එකේ invoice එකක් හැදිලා, payment එක confirm කළාම licence key එක WhatsApp වලින් යනවා.',sug:'යෝජිත මිල',foot:'Endora Wedding Films · Private link එකෙන් විතරයි. Search engines වල පේන්නේ නෑ.',l1:'Computer 1ක් · එක් වරක් + අවුරුද්දක updates',l2:'Computers 2ක් · එක් වරක් + අවුරුද්දක updates',l3:'අවුරුදු subscription එක (updates සමඟ)'}};
+let L='en';try{L=localStorage.getItem('lang')||'en'}catch(e){}
+let F='all';
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lkr=n=>'LKR '+n.toLocaleString('en-US');
+const t=k=>T[L][k];
+const langBar=()=>`<div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="${L==='en'}">English</button><button type="button" data-lang="si" aria-pressed="${L==='si'}">සිංහල</button></div>`;
+const top=()=>`<div class="top"><a class="tally" href="#"><i class="p"></i>PGM <i class="v"></i>PVW <span>· ${t('eyebrow')}</span></a>${langBar()}</div>`;
+function list(){
+  $('#app').innerHTML=`${top()}<header style="display:flex;flex-direction:column;gap:12px"><h1>${t('h')}</h1><p class="lead">${t('lead')}</p></header>
+  <div class="filters" role="group" aria-label="Filter">${['all','atem','vmix','biz'].map(k=>`<button type="button" data-f="${k}" aria-pressed="${F===k}">${t(k)}</button>`).join('')}</div>
+  <div class="grid">${APPS.filter(a=>F==='all'||a.k===F).map(a=>`<a class="mod" href="#${a.id}"><div class="thumb"><video src="${a.v}" muted loop playsinline preload="metadata"></video><b class="bug ${a.bug}">${a.bug}</b></div><div class="mb"><h2>${esc(a.n)}</h2><p>${esc(a[L].s)}</p><div class="row"><div class="price">${lkr(a.price)}<small>${t('sug')}</small></div><span class="more">${t('more')}</span></div></div></a>`).join('')}</div>
+  <div class="how">${[1,2,3,4].map(i=>`<div><div class="k">STEP ${i}</div><h3>${t('s'+i)}</h3><p>${t('s'+i+'d')}</p></div>`).join('')}</div>
+  <footer>${t('foot')}</footer>`;
+  document.querySelectorAll('.mod').forEach(m=>{const v=$('video',m);m.addEventListener('mouseenter',()=>v.play().catch(()=>{}));m.addEventListener('mouseleave',()=>v.pause());});
+}
+function detail(a){
+  const d=a[L];
+  $('#app').innerHTML=`${top()}<a class="back" href="#">${t('back')}</a>
+  <div class="hero"><div class="player"><video src="${a.v}" controls autoplay muted playsinline loop></video></div>
+  <div class="side"><b class="bug ${a.bug}" style="position:static;align-self:flex-start">${a.bug}</b><h1>${esc(a.n)}</h1><p style="margin:0;color:var(--muted)">${esc(d.s)}</p><div class="spec">${a.plat.map(x=>`<b>${esc(x)}</b>`).join('')}</div>
+  <div class="big">${lkr(a.price)}<small>${t('sug')} · ${t('once')}</small></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn go" type="button" data-buy>${t('buy')}</button><button class="btn" type="button" data-trial>${t('trial')}</button></div></div></div>
+  <div class="cols"><div class="desc"><h3>${t('about')}</h3><p>${esc(d.d)}</p></div><div class="desc"><h3>${t('feat')}</h3><ul class="feat">${d.f.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>
+  <div class="shots"><h3>${t('shots')}</h3>${a.ss.length?`<div class="strip">${a.ss.map(s=>`<button type="button" data-lb="${s}"><img src="${s}" alt="${esc(a.n)} screenshot" loading="lazy"></button>`).join('')}</div>`:`<div class="noss">${t('noss')}</div>`}</div>
+  <footer>${t('foot')}</footer>`;
+  window.scrollTo(0,0);
+}
+function route(){const id=location.hash.slice(1);const a=APPS.find(x=>x.id===id);a?detail(a):list();}
+document.addEventListener('click',e=>{
+  const lg=e.target.closest('[data-lang]');if(lg){L=lg.dataset.lang;try{localStorage.setItem('lang',L)}catch(x){}route();return}
+  const f=e.target.closest('[data-f]');if(f){F=f.dataset.f;list();return}
+  const lb=e.target.closest('[data-lb]');if(lb){$('#lbi').src=lb.dataset.lb;$('#lb').showModal();return}
+  if(e.target.closest('#lb')){$('#lb').close();return}
+  const b=e.target.closest('[data-buy],[data-trial]');if(b){openBuy(!!b.dataset.trial);return}
+});
+function openBuy(trial){
+  const a=APPS.find(x=>x.id===location.hash.slice(1));
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));
+  $('#lic').innerHTML=[['l1',1],['l2',1.6],['l3',.4]].map(([k,m])=>`<option>${t(k)} — ${lkr(Math.round(a.price*m/500)*500)}</option>`).join('');
+  $('#dT').textContent=(trial?t('trial'):t('buy'))+' · '+a.n;
+  ['lic','slip'].forEach(id=>$('#'+id).closest('label').hidden=trial);$('.payrow').hidden=trial;
+  $('#ok').hidden=true;$('#dlg').showModal();
+}
+$('#f').addEventListener('submit',e=>{e.preventDefault();$('#ok').hidden=false;});
+$('#cx').onclick=()=>$('#dlg').close();
+addEventListener('hashchange',route);route();
+</script>
+</body></html>
