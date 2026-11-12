@@ -4,6 +4,7 @@ name: Build Endora Invoice
 on:
   push:
     branches: [main]
+    paths-ignore: ['tools/**', '.github/workflows/drive-sync.yml']
   workflow_dispatch:
 permissions:
   contents: write

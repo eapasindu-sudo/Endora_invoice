@@ -1,0 +1,33 @@
+# Keeps the newest installer of every Endora Live Tools app in Google Drive (old versions are deleted).
+name: Drive sync
+on:
+  schedule: [{ cron: '17 * * * *' }]
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Build Endora Invoice]
+    types: [completed]
+permissions:
+  contents: write
+concurrency: drive-sync
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Copy installers to Google Drive
+        env:
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+        run: node tools/drive-sync.js
+      # The download links on tools.endoraweddingfilms.com read this file.
+      - name: Save the Drive file list
+        run: |
+          git fetch origin drive-manifest || true
+          mkdir -p /tmp/m && cp drive-manifest.json /tmp/m/
+          git checkout --orphan drive-manifest-new && git rm -rq --cached . && git clean -fdq
+          cp /tmp/m/drive-manifest.json . && git add drive-manifest.json
+          git -c user.name=endora-bot -c user.email=bot@endoraweddingfilms.com commit -qm "Drive file list"
+          git push -f origin HEAD:drive-manifest
