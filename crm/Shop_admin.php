@@ -72,6 +72,32 @@ class Shop_admin extends Ops
         exit;
     }
 
+    /* Key message with the paid invoice PDF attached. With a file it goes out as the approved
+       "endora_document" template, so it reaches a client who has never written to us on WhatsApp. */
+    private function send_key($r)
+    {
+        $file = null;
+        $name = 'invoice.pdf';
+        if ($r->invoiceid) {
+            try {
+                $this->load->model('invoices_model');
+                $inv = $this->invoices_model->get($r->invoiceid);
+                if ($inv) {
+                    $name = format_invoice_number($inv->id) . '.pdf';
+                    $file = get_temp_dir() . 'endora-licence-' . $inv->id . '-' . time() . '.pdf';
+                    invoice_pdf($inv)->Output($file, 'F');
+                }
+            } catch (Throwable $e) {
+                $file = null;
+            }
+        }
+        $res = endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r), $file && is_file($file) ? $file : null, $name);
+        if ($file && is_file($file)) {
+            @unlink($file);
+        }
+        return !empty($res['ok']) && empty($res['queued']);
+    }
+
     private function row($id)
     {
         $r = $this->db->where('id', (int) $id)->get(db_prefix() . 'endora_licenses')->row();
@@ -106,7 +132,7 @@ class Shop_admin extends Ops
         }
         $this->db->where('id', $r->id)->update($p . 'endora_licenses', ['lic_key' => $key, 'status' => 'active', 'approved_at' => date('Y-m-d H:i:s'), 'expires_at' => $exp]);
         $r = $this->db->where('id', $r->id)->get($p . 'endora_licenses')->row();
-        $ok = !empty(endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r))['ok']);
+        $ok = $this->send_key($r);
         $this->db->where('id', $r->id)->update($p . 'endora_licenses', ['wa_sent' => $ok ? 1 : 0]);
         $this->go($ok ? 'm=' . rawurlencode('Approved. Licence key ' . $key . ' sent to ' . $r->name . ' on WhatsApp.') : 'err=' . rawurlencode('Approved with key ' . $key . ', but WhatsApp did not send. Press "Resend key".'));
     }
@@ -114,7 +140,7 @@ class Shop_admin extends Ops
     public function resend($id)
     {
         $r  = $this->row($id);
-        $ok = $r->lic_key !== '' && !empty(endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r))['ok']);
+        $ok = $r->lic_key !== '' && $this->send_key($r);
         $this->go($ok ? 'm=' . rawurlencode('Key sent again.') : 'err=' . rawurlencode('WhatsApp did not send.'));
     }
 
