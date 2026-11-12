@@ -75,6 +75,9 @@ class Shop extends App_Controller
     public function trial()
     {
         list($product, $name, $phone) = $this->common();
+        if (in_array($product, ['atem-tally'], true)) { // no_trial: sold as a full licence only
+            $this->out(['ok' => false, 'error' => 'This app has no free trial.'], 400);
+        }
         $this->db->insert(db_prefix() . 'endora_trials', ['product' => $product, 'name' => $name, 'phone' => $phone, 'ip' => mb_substr((string) $this->input->ip_address(), 0, 45), 'created_at' => date('Y-m-d H:i:s')]);
         $pr = endora_bridge_shop_products()[$product];
         endora_bridge_shop_owner_wa( "🧪 Free trial download\n" . $pr[0] . "\n" . $name . ' · +' . $phone);
