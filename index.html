@@ -3,7 +3,7 @@
 <title>Endora Live Tools</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&family=Noto+Sans+Sinhala:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Sans+Sinhala:wght@400;600;700&display=swap">
 <style>
 /* Layout: control-room rack. List view = product modules in a grid; detail view = monitor (video) + spec column, then bilingual description and screenshot strip. Single dark look. */
 :root{--bg:#0d0f12;--panel:#15191f;--panel2:#1c2129;--line:#2a313b;--fg:#e9edf2;--muted:#8b95a3;--pgm:#ff3b30;--pvw:#34c759;--amber:#ffb020;--vmix:#2f7cf6;
@@ -76,6 +76,50 @@ dialog.lb{width:min(1200px,calc(100% - 32px));background:#000}dialog.lb img{disp
 .ok{color:var(--pvw);font-size:14px}
 .sug{font:600 10px var(--mono);letter-spacing:.08em;color:var(--amber);text-transform:uppercase}
 </style>
+
+<style>
+/* Endora house style: ink + charcoal, gold, Cormorant Garamond display, Jost body (same as endoraweddingfilms.com) */
+:root{--bg:#0b0a09;--panel:#161412;--panel2:#1d1a17;--line:rgba(245,240,232,.12);--fg:#f5f0e8;--muted:rgba(245,240,232,.64);--gold:#c8a96a;--gold-soft:#dcc38f;--gold-deep:#a88a4d;--pvw:#c8a96a;--amber:#dcc38f;--vmix:#1d1a17;
+--display:"Cormorant Garamond","Noto Serif Sinhala",Garamond,serif;--body:"Jost","Noto Sans Sinhala","Helvetica Neue",Arial,sans-serif}
+body{font-family:var(--body);font-weight:300;letter-spacing:.01em}
+.hero-band{position:relative;margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:clamp(48px,9vw,110px) max(16px,env(safe-area-inset-left,0px)) clamp(40px,7vw,80px);background:linear-gradient(180deg,rgba(11,10,9,.55),rgba(11,10,9,.92) 70%,var(--bg)),url("https://www.endoraweddingfilms.com/wp-content/themes/endora-wedding-films/assets/images/hero-poster.jpg.webp") center/cover;border-bottom:1px solid var(--line);text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.hero-band .eyebrow{font:500 12px var(--body);letter-spacing:.42em;text-transform:uppercase;color:var(--gold)}
+.hero-band h1{font:500 clamp(40px,6.4vw,76px)/1.02 var(--display);letter-spacing:.005em;max-width:16ch;margin:0}
+.hero-band h1 em{font-style:italic;color:var(--gold-soft)}
+.hero-band .lead{color:var(--muted);font-size:17px;max-width:58ch;margin:0 auto}
+.hero-band .rule{width:70px;height:1px;background:var(--gold)}
+.top{padding-block:4px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg)}
+.brand img{height:38px;width:auto}
+.brand span{font:500 11px var(--body);letter-spacing:.38em;text-transform:uppercase;color:var(--gold)}
+.lang{border-color:var(--line);border-radius:2px}.lang button{font-family:var(--body);background:transparent}.lang button[aria-pressed="true"]{background:var(--panel2);box-shadow:inset 0 -1px 0 var(--gold);color:var(--gold-soft)}
+.filters{justify-content:center}
+.filters button{font:500 11px var(--body);letter-spacing:.24em;border-radius:2px;background:transparent;border-color:var(--line);padding:10px 18px}
+.filters button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);box-shadow:none}
+.mod{border-radius:2px;border-color:var(--line);background:var(--panel);transition:border-color .35s,transform .35s}
+.mod:hover{border-color:rgba(200,169,106,.55);transform:translateY(-3px)}
+.thumb{border-bottom-color:var(--line)}
+.bug{font:500 9px var(--body);letter-spacing:.24em;border-radius:1px;background:rgba(11,10,9,.78)!important;color:var(--gold)!important;border:1px solid rgba(200,169,106,.5)}
+.mb h2,.side h1{font-family:var(--display);font-weight:600;letter-spacing:.005em}
+.mb h2{font-size:26px}
+.price,.big{font-family:var(--display);font-weight:600;color:var(--gold-soft)}
+.price{font-size:20px}.big{font-size:34px}
+.price small,.big small{font-family:var(--body);font-weight:300;letter-spacing:.04em}
+.more{color:var(--gold);font-weight:500;letter-spacing:.08em}
+.btn{font:500 12px var(--body);letter-spacing:.2em;text-transform:uppercase;border-radius:2px;padding:13px 20px;background:transparent;border-color:var(--line-strong,rgba(245,240,232,.24))}
+.btn:hover{border-color:var(--gold);color:var(--gold-soft)}
+.btn.go{background:var(--gold);border-color:var(--gold);color:#0b0a09}.btn.go:hover{background:var(--gold-soft);color:#0b0a09}
+.how div{border-top:1px solid var(--gold-deep)}.how h3{font:600 22px var(--display)}.how .k{color:var(--gold);font-family:var(--body);letter-spacing:.3em}
+.side,.player,.strip button,.noss,dialog,.bank,.dlg input,.dlg select{border-radius:2px}
+.side{background:var(--panel)}
+.desc h3,.shots h3{font-family:var(--body);color:var(--gold);letter-spacing:.32em}
+.feat li::before{background:var(--gold);width:6px;height:6px;margin-top:10px}
+dialog{background:var(--panel)}.dlg h3{font:600 26px var(--display)}
+.dlg label{font-family:var(--body);letter-spacing:.2em}
+.ok{color:var(--gold-soft)}
+footer{text-align:center;letter-spacing:.06em}
+.back{color:var(--gold)}
+</style>
 </head><body>
 
 <div class="wrap" id="app"></div>
@@ -98,8 +142,8 @@ dialog.lb{width:min(1200px,calc(100% - 32px));background:#000}dialog.lb img{disp
 
 <script src="data.js"></script>
 <script>
-const T={en:{eyebrow:'ENDORA LIVE TOOLS',h:'Software we built for our own live productions',lead:'Tools for ATEM switchers, vMix, live cricket and photo studios, used on real weddings and match days in Sri Lanka. Try any of them free for 14 days, then buy a licence.',all:'All',atem:'Built for ATEM',vmix:'vMix & live graphics',biz:'Business',more:'Details →',trial:'Free trial',buy:'Buy',back:'← All software',about:'About',feat:'Features',shots:'Screenshots',noss:'Screenshots will be added soon. Watch the demo video above.',once:'one-time, 1 year of updates',s1:'Try it free',s1d:'Download and use the full app for 14 days.',s2:'Pay',s2d:'Scan our LankaQR or transfer to our BOC account.',s3:'Get your licence key',s3d:'Sent to your WhatsApp after we confirm the payment.',s4:'Updates',s4d:'The app updates itself while your licence is active.',lic:'Licence',name:'Name or company',wa:'WhatsApp number',bankt:'Pay by bank transfer',banknote:'Use your name as the reference.',slip:'Payment slip',send:'Send order',cancel:'Cancel',orderok:'Thank you! Your order # is saved. We will check the payment and send your licence key on WhatsApp.',trialok:'Your download is ready:',dl:'Download now',sending:'Sending…',done:'Sent ✓',needslip:'Add a photo of the payment slip.',neterr:'Could not connect. Check your internet and try again.',sug:'Suggested price',foot:'Endora Wedding Films · Shared by private link only. Not listed on search engines.',l1:'1 computer · one-time + 1 year updates',l2:'2 computers · one-time + 1 year updates',l3:'Yearly subscription (updates included)'},
-si:{eyebrow:'ENDORA LIVE TOOLS',h:'අපේම live productions වලට අපි හදපු software',lead:'ATEM switchers, vMix, live cricket සහ photo studios සඳහා tools. ලංකාවේ ඇත්ත weddings සහ match days වල පාවිච්චි කරපු ඒවා. ඕනෑම එකක් දින 14ක් free try කරලා, ඊට පස්සේ licence එකක් ගන්න.',all:'සියල්ල',atem:'ATEM සඳහා',vmix:'vMix සහ live graphics',biz:'Business',more:'විස්තර →',trial:'Free trial',buy:'මිලදී ගන්න',back:'← සියලු software',about:'විස්තරය',feat:'Features',shots:'Screenshots',noss:'Screenshots ළඟදීම එකතු කරනවා. උඩ තියෙන demo video එක බලන්න.',once:'එක් වරක්, අවුරුද්දක updates',s1:'Free try කරන්න',s1d:'සම්පූර්ණ app එක දින 14ක් download කරලා පාවිච්චි කරන්න.',s2:'Payment',s2d:'අපේ LankaQR එක scan කරන්න, නැත්නම් BOC account එකට transfer කරන්න.',s3:'Licence key එක ගන්න',s3d:'Payment එක confirm කළාම ඔබේ WhatsApp එකට එවනවා.',s4:'Updates',s4d:'Licence එක active ව තියෙනකම් app එක auto update වෙනවා.',lic:'Licence',name:'නම හෝ company එක',wa:'WhatsApp number',bankt:'Bank transfer',banknote:'Reference එකට ඔබේ නම දාන්න.',slip:'Payment slip එක',send:'Order එක යවන්න',cancel:'Cancel',orderok:'ස්තූතියි! ඔබේ order එක # ලෙස save වුණා. Payment එක check කරලා licence key එක WhatsApp වලින් එවනවා.',trialok:'ඔබේ download එක ලෑස්තියි:',dl:'දැන් download කරන්න',sending:'යවමින්…',done:'යැව්වා ✓',needslip:'Payment slip එකේ photo එකක් දාන්න.',neterr:'Connect වෙන්න බැරි වුණා. Internet එක check කරලා ආයෙ උත්සාහ කරන්න.',sug:'යෝජිත මිල',foot:'Endora Wedding Films · Private link එකෙන් විතරයි. Search engines වල පේන්නේ නෑ.',l1:'Computer 1ක් · එක් වරක් + අවුරුද්දක updates',l2:'Computers 2ක් · එක් වරක් + අවුරුද්දක updates',l3:'අවුරුදු subscription එක (updates සමඟ)'}};
+const T={en:{eyebrow:'ENDORA LIVE TOOLS',h:'Software we built for our own <em>live productions</em>',lead:'Tools for ATEM switchers, vMix, live cricket and photo studios, used on real weddings and match days in Sri Lanka. Try any of them free for 14 days, then buy a licence.',all:'All',atem:'Built for ATEM',vmix:'vMix & live graphics',biz:'Business',more:'Details →',trial:'Free trial',buy:'Buy',back:'← All software',about:'About',feat:'Features',shots:'Screenshots',noss:'Screenshots will be added soon. Watch the demo video above.',once:'one-time, 1 year of updates',s1:'Try it free',s1d:'Download and use the full app for 14 days.',s2:'Pay',s2d:'Scan our LankaQR or transfer to our BOC account.',s3:'Get your licence key',s3d:'Sent to your WhatsApp after we confirm the payment.',s4:'Updates',s4d:'The app updates itself while your licence is active.',lic:'Licence',name:'Name or company',wa:'WhatsApp number',bankt:'Pay by bank transfer',banknote:'Use your name as the reference.',slip:'Payment slip',send:'Send order',cancel:'Cancel',orderok:'Thank you! Your order # is saved. We will check the payment and send your licence key on WhatsApp.',trialok:'Your download is ready:',dl:'Download now',sending:'Sending…',done:'Sent ✓',needslip:'Add a photo of the payment slip.',neterr:'Could not connect. Check your internet and try again.',sug:'Suggested price',foot:'Endora Wedding Films · Shared by private link only. Not listed on search engines.',l1:'1 computer · one-time + 1 year updates',l2:'2 computers · one-time + 1 year updates',l3:'Yearly subscription (updates included)'},
+si:{eyebrow:'ENDORA LIVE TOOLS',h:'අපේම <em>live productions</em> වලට අපි හදපු software',lead:'ATEM switchers, vMix, live cricket සහ photo studios සඳහා tools. ලංකාවේ ඇත්ත weddings සහ match days වල පාවිච්චි කරපු ඒවා. ඕනෑම එකක් දින 14ක් free try කරලා, ඊට පස්සේ licence එකක් ගන්න.',all:'සියල්ල',atem:'ATEM සඳහා',vmix:'vMix සහ live graphics',biz:'Business',more:'විස්තර →',trial:'Free trial',buy:'මිලදී ගන්න',back:'← සියලු software',about:'විස්තරය',feat:'Features',shots:'Screenshots',noss:'Screenshots ළඟදීම එකතු කරනවා. උඩ තියෙන demo video එක බලන්න.',once:'එක් වරක්, අවුරුද්දක updates',s1:'Free try කරන්න',s1d:'සම්පූර්ණ app එක දින 14ක් download කරලා පාවිච්චි කරන්න.',s2:'Payment',s2d:'අපේ LankaQR එක scan කරන්න, නැත්නම් BOC account එකට transfer කරන්න.',s3:'Licence key එක ගන්න',s3d:'Payment එක confirm කළාම ඔබේ WhatsApp එකට එවනවා.',s4:'Updates',s4d:'Licence එක active ව තියෙනකම් app එක auto update වෙනවා.',lic:'Licence',name:'නම හෝ company එක',wa:'WhatsApp number',bankt:'Bank transfer',banknote:'Reference එකට ඔබේ නම දාන්න.',slip:'Payment slip එක',send:'Order එක යවන්න',cancel:'Cancel',orderok:'ස්තූතියි! ඔබේ order එක # ලෙස save වුණා. Payment එක check කරලා licence key එක WhatsApp වලින් එවනවා.',trialok:'ඔබේ download එක ලෑස්තියි:',dl:'දැන් download කරන්න',sending:'යවමින්…',done:'යැව්වා ✓',needslip:'Payment slip එකේ photo එකක් දාන්න.',neterr:'Connect වෙන්න බැරි වුණා. Internet එක check කරලා ආයෙ උත්සාහ කරන්න.',sug:'යෝජිත මිල',foot:'Endora Wedding Films · Private link එකෙන් විතරයි. Search engines වල පේන්නේ නෑ.',l1:'Computer 1ක් · එක් වරක් + අවුරුද්දක updates',l2:'Computers 2ක් · එක් වරක් + අවුරුද්දක updates',l3:'අවුරුදු subscription එක (updates සමඟ)'}};
 let L='en';try{L=localStorage.getItem('lang')||'en'}catch(e){}
 let F='all';
 const $=(s,r=document)=>r.querySelector(s);
@@ -107,9 +151,9 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const lkr=n=>'LKR '+n.toLocaleString('en-US');
 const t=k=>T[L][k];
 const langBar=()=>`<div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="${L==='en'}">English</button><button type="button" data-lang="si" aria-pressed="${L==='si'}">සිංහල</button></div>`;
-const topBar=()=>`<div class="top"><a class="tally" href="#"><i class="p"></i>PGM <i class="v"></i>PVW <span>· ${t('eyebrow')}</span></a>${langBar()}</div>`;
+const topBar=()=>`<div class="top"><a class="brand" href="#"><img src="https://www.endoraweddingfilms.com/wp-content/uploads/2026/10/endora-header-logo.png" alt="Endora"><span>Live Tools</span></a>${langBar()}</div>`;
 function list(){
-  $('#app').innerHTML=`${topBar()}<header style="display:flex;flex-direction:column;gap:12px"><h1>${t('h')}</h1><p class="lead">${t('lead')}</p></header>
+  $('#app').innerHTML=`${topBar()}<header class="hero-band"><div class="eyebrow">${t('eyebrow')}</div><h1>${t('h')}</h1><div class="rule"></div><p class="lead">${t('lead')}</p></header>
   <div class="filters" role="group" aria-label="Filter">${['all','atem','vmix','biz'].map(k=>`<button type="button" data-f="${k}" aria-pressed="${F===k}">${t(k)}</button>`).join('')}</div>
   <div class="grid">${APPS.filter(a=>F==='all'||a.k===F).map(a=>`<a class="mod" href="#${a.id}"><div class="thumb"><video src="${a.v}" muted loop playsinline preload="metadata"></video><b class="bug ${a.bug}">${a.bug}</b></div><div class="mb"><h2>${esc(a.n)}</h2><p>${esc(a[L].s)}</p><div class="row"><div class="price">${lkr(a.price)}<small>${t('sug')}</small></div><span class="more">${t('more')}</span></div></div></a>`).join('')}</div>
   <div class="how">${[1,2,3,4].map(i=>`<div><div class="k">STEP ${i}</div><h3>${t('s'+i)}</h3><p>${t('s'+i+'d')}</p></div>`).join('')}</div>
