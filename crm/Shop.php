@@ -137,6 +137,13 @@ class Shop extends App_Controller
         $this->out(['ok' => true, 'invoice' => format_invoice_number($iid)]);
     }
 
+    /* tools.endoraweddingfilms.com/dl.php?app=… asks here for the newest installer link */
+    public function download()
+    {
+        $p = (string) $this->input->get('p');
+        $this->out(['ok' => true, 'url' => isset(endora_bridge_shop_products()[$p]) ? endora_bridge_shop_download($p) : '']);
+    }
+
     /* Apps call this: key, product, machine (a stable id of the computer). Binds new machines up to the licence seats. */
     public function check()
     {

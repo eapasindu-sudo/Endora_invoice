@@ -93,14 +93,29 @@ function endora_bridge_shop_lk_phone($raw)
 /* Message to the client with the licence key (sent when the owner presses Approve). No CRM links. */
 function endora_bridge_shop_key_message($lic)
 {
-    $pr   = endora_bridge_shop_products()[$lic->product] ?? [$lic->product];
-    $pl   = endora_bridge_shop_plans()[$lic->plan] ?? ['', 1];
-    $dl   = endora_bridge_shop_download($lic->product);
-    $text = 'Hi ' . $lic->name . ', thank you for buying ' . $pr[0] . ".\n\nYour licence key:\n*" . $lic->lic_key . "*\n\n"
-        . 'Licence: ' . $pl[0] . ($lic->expires_at ? "\nValid until: " . date('j M Y', strtotime($lic->expires_at)) : '') . "\n\n"
-        . ($dl !== '' ? 'Download: ' . $dl . "\n\n" : '')
-        . "Open the app and paste the key when it asks for it. Keep this message safe.\n\n– Endora Live Tools";
-    return $text;
+    $pr = endora_bridge_shop_products()[$lic->product] ?? [$lic->product];
+    $pl = endora_bridge_shop_plans()[$lic->plan] ?? ['', 1];
+    $dl = endora_bridge_shop_download($lic->product) !== '' ? 'https://tools.endoraweddingfilms.com/dl.php?app=' . rawurlencode($lic->product) : '';
+    return 'Hi ' . $lic->name . ', thank you for buying ' . $pr[0] . ".\n\n"
+        . "Your licence key:\n" . $lic->lic_key . "\n\n"
+        . 'Licence: ' . $pl[0] . ($lic->expires_at ? "\nValid until: " . date('j M Y', strtotime($lic->expires_at)) : '') . "\n"
+        . ($dl !== '' ? 'Download: ' . $dl . "\n" : '')
+        . "\nOpen the app and paste the licence key when it asks for it.\n"
+        . "Reply to this message and we will send the licence key again on its own, so it is easy to copy.\n\n"
+        . '– Endora Live Tools';
+}
+
+/* Send the key to the client. Outside the WhatsApp 24-hour window the message goes as a template (one line),
+   so the key alone is also queued: it is delivered by itself as soon as the client replies. */
+function endora_bridge_shop_send_key($lic, $file = null, $file_name = 'invoice.pdf')
+{
+    $open = function_exists('endora_bridge_meta_window_open') && endora_bridge_meta_cfg() ? endora_bridge_meta_window_open($lic->phone) : true;
+    $res  = endora_bridge_wa_send($lic->phone, endora_bridge_shop_key_message($lic), $file, $file_name);
+    if (!$open && !empty($res['ok']) && empty($res['queued'])) {
+        endora_bridge_wa_tables();
+        get_instance()->db->insert(db_prefix() . 'endora_wa_queue', ['phone' => endora_bridge_wa_digits($lic->phone), 'body' => $lic->lic_key, 'file' => null, 'file_name' => null, 'created_at' => date('Y-m-d H:i:s')]);
+    }
+    return $res;
 }
 
 /* Orders always reach the owner on WhatsApp (not only as an app notification). Returns the send result. */

@@ -91,7 +91,7 @@ class Shop_admin extends Ops
                 $file = null;
             }
         }
-        $res = endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r), $file && is_file($file) ? $file : null, $name);
+        $res = endora_bridge_shop_send_key($r, $file && is_file($file) ? $file : null, $name);
         if ($file && is_file($file)) {
             @unlink($file);
         }
