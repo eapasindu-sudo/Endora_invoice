@@ -20,7 +20,7 @@ function endora_bridge_shop_products()
     // id => [name, key prefix, price LKR (1 computer, one-time + 1 year updates), name in endora_bridge_software() or a download URL]
     return [
         'atem-switcher' => ['ATEM Web Switcher', 'ATM', 15000, 'sw:ATEM Switcher'],
-        'atem-tally'    => ['ATEM Tally for DJI RC Pro', 'TLY', 7500, 'sw:ATEM Switcher'],
+        'atem-tally'    => ['ATEM Tally for DJI RC Pro', 'TLY', 5000, 'https://github.com/eapasindu-sudo/atem-web-switcher/releases/download/tally-android/ATEM-Tally.apk'],
         'atem-ccu'      => ['ATEM CCU', 'CCU', 12000, 'sw:ATEM Switcher'],
         'cricket-scorer' => ['Cricket Scorer', 'CRK', 25000, 'sw:Cricket Scorer'],
         'playout'       => ['Endora Playout + CG Composer', 'PLY', 45000, 'sw:Endora Playout'],
