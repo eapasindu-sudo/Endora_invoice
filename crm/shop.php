@@ -104,11 +104,12 @@ function endora_bridge_shop_key_message($lic)
 }
 
 /* Orders always reach the owner on WhatsApp (not only as an app notification). Returns the send result. */
-function endora_bridge_shop_owner_wa($text)
+function endora_bridge_shop_owner_wa($text, $file = null, $file_name = 'payment-slip.pdf')
 {
     $GLOBALS['endora_wa_force'] = 1;
     try {
-        $r = endora_bridge_wa_send(endora_bridge_shop_owner_phone(), $text);
+        // With the slip attached it goes out as the approved "endora_document" template, so it arrives even when the 24-hour WhatsApp window is closed.
+        $r = endora_bridge_wa_send(endora_bridge_shop_owner_phone(), $text, $file && is_file($file) ? $file : null, $file_name);
     } catch (Throwable $e) {
         $r = ['ok' => false, 'error' => $e->getMessage()];
     }
