@@ -169,7 +169,7 @@ function detail(a){
   <div class="hero"><div class="player"><video src="${a.v}" controls autoplay muted playsinline loop></video></div>
   <div class="side"><b class="bug ${a.bug}" style="position:static;align-self:flex-start">${a.bug}</b><h1>${esc(a.n)}</h1><p style="margin:0;color:var(--muted)">${esc(d.s)}</p><div class="spec">${a.plat.map(x=>`<b>${esc(x)}</b>`).join('')}</div>
   <div class="big">${priceLine(a)}<small>${a.plans.length>1?t('choose'):t('lifeu')}</small></div>${a.plans.length>1?`<table class="plans">${a.plans.map(p=>`<tr><td>${esc(planLbl(p))}</td><td>${lkr(p[3])}</td></tr>`).join('')}</table>`:''}
-  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn go" type="button" data-buy>${t('buy')}</button><button class="btn" type="button" data-trial>${t('trial')}</button></div></div></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn go" type="button" data-buy>${t('buy')}</button>${a.noTrial?'':`<button class="btn" type="button" data-trial>${t('trial')}</button>`}</div></div></div>
   <div class="cols"><div class="desc"><h3>${t('about')}</h3><p>${esc(d.d)}</p></div><div class="desc"><h3>${t('feat')}</h3><ul class="feat">${d.f.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>
   <div class="shots"><h3>${t('shots')}</h3>${a.ss.length?`<div class="strip">${a.ss.map(s=>`<button type="button" data-lb="${s}"><img src="${s}" alt="${esc(a.n)} screenshot" loading="lazy"></button>`).join('')}</div>`:`<div class="noss">${t('noss')}</div>`}</div>
   <footer>${t('foot')}</footer>`;
