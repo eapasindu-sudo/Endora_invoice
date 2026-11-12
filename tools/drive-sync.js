@@ -6,7 +6,7 @@
 const fs = require('fs');
 
 const CRM = 'https://www.endoraweddingfilms.com/perfex_crm/endora_bridge/shop/';
-const APPS = { 'atem-switcher': 'ATEM Web Switcher', 'atem-tally': 'ATEM Tally for DJI RC Pro', 'cricket-scorer': 'Cricket Scorer', playout: 'Endora Playout + CG Composer', replay: 'Endora Replay', 'led-display': 'Endora LED Display', album: 'Endora Album', invoice: 'Endora Invoice' };
+const APPS = { 'atem-switcher': 'ATEM Web Switcher', 'atem-tally': 'ATEM Tally for DJI RC Pro', 'atem-ccu': 'ATEM CCU', 'cricket-scorer': 'Cricket Scorer', playout: 'Endora Playout + CG Composer', replay: 'Endora Replay', 'led-display': 'Endora LED Display', album: 'Endora Album', invoice: 'Endora Invoice' };
 const KEEP = /\.(exe|dmg|apk|msi|pkg)$/i;
 
 let TOKEN = '';
