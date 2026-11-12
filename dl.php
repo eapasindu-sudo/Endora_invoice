@@ -8,6 +8,7 @@ $get = function ($u, $gh = false) {
 };
 $ua  = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
 $mac = (stripos($ua, 'Macintosh') !== false || stripos($ua, 'Mac OS X') !== false) && stripos($ua, 'iPhone') === false && stripos($ua, 'iPad') === false;
+@file_get_contents('https://www.endoraweddingfilms.com/perfex_crm/endora_bridge/shop/track?ev=download&app=' . rawurlencode($app));
 // 1) Google Drive copy (kept up to date by the "Drive sync" GitHub workflow)
 $man = $get('https://raw.githubusercontent.com/eapasindu-sudo/Endora_invoice/drive-manifest/drive-manifest.json');
 foreach ((array) ($man['apps'][$app]['files'] ?? []) as $f) {

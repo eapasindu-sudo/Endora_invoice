@@ -165,3 +165,31 @@ function endora_bridge_shop_owner_wa($text, $file = null, $file_name = 'payment-
     update_option('endora_bridge_shop_last_wa', json_encode(['t' => date('Y-m-d H:i:s'), 'r' => $r]));
     return $r;
 }
+
+/* Click counter for tools.endoraweddingfilms.com: app × event × day. */
+function endora_bridge_shop_track($app, $ev)
+{
+    $CI = &get_instance();
+    $t  = db_prefix() . 'endora_shop_stats';
+    if (!$CI->db->table_exists($t)) {
+        $CI->db->query('CREATE TABLE `' . $t . '` (`app` varchar(40) NOT NULL, `ev` varchar(12) NOT NULL, `day` date NOT NULL, `n` int(11) NOT NULL DEFAULT 0, PRIMARY KEY (`app`,`ev`,`day`)) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+    }
+    if (!isset(endora_bridge_shop_products()[$app]) || !in_array($ev, ['view', 'trial', 'buy', 'download'], true)) {
+        return;
+    }
+    $CI->db->query('INSERT INTO `' . $t . '` (app, ev, day, n) VALUES (?, ?, CURDATE(), 1) ON DUPLICATE KEY UPDATE n = n + 1', [$app, $ev]);
+}
+
+function endora_bridge_shop_stats()
+{
+    $CI = &get_instance();
+    $t  = db_prefix() . 'endora_shop_stats';
+    $out = [];
+    if (!$CI->db->table_exists($t)) {
+        return $out;
+    }
+    foreach ($CI->db->query('SELECT app, ev, SUM(n) total, SUM(CASE WHEN day >= CURDATE() - INTERVAL 6 DAY THEN n ELSE 0 END) week FROM `' . $t . '` GROUP BY app, ev')->result() as $r) {
+        $out[$r->app][$r->ev] = [(int) $r->total, (int) $r->week];
+    }
+    return $out;
+}

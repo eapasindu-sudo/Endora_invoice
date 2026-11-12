@@ -137,6 +137,15 @@ class Shop extends App_Controller
         $this->out(['ok' => true, 'invoice' => format_invoice_number($iid)]);
     }
 
+    /* Click counter ping from the tools page (an image request, so no CORS). */
+    public function track()
+    {
+        endora_bridge_shop_track((string) $this->input->get('app'), (string) $this->input->get('ev'));
+        header('Content-Type: image/gif');
+        echo base64_decode('R0lGODlhAQABAAAAACw=');
+        exit;
+    }
+
     /* tools.endoraweddingfilms.com/dl.php?app=… asks here for the newest installer link */
     public function download()
     {

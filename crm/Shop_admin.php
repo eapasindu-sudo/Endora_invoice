@@ -24,6 +24,13 @@ class Shop_admin extends Ops
         $prods = endora_bridge_shop_products();
         $plans = endora_bridge_shop_plans();
         $this->head('&#128273; Software orders', 'Orders from tools.endoraweddingfilms.com. Check the slip on the invoice, then press Approve: the payment is recorded and the licence key goes to the client on WhatsApp.');
+        $st = endora_bridge_shop_stats();
+        echo '<h2>Clicks on tools.endoraweddingfilms.com</h2><div class="box" style="overflow-x:auto"><table><tr><th>Software</th><th>Page views</th><th>Trial</th><th>Buy</th><th>Downloads</th></tr>';
+        $cell = function ($a, $e) use ($st) { $v = $st[$a][$e] ?? [0, 0]; return '<td><b>' . $v[0] . '</b>' . ($v[1] ? ' <span class="m">(' . $v[1] . ' this week)</span>' : '') . '</td>'; };
+        foreach ($prods as $id => $pr) {
+            echo '<tr><td>' . html_escape($pr[0]) . '</td>' . $cell($id, 'view') . $cell($id, 'trial') . $cell($id, 'buy') . $cell($id, 'download') . '</tr>';
+        }
+        echo '</table></div>';
         $rows = $this->db->order_by('id', 'desc')->limit(100)->get($p . 'endora_licenses')->result();
         foreach (['pending' => 'Waiting for approval', 'active' => 'Active licences', 'rejected' => 'Rejected'] as $st => $label) {
             $list = array_filter($rows, function ($r) use ($st) { return $r->status === $st || ($st === 'active' && $r->status === 'revoked'); });

@@ -164,6 +164,7 @@ function list(){
   document.querySelectorAll('.mod').forEach(m=>{const v=$('video',m);m.addEventListener('mouseenter',()=>v.play().catch(()=>{}));m.addEventListener('mouseleave',()=>v.pause());});
 }
 function detail(a){
+  if(detail.last!==a.id){ping(a.id,'view');detail.last=a.id;}
   const d=a[L];
   $('#app').innerHTML=`${topBar()}<a class="back" href="#">${t('back')}</a>
   <div class="hero"><div class="player"><video src="${a.v}" controls autoplay muted playsinline loop></video></div>
@@ -185,6 +186,7 @@ document.addEventListener('click',e=>{
 });
 function openBuy(trial){
   const a=APPS.find(x=>x.id===location.hash.slice(1));
+  ping(a.id,trial?'trial':'buy');
   document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));
   $('#lic').innerHTML=a.plans.map(p=>`<option value="${p[0]}">${esc(planLbl(p))} — ${lkr(p[3])}</option>`).join('');
   CUR={id:a.id,trial};$('#err').hidden=true;$('#f button[type=submit]').disabled=false;
@@ -192,6 +194,7 @@ function openBuy(trial){
   ['lic','slip'].forEach(id=>$('#'+id).closest('label').hidden=trial);$('.payrow').hidden=trial;
   $('#ok').hidden=true;$('#f button[type=submit]').textContent=t('send');$('#dlg').showModal();
 }
+const ping=(app,ev)=>{try{new Image().src='https://www.endoraweddingfilms.com/perfex_crm/endora_bridge/shop/track?app='+encodeURIComponent(app)+'&ev='+ev+'&r='+Date.now();}catch(e){}};
 let CUR={};const API='https://www.endoraweddingfilms.com/perfex_crm/endora_bridge/shop/';
 $('#f').addEventListener('submit',async e=>{e.preventDefault();const sb=$('#f button[type=submit]'),er=$('#err');er.hidden=true;$('#ok').hidden=true;
   const fd=new FormData();fd.append('product',CUR.id);fd.append('name',$('#nm').value);fd.append('phone',$('#ph').value);fd.append('website',$('#hp').value);
