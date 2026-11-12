@@ -132,7 +132,7 @@ class Shop extends App_Controller
             $this->db->insert($p . 'files', ['rel_id' => $iid, 'rel_type' => 'invoice', 'file_name' => $fn, 'filetype' => $mime, 'visible_to_customer' => 0, 'attachment_key' => app_generate_hash(), 'staffid' => 0, 'contact_id' => 0, 'dateadded' => date('Y-m-d H:i:s')]);
         }
         $this->db->insert($p . 'endora_licenses', ['product' => $product, 'plan' => $plan, 'seats' => $pl[1], 'clientid' => $cid, 'invoiceid' => $iid, 'name' => $name, 'phone' => $phone, 'status' => 'pending', 'machines' => '[]', 'created_at' => date('Y-m-d H:i:s')]);
-        endora_bridge_shop_owner_wa( "🛒 New software order\n" . $pr[0] . ' – ' . $pl[0] . "\nLKR " . number_format($price) . "\n" . $name . ' · +' . $phone . "\nInvoice " . format_invoice_number($iid) . " (slip attached in the CRM)\n\nCheck the payment, then approve: " . admin_url('endora_bridge/shop_admin'));
+        endora_bridge_shop_owner_wa( "🛒 New software order\n" . $pr[0] . ' – ' . $pl[0] . "\nLKR " . number_format($price) . "\n" . $name . ' · +' . $phone . "\nInvoice " . format_invoice_number($iid) . " (slip attached in the CRM)\n\nCheck the payment, then approve: " . admin_url('endora_bridge/shop_admin'), is_file($dir . $fn) ? $dir . $fn : null, $fn);
         @endora_bridge_push_all(['title' => '🛒 New software order', 'body' => $pr[0] . ' · LKR ' . number_format($price) . ' · ' . $name, 'url' => admin_url('endora_bridge/shop_admin'), 'tag' => 'shop-' . $iid, 'alarm' => 1]);
         $this->out(['ok' => true, 'invoice' => format_invoice_number($iid)]);
     }
