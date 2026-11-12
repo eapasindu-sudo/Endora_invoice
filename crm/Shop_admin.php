@@ -33,13 +33,13 @@ class Shop_admin extends Ops
             }
             foreach ($list as $r) {
                 $inv = $r->invoiceid ? $this->db->select('id,total,status')->where('id', $r->invoiceid)->get($p . 'invoices')->row() : null;
-                echo '<div class="box"><div class="r"><div><b>' . html_escape(($prods[$r->product][0] ?? $r->product)) . '</b><div class="m">' . html_escape($plans[$r->plan][0] ?? $r->plan) . '</div></div><div style="text-align:right">'
+                echo '<div class="box"><div class="r"><div><b>' . html_escape(($prods[$r->product][0] ?? $r->product)) . '</b><div class="m">' . html_escape((endora_bridge_shop_plan($r->product, $r->plan) ?: [$r->plan])[0]) . '</div></div><div style="text-align:right">'
                     . ($inv ? '<a href="' . admin_url('invoices/list_invoices/' . $inv->id) . '">' . format_invoice_number($inv->id) . '</a><div class="m">LKR ' . number_format((float) $inv->total) . ' · ' . format_invoice_status($inv->status, '', false) . '</div>' : '') . '</div></div>'
                     . '<div class="r"><span>' . html_escape($r->name) . ' · +' . html_escape($r->phone) . '</span><span class="m">' . date('j M, g:i a', strtotime($r->created_at)) . '</span></div>';
                 if ($r->status === 'pending') {
                     $preview = clone $r;
                     $preview->lic_key = 'EWF-' . ($prods[$r->product][1] ?? 'XXX') . '-XXXX-XXXX-XXXX';
-                    $preview->expires_at = $plans[$r->plan][3] ? date('Y-m-d', strtotime('+' . $plans[$r->plan][3] . ' months')) : null;
+                    $preview->expires_at = endora_bridge_shop_expiry($r->product, $r->plan);
                     echo '<details style="margin:8px 0"><summary class="m">WhatsApp message the client will get</summary><pre style="white-space:pre-wrap;font:13px/1.5 inherit;background:#141110;padding:10px;border-radius:10px">' . html_escape(endora_bridge_shop_key_message($preview)) . '</pre></details>'
                         . '<div class="row">' . form_open(admin_url('endora_bridge/shop_admin/approve/' . $r->id), ['class' => 'inline']) . '<button class="btn gold" style="width:100%">&#10003; Payment received – approve &amp; send key</button>' . form_close()
                         . form_open(admin_url('endora_bridge/shop_admin/reject/' . $r->id), ['class' => 'inline']) . '<button class="btn" style="width:100%">Reject</button>' . form_close() . '</div>';
@@ -119,7 +119,7 @@ class Shop_admin extends Ops
         do {
             $key = endora_bridge_shop_newkey($prods[$r->product][1] ?? 'APP');
         } while ($this->db->where('lic_key', $key)->count_all_results($p . 'endora_licenses'));
-        $exp = !empty($plans[$r->plan][3]) ? date('Y-m-d', strtotime('+' . $plans[$r->plan][3] . ' months')) : null;
+        $exp = endora_bridge_shop_expiry($r->product, $r->plan);
         // record the payment for what is still due on the invoice
         if ($r->invoiceid) {
             $this->load->model(['invoices_model', 'payments_model', 'payment_modes_model']);

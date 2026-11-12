@@ -31,17 +31,40 @@ function endora_bridge_shop_products()
     ];
 }
 
-function endora_bridge_shop_plans()
+function endora_bridge_shop_plans($product = null)
 {
-    // plan => [label, seats, price factor, months valid (0 = forever, updates 1 year)]
-    return ['one' => ['1 computer · one-time + 1 year updates', 1, 1.0, 0], 'two' => ['2 computers · one-time + 1 year updates', 2, 1.6, 0], 'year' => ['Yearly subscription (updates included)', 1, 0.4, 12]];
+    // product => plan => [label, computers, price LKR, days valid (0 = lifetime)]. Updates are included for as long as the licence is valid.
+    $life = function ($price) { return ['life' => ['Lifetime licence + updates', 1, $price, 0]]; };
+    $all  = [
+        'cricket-scorer' => [
+            'match' => ['1 match', 1, 500, 1], 'day' => ['1 day', 1, 1000, 1], 'days2' => ['2 days', 1, 1500, 2],
+            'week' => ['1 week', 1, 3500, 7], 'month' => ['1 month', 1, 10000, 30], 'life' => ['Lifetime licence + updates', 1, 50000, 0],
+        ],
+        'playout' => ['day' => ['1 day', 1, 1500, 1], 'year' => ['1 year + updates', 1, 25000, 365], 'life' => ['Lifetime licence + updates', 1, 100000, 0]],
+        'atem-switcher' => $life(5000), 'atem-tally' => $life(5000), 'atem-ccu' => $life(10000),
+        'replay' => $life(10000), 'album' => $life(20000), 'invoice' => $life(9500), 'led-display' => $life(15000),
+    ];
+    if ($product === null) {
+        return $all;
+    }
+    return $all[$product] ?? [];
+}
+
+function endora_bridge_shop_plan($product, $plan)
+{
+    return endora_bridge_shop_plans($product)[$plan] ?? null;
 }
 
 function endora_bridge_shop_price($product, $plan)
 {
-    $pr = endora_bridge_shop_products()[$product] ?? null;
-    $pl = endora_bridge_shop_plans()[$plan] ?? null;
-    return ($pr && $pl) ? (int) (round($pr[2] * $pl[2] / 500) * 500) : 0;
+    $pl = endora_bridge_shop_plan($product, $plan);
+    return $pl ? (int) $pl[2] : 0;
+}
+
+function endora_bridge_shop_expiry($product, $plan, $from = null)
+{
+    $pl = endora_bridge_shop_plan($product, $plan);
+    return ($pl && $pl[3] > 0) ? date('Y-m-d', strtotime(($from ?: date('Y-m-d')) . ' +' . ($pl[3] - 1) . ' days')) : null;
 }
 
 function endora_bridge_shop_download($product)
@@ -94,7 +117,7 @@ function endora_bridge_shop_lk_phone($raw)
 function endora_bridge_shop_key_message($lic, $one_line = false)
 {
     $pr = endora_bridge_shop_products()[$lic->product] ?? [$lic->product];
-    $pl = endora_bridge_shop_plans()[$lic->plan] ?? ['', 1];
+    $pl = endora_bridge_shop_plan($lic->product, $lic->plan) ?: ['', 1];
     $dl = endora_bridge_shop_download($lic->product) !== '' ? 'https://tools.endoraweddingfilms.com/dl.php?app=' . rawurlencode($lic->product) : '';
     if ($one_line) {
         // WhatsApp templates cannot carry line breaks, so this version reads as one clean paragraph (no " · " separators).

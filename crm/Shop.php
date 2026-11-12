@@ -64,8 +64,8 @@ class Shop extends App_Controller
         $out = [];
         foreach (endora_bridge_shop_products() as $id => $p) {
             $prices = [];
-            foreach (endora_bridge_shop_plans() as $k => $pl) {
-                $prices[$k] = ['label' => $pl[0], 'price' => endora_bridge_shop_price($id, $k)];
+            foreach (endora_bridge_shop_plans($id) as $k => $pl) {
+                $prices[$k] = ['label' => $pl[0], 'price' => (int) $pl[2], 'days' => (int) $pl[3]];
             }
             $out[$id] = ['name' => $p[0], 'plans' => $prices];
         }
@@ -86,7 +86,7 @@ class Shop extends App_Controller
     {
         list($product, $name, $phone) = $this->common();
         $plan = (string) $this->input->post('plan');
-        if (!isset(endora_bridge_shop_plans()[$plan])) {
+        if (!endora_bridge_shop_plan($product, $plan)) {
             $this->out(['ok' => false, 'error' => 'Choose a licence.'], 400);
         }
         $f = $_FILES['slip'] ?? null;
@@ -111,7 +111,7 @@ class Shop extends App_Controller
             $cid = (int) $this->clients_model->add(['company' => $name, 'phonenumber' => '+' . $phone, 'country' => 206]);
         }
         $pr    = endora_bridge_shop_products()[$product];
-        $pl    = endora_bridge_shop_plans()[$plan];
+        $pl    = endora_bridge_shop_plan($product, $plan);
         $price = endora_bridge_shop_price($product, $plan);
         $cur   = get_base_currency();
         $iid   = (int) $this->invoices_model->add([
