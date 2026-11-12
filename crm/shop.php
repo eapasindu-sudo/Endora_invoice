@@ -91,11 +91,18 @@ function endora_bridge_shop_lk_phone($raw)
 }
 
 /* Message to the client with the licence key (sent when the owner presses Approve). No CRM links. */
-function endora_bridge_shop_key_message($lic)
+function endora_bridge_shop_key_message($lic, $one_line = false)
 {
     $pr = endora_bridge_shop_products()[$lic->product] ?? [$lic->product];
     $pl = endora_bridge_shop_plans()[$lic->plan] ?? ['', 1];
     $dl = endora_bridge_shop_download($lic->product) !== '' ? 'https://tools.endoraweddingfilms.com/dl.php?app=' . rawurlencode($lic->product) : '';
+    if ($one_line) {
+        // WhatsApp templates cannot carry line breaks, so this version reads as one clean paragraph (no " · " separators).
+        return 'Hi ' . $lic->name . ', thank you for buying ' . $pr[0] . '. Your licence key is ' . $lic->lic_key
+            . ' – Licence: ' . str_replace(' · ', ', ', $pl[0]) . ($lic->expires_at ? ', valid until ' . date('j M Y', strtotime($lic->expires_at)) : '') . '.'
+            . ($dl !== '' ? ' Download the app here: ' . $dl : '')
+            . ' Open the app and paste the licence key when it asks for it. Reply to this message and we will send the key again on its own line, easy to copy. – Endora Live Tools';
+    }
     return 'Hi ' . $lic->name . ', thank you for buying ' . $pr[0] . ".\n\n"
         . "Your licence key:\n" . $lic->lic_key . "\n\n"
         . 'Licence: ' . $pl[0] . ($lic->expires_at ? "\nValid until: " . date('j M Y', strtotime($lic->expires_at)) : '') . "\n"
@@ -110,7 +117,7 @@ function endora_bridge_shop_key_message($lic)
 function endora_bridge_shop_send_key($lic, $file = null, $file_name = 'invoice.pdf')
 {
     $open = function_exists('endora_bridge_meta_window_open') && endora_bridge_meta_cfg() ? endora_bridge_meta_window_open($lic->phone) : true;
-    $res  = endora_bridge_wa_send($lic->phone, endora_bridge_shop_key_message($lic), $file, $file_name);
+    $res  = endora_bridge_wa_send($lic->phone, endora_bridge_shop_key_message($lic, !$open), $file, $file_name);
     if (!$open && !empty($res['ok']) && empty($res['queued'])) {
         endora_bridge_wa_tables();
         get_instance()->db->insert(db_prefix() . 'endora_wa_queue', ['phone' => endora_bridge_wa_digits($lic->phone), 'body' => $lic->lic_key, 'file' => null, 'file_name' => null, 'created_at' => date('Y-m-d H:i:s')]);
