@@ -102,3 +102,20 @@ function endora_bridge_shop_key_message($lic)
         . "Open the app and paste the key when it asks for it. Keep this message safe.\n\n– Endora Live Tools";
     return $text;
 }
+
+/* Orders always reach the owner on WhatsApp (not only as an app notification). Returns the send result. */
+function endora_bridge_shop_owner_wa($text)
+{
+    $GLOBALS['endora_wa_force'] = 1;
+    try {
+        $r = endora_bridge_wa_send(endora_bridge_shop_owner_phone(), $text);
+    } catch (Throwable $e) {
+        $r = ['ok' => false, 'error' => $e->getMessage()];
+    }
+    unset($GLOBALS['endora_wa_force']);
+    if (empty($r['ok'])) {
+        log_message('error', 'Endora shop: owner WhatsApp failed: ' . json_encode($r));
+    }
+    update_option('endora_bridge_shop_last_wa', json_encode(['t' => date('Y-m-d H:i:s'), 'r' => $r]));
+    return $r;
+}

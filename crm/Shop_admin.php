@@ -106,7 +106,7 @@ class Shop_admin extends Ops
         }
         $this->db->where('id', $r->id)->update($p . 'endora_licenses', ['lic_key' => $key, 'status' => 'active', 'approved_at' => date('Y-m-d H:i:s'), 'expires_at' => $exp]);
         $r = $this->db->where('id', $r->id)->get($p . 'endora_licenses')->row();
-        $ok = endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r));
+        $ok = !empty(endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r))['ok']);
         $this->db->where('id', $r->id)->update($p . 'endora_licenses', ['wa_sent' => $ok ? 1 : 0]);
         $this->go($ok ? 'm=' . rawurlencode('Approved. Licence key ' . $key . ' sent to ' . $r->name . ' on WhatsApp.') : 'err=' . rawurlencode('Approved with key ' . $key . ', but WhatsApp did not send. Press "Resend key".'));
     }
@@ -114,7 +114,7 @@ class Shop_admin extends Ops
     public function resend($id)
     {
         $r  = $this->row($id);
-        $ok = $r->lic_key !== '' && endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r));
+        $ok = $r->lic_key !== '' && !empty(endora_bridge_wa_send($r->phone, endora_bridge_shop_key_message($r))['ok']);
         $this->go($ok ? 'm=' . rawurlencode('Key sent again.') : 'err=' . rawurlencode('WhatsApp did not send.'));
     }
 
