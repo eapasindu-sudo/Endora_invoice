@@ -21,7 +21,7 @@ function endora_bridge_shop_products()
     return [
         'atem-switcher' => ['ATEM Web Switcher', 'ATM', 15000, 'sw:ATEM Switcher'],
         'atem-tally'    => ['ATEM Tally for DJI RC Pro', 'TLY', 7500, 'sw:ATEM Switcher'],
-        'atem-ccu'      => ['ATEM CCU', 'CCU', 12000, ''],
+        'atem-ccu'      => ['ATEM CCU', 'CCU', 12000, 'sw:ATEM Switcher'],
         'cricket-scorer' => ['Cricket Scorer', 'CRK', 25000, 'sw:Cricket Scorer'],
         'playout'       => ['Endora Playout + CG Composer', 'PLY', 45000, 'sw:Endora Playout'],
         'replay'        => ['Endora Replay', 'RPL', 30000, 'sw:Endora Replay'],
