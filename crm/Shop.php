@@ -163,18 +163,26 @@ class Shop extends App_Controller
         $product = (string) ($this->input->get_post('product') ?? '');
         $machine = mb_substr(preg_replace('/[^A-Za-z0-9:_\-.]/', '', (string) ($this->input->get_post('machine') ?? '')), 0, 80);
         $lic     = $key !== '' ? $this->db->where('lic_key', $key)->get(db_prefix() . 'endora_licenses')->row() : null;
-        if (!$lic || $lic->status !== 'active' || ($product !== '' && $lic->product !== $product)) {
+        // Bundles: one key also opens these apps (Playout includes the ATEM Web Switcher).
+        $bundle = ['playout' => ['atem-switcher']];
+        $fits   = $lic && ($product === '' || $lic->product === $product || in_array($product, $bundle[$lic->product] ?? [], true));
+        if (!$lic || $lic->status !== 'active' || !$fits) {
             $this->out(['ok' => true, 'valid' => false, 'reason' => 'This licence key is not valid for this app.']);
         }
         if ($lic->expires_at && $lic->expires_at < date('Y-m-d')) {
             $this->out(['ok' => true, 'valid' => false, 'reason' => 'This licence expired on ' . $lic->expires_at . '.']);
         }
-        $ms = json_decode((string) $lic->machines, true) ?: [];
-        if ($machine !== '' && !in_array($machine, $ms, true)) {
-            if (count($ms) >= (int) $lic->seats) {
-                $this->out(['ok' => true, 'valid' => false, 'reason' => 'This key is already used on ' . count($ms) . ' computer(s).']);
+        // Computers are counted per app, so a bundle key works in each of its apps on the same PC.
+        $ms  = json_decode((string) $lic->machines, true) ?: [];
+        $tag = ($product !== '' && $product !== $lic->product) ? $product . ':' . $machine : $machine;
+        $mine = array_values(array_filter($ms, function ($m) use ($product, $lic) {
+            return ($product !== '' && $product !== $lic->product) ? strpos($m, $product . ':') === 0 : strpos($m, ':') === false;
+        }));
+        if ($machine !== '' && !in_array($tag, $ms, true)) {
+            if (count($mine) >= (int) $lic->seats) {
+                $this->out(['ok' => true, 'valid' => false, 'reason' => 'This key is already used on ' . count($mine) . ' computer(s).']);
             }
-            $ms[] = $machine;
+            $ms[] = $tag;
             $this->db->where('id', $lic->id)->update(db_prefix() . 'endora_licenses', ['machines' => json_encode($ms)]);
         }
         $this->out(['ok' => true, 'valid' => true, 'product' => $lic->product, 'name' => $lic->name, 'seats' => (int) $lic->seats, 'expires' => $lic->expires_at,
