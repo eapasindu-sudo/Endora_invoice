@@ -44,7 +44,13 @@ async function installers(app) {
   const url = String(j.url || '');
   // Mac build published beside a Windows one on our own server
   let extra = [];
-  try { const m = await (await fetch(CRM + 'download?p=' + app + '&mac=1')).json(); if (m.url && m.url !== url && !/github\.com/.test(m.url)) extra = [{ name: decodeURIComponent(m.url.split('/').pop().split('?')[0]), url: m.url }]; } catch (e) {}
+  try {
+    if (url && !/github\.com/.test(url)) {
+      const base = url.replace(/[^/]+$/, '');
+      const y = await (await fetch(base + 'latest-mac.yml')).text();
+      extra = [...y.matchAll(/url:\s*(\S+\.dmg)/g)].map((x) => ({ name: x[1], url: base + encodeURIComponent(x[1]) }));
+    }
+  } catch (e) {}
   const m = url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/latest/);
   if (!m) return (url ? [{ name: decodeURIComponent(url.split('/').pop().split('?')[0]), url }] : []).concat(extra);
   const rel = await (await fetch(`https://api.github.com/repos/${m[1]}/releases/latest`, { headers: { 'User-Agent': 'endora-drive-sync' } })).json();
