@@ -19,9 +19,9 @@ function endora_bridge_shop_products()
 {
     // id => [name, key prefix, price LKR (1 computer, one-time + 1 year updates), name in endora_bridge_software() or a download URL]
     return [
-        'atem-switcher' => ['ATEM Web Switcher', 'ATM', 15000, 'sw:ATEM Switcher'],
+        'atem-switcher' => ['ATEM Web Switcher', 'ATM', 15000, 'https://github.com/eapasindu-sudo/atem-web-switcher/releases/latest'],
         'atem-tally'    => ['ATEM Tally for DJI RC Pro', 'TLY', 5000, 'https://github.com/eapasindu-sudo/atem-web-switcher/releases/download/tally-android/ATEM-Tally.apk'],
-        'atem-ccu'      => ['ATEM CCU', 'CCU', 12000, 'sw:ATEM Switcher'],
+        'atem-ccu'      => ['ATEM CCU', 'CCU', 12000, 'https://github.com/eapasindu-sudo/atem-web-switcher/releases/latest'],
         'cricket-scorer' => ['Cricket Scorer', 'CRK', 25000, 'sw:Cricket Scorer'],
         'playout'       => ['Endora Playout + CG Composer', 'PLY', 45000, 'sw:Endora Playout'],
         'replay'        => ['Endora Replay', 'RPL', 30000, 'sw:Endora Replay'],
@@ -67,17 +67,30 @@ function endora_bridge_shop_expiry($product, $plan, $from = null)
     return ($pl && $pl[3] > 0) ? date('Y-m-d', strtotime(($from ?: date('Y-m-d')) . ' +' . ($pl[3] - 1) . ' days')) : null;
 }
 
-function endora_bridge_shop_download($product)
+function endora_bridge_shop_download($product, $mac = false)
 {
     $pr = endora_bridge_shop_products()[$product] ?? null;
     if (!$pr || $pr[3] === '') {
         return '';
     }
     if (strpos($pr[3], 'sw:') !== 0) {
-        return $pr[3];
+        return $pr[3]; // a GitHub release: dl.php picks the .dmg or .exe from it
     }
     foreach (endora_bridge_software() as $a) {
         if ($a[0] === substr($pr[3], 3) && !empty($a[3]['url']) && strpos($a[3]['url'], '/admin/') === false) {
+            if ($mac) {
+                // Mac build published beside the Windows one (latest-mac.yml in the same folder)
+                $base = preg_replace('#[^/]+$#', '', $a[3]['url']);
+                $y    = endora_bridge_sw_get($base . 'latest-mac.yml');
+                if (preg_match_all('/^\s*-?\s*url:\s*(\S+\.dmg)/m', $y, $m)) {
+                    $pick = $m[1][0];
+                    foreach ($m[1] as $u) {
+                        if (stripos($u, 'arm64') !== false) { $pick = $u; break; }
+                    }
+                    return $base . rawurlencode($pick);
+                }
+                return '';
+            }
             return $a[3]['url'];
         }
     }

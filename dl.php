@@ -18,15 +18,21 @@ foreach ((array) ($man['apps'][$app]['files'] ?? []) as $f) {
     }
 }
 // 2) Otherwise straight from the release
-$j   = $get('https://www.endoraweddingfilms.com/perfex_crm/endora_bridge/shop/download?p=' . rawurlencode($app));
+$j   = $get('https://www.endoraweddingfilms.com/perfex_crm/endora_bridge/shop/download?p=' . rawurlencode($app) . ($mac ? '&mac=1' : ''));
 $url = is_array($j) ? (string) ($j['url'] ?? '') : '';
 if (preg_match('#^https://github\.com/([^/]+/[^/]+)/releases/latest#', $url, $m)) {
     $rel = $get('https://api.github.com/repos/' . $m[1] . '/releases/latest');
+    $found = [];
     foreach ((array) ($rel['assets'] ?? []) as $a) {
         $n = (string) $a['name'];
         if ($mac ? preg_match('/\.dmg$/i', $n) : preg_match('/\.exe$/i', $n)) {
-            $url = $a['browser_download_url'];
-            break;
+            $found[$n] = $a['browser_download_url'];
+        }
+    }
+    if ($found) {
+        $url = reset($found);
+        foreach ($found as $n => $u) {
+            if (stripos($n, 'arm64') !== false) { $url = $u; break; } // Apple Silicon first
         }
     }
 }
