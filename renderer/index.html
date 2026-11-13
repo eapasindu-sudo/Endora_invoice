@@ -12,6 +12,7 @@
     <input id="licKey" placeholder="EWF-INV-XXXX-XXXX-XXXX" autocomplete="off" style="font-size:16px;letter-spacing:.08em;text-align:center;text-transform:uppercase">
     <div id="licErr" class="err"></div>
     <button class="btn gold" id="licGo" style="width:100%;margin-top:6px">Activate</button>
+    <button class="btn hidden" id="licClose" style="width:100%;margin-top:6px">Close</button>
     <p class="muted" style="margin-top:14px;font-size:12px">No key yet? <a href="#" id="licBuy" style="color:var(--gold)">Buy a licence</a></p></div>
 </div>
 <div id="lock" class="lock hidden">
@@ -28,7 +29,7 @@
     <a data-v="settings">Settings</a>
   </nav>
   <div id="upd" class="upd hidden"></div>
-  <div class="ver" id="ver"></div>
+  <div class="ver" id="ver" title="Licence key" style="cursor:pointer"></div><a id="licLink" style="font-size:11px;color:var(--gold);padding:0 10px;cursor:pointer">Licence key…</a>
 </aside>
 <main id="main"></main>
 <div id="modal" class="modal hidden"><div class="mbox" id="mbox"></div></div>

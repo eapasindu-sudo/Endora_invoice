@@ -320,6 +320,15 @@ async function activateKey() {
   else $('#licErr').textContent = s.message || 'This key did not work.';
 }
 $('#licGo').onclick = activateKey;
+async function showLicence() {
+  const s = await api.licenceStatus();
+  $('#licMsg').textContent = s.state === 'licensed' ? `Licensed with key ${s.key}${s.expires ? ' (until ' + s.expires + ')' : ''}. Enter another key to replace it.` : (s.message || 'Enter your licence key.');
+  $('#licKey').value = ''; $('#licErr').textContent = '';
+  $('#licClose').classList.toggle('hidden', !s.ok);
+  $('#lic').classList.remove('hidden'); $('#licKey').focus();
+}
+$('#licLink').onclick = showLicence;
+$('#licClose').onclick = () => $('#lic').classList.add('hidden');
 $('#licKey').addEventListener('keydown', (e) => { if (e.key === 'Enter') activateKey(); });
 $('#licBuy').onclick = (e) => { e.preventDefault(); api.openUrl(BUY); };
 
