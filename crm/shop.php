@@ -193,3 +193,38 @@ function endora_bridge_shop_stats()
     }
     return $out;
 }
+
+/* One-page licence certificate PDF. A WhatsApp message with a file can go out as the approved
+   "endora_document" template, so the key reaches people who have not written to us in 24 hours. */
+function endora_bridge_shop_licence_pdf($lic)
+{
+    try {
+        if (!class_exists('TCPDF')) {
+            foreach ([APPPATH . 'vendor/tecnickcom/tcpdf/tcpdf.php', FCPATH . 'vendor/tecnickcom/tcpdf/tcpdf.php'] as $f) {
+                if (is_file($f)) { require_once $f; break; }
+            }
+        }
+        if (!class_exists('TCPDF')) {
+            return null;
+        }
+        $pr  = endora_bridge_shop_products()[$lic->product] ?? [$lic->product];
+        $pl  = endora_bridge_shop_plan($lic->product, $lic->plan) ?: [$lic->plan === 'free' ? 'Lifetime licence + updates' : $lic->plan];
+        $pdf = new TCPDF('P', 'mm', 'A5', true, 'UTF-8');
+        $pdf->setPrintHeader(false); $pdf->setPrintFooter(false); $pdf->SetMargins(14, 16, 14); $pdf->AddPage();
+        $pdf->SetFillColor(11, 10, 9); $pdf->Rect(0, 0, 148, 210, 'F');
+        $pdf->SetTextColor(200, 169, 106); $pdf->SetFont('helvetica', '', 9); $pdf->Cell(0, 6, 'ENDORA  ·  LIVE TOOLS', 0, 1, 'C');
+        $pdf->Ln(10); $pdf->SetTextColor(245, 240, 232); $pdf->SetFont('times', '', 22); $pdf->MultiCell(0, 10, $pr[0], 0, 'C');
+        $pdf->Ln(4); $pdf->SetFont('helvetica', '', 10); $pdf->SetTextColor(190, 180, 165); $pdf->Cell(0, 6, 'Licence for ' . $lic->name, 0, 1, 'C');
+        $pdf->Ln(12); $pdf->SetFont('helvetica', '', 9); $pdf->SetTextColor(200, 169, 106); $pdf->Cell(0, 6, 'YOUR LICENCE KEY', 0, 1, 'C');
+        $pdf->SetFont('courier', 'B', 17); $pdf->SetTextColor(245, 240, 232); $pdf->Cell(0, 12, $lic->lic_key, 0, 1, 'C');
+        $pdf->Ln(8); $pdf->SetFont('helvetica', '', 10); $pdf->SetTextColor(190, 180, 165);
+        $pdf->MultiCell(0, 6, $pl[0] . ($lic->expires_at ? "\nValid until " . date('j M Y', strtotime($lic->expires_at)) : '') . "\n" . (int) $lic->seats . ' computer' . ((int) $lic->seats === 1 ? '' : 's'), 0, 'C');
+        $pdf->Ln(10); $pdf->SetFont('helvetica', '', 9);
+        $pdf->MultiCell(0, 5, "Open the app and paste the licence key when it asks for it.\nDownload: tools.endoraweddingfilms.com", 0, 'C');
+        $file = get_temp_dir() . 'endora-licence-' . $lic->id . '-' . time() . '.pdf';
+        $pdf->Output($file, 'F');
+        return is_file($file) ? $file : null;
+    } catch (Throwable $e) {
+        return null;
+    }
+}

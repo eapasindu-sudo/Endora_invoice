@@ -105,7 +105,13 @@ class Shop_admin extends Ops
                 $file = null;
             }
         }
+        if (!$file || !is_file($file)) {
+            $file = endora_bridge_shop_licence_pdf($r); // free keys have no invoice
+            $name = 'Licence ' . $r->lic_key . '.pdf';
+        }
+        $GLOBALS['endora_wa_force'] = 1; // keys always go on WhatsApp, also to the owner's number
         $res = endora_bridge_shop_send_key($r, $file && is_file($file) ? $file : null, $name);
+        unset($GLOBALS['endora_wa_force']);
         if ($file && is_file($file)) {
             @unlink($file);
         }
