@@ -6,7 +6,7 @@ const { Store, totals } = require('./src/store');
 const { invoiceHtml } = require('./src/invoice-html');
 const { backupNow } = require('./src/backup');
 
-let win, store, pdfDir;
+let win, store, pdfDir, licence;
 const isMac = process.platform === 'darwin';
 
 if (!app.requestSingleInstanceLock()) app.quit();
@@ -149,6 +149,13 @@ function setupUpdates() {
 app.whenReady().then(() => {
   store = new Store(app.getPath('userData'));
   pdfDir = path.join(app.getPath('documents'), 'Endora Invoices');
+
+  const { Licence } = require('./src/licence');
+  licence = new Licence(app.getPath('userData'), 'invoice');
+  ipcMain.handle('licence-status', () => licence.refresh());
+  ipcMain.handle('licence-activate', async (e, key) => { try { return await licence.activate(key); } catch (err) { return { state: 'error', ok: false, message: err.message }; } });
+  ipcMain.handle('licence-remove', () => licence.remove());
+  setInterval(() => licence.refresh().then((s) => { if (win && !win.isDestroyed()) win.webContents.send('licence', s); }), 6 * 3600 * 1000);
 
   ipcMain.handle('db', () => store.all());
   ipcMain.handle('version', () => app.getVersion());

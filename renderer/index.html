@@ -7,6 +7,13 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="lic" class="lock hidden">
+  <div class="lockbox" style="width:380px"><img src="logo.png" alt=""><h2>Endora Invoice</h2><p id="licMsg" class="muted"></p>
+    <input id="licKey" placeholder="EWF-INV-XXXX-XXXX-XXXX" autocomplete="off" style="font-size:16px;letter-spacing:.08em;text-align:center;text-transform:uppercase">
+    <div id="licErr" class="err"></div>
+    <button class="btn gold" id="licGo" style="width:100%;margin-top:6px">Activate</button>
+    <p class="muted" style="margin-top:14px;font-size:12px">No key yet? <a href="#" id="licBuy" style="color:var(--gold)">Buy a licence</a></p></div>
+</div>
 <div id="lock" class="lock hidden">
   <div class="lockbox"><img id="lLogo" src="logo.png" alt=""><h2 id="lName">Invoice</h2><p>Enter your PIN</p>
     <input id="pinIn" type="password" inputmode="numeric" maxlength="8" autocomplete="off"><div id="pinErr" class="err"></div></div>

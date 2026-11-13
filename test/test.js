@@ -25,3 +25,24 @@ const { parsePackages } = require('../src/pdf-import');
 const pk = parsePackages(['WEDDING 2027', 'SILVER PACKAGE', 'Rs. 85,000', '• 1 photographer', 'GOLD PACKAGE', 'Rs. 125,000 /-', '• 2 photographers', '• Album']);
 assert.deepStrictEqual(pk.map((p) => [p.name, p.priceHD, p.includes.length]), [['SILVER PACKAGE', 85000, 1], ['GOLD PACKAGE', 125000, 2]]);
 console.log('PDF import parser OK');
+
+// licence: trial, activation, expiry, revoke, offline grace
+{
+  const { Licence } = require('../src/licence');
+  const dir = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'lic-'));
+  let now = Date.parse('2026-11-01T10:00:00Z'), answer = { ok: true, valid: true, name: 'Test', expires: null };
+  const L = new Licence(dir, 'invoice', { trialDays: 14, now: () => now, machine: 'm1', fetch: async () => ({ json: async () => answer }) });
+  assert.strictEqual(L.status().state, 'trial'); assert.strictEqual(L.status().daysLeft, 14);
+  now += 15 * 86400000; assert.strictEqual(L.status().state, 'none');
+  (async () => {
+    assert.strictEqual((await L.activate('ewf-inv-aaaa')).state, 'licensed');
+    now += 8 * 86400000; assert.strictEqual(L.status().state, 'offline');
+    assert.strictEqual((await L.refresh()).state, 'licensed');
+    answer = { ok: true, valid: true, expires: '2026-11-25' }; await L.refresh(true);
+    now = Date.parse('2026-11-26T10:00:00Z'); assert.strictEqual(L.status().state, 'expired');
+    answer = { ok: true, valid: false, reason: 'revoked' }; assert.strictEqual((await L.refresh(true)).state, 'revoked');
+    const L2 = new Licence(dir, 'invoice', { now: () => now, machine: 'm1', fetch: async () => ({ json: async () => answer }) });
+    assert.strictEqual(L2.s.key, 'EWF-INV-AAAA');
+    console.log('Licence OK');
+  })().catch((e) => { console.error(e); process.exit(1); });
+}

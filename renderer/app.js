@@ -298,6 +298,31 @@ function setupWizard() {
 }
 
 /* ---------------- Start ---------------- */
+/* ---------------- Licence ---------------- */
+const BUY = 'https://tools.endoraweddingfilms.com/#invoice';
+function licenceGate(s) {
+  const box = $('#lic');
+  if (s.ok) {
+    box.classList.add('hidden');
+    $('#ver').textContent = $('#ver').textContent.replace(/ ·.*$/, '') + (s.state === 'trial' ? ` · Trial: ${s.daysLeft} day${s.daysLeft === 1 ? '' : 's'} left` : '');
+    return;
+  }
+  $('#licMsg').textContent = s.message || 'Enter your licence key.';
+  box.classList.remove('hidden'); $('#licKey').value = s.key || ''; $('#licKey').focus();
+}
+async function activateKey() {
+  const k = $('#licKey').value.trim();
+  if (!k) { $('#licErr').textContent = 'Paste the licence key from your WhatsApp message.'; return; }
+  $('#licGo').disabled = true; $('#licErr').textContent = 'Checking…';
+  const s = await api.licenceActivate(k);
+  $('#licGo').disabled = false;
+  if (s.ok && s.state === 'licensed') { $('#licErr').textContent = ''; licenceGate(s); toast('Licence activated. Thank you!'); }
+  else $('#licErr').textContent = s.message || 'This key did not work.';
+}
+$('#licGo').onclick = activateKey;
+$('#licKey').addEventListener('keydown', (e) => { if (e.key === 'Enter') activateKey(); });
+$('#licBuy').onclick = (e) => { e.preventDefault(); api.openUrl(BUY); };
+
 (async function start() {
   DB = await api.db();
   $('#ver').textContent = 'v' + (await api.version());
@@ -315,5 +340,7 @@ function setupWizard() {
     else el.textContent = `Downloading version ${u.version}…`;
     const b = $('#updBtn'); if (b) b.onclick = () => u.state === 'ready' ? api.installUpdate() : api.openUrl('https://github.com/eapasindu-sudo/Endora_invoice/releases/latest');
   });
+  licenceGate(await api.licenceStatus());
+  api.on('licence', licenceGate);
   api.on('backup-done', (r) => { if (r.some((x) => !x.ok)) toast('Backup failed for: ' + r.filter((x) => !x.ok).map((x) => x.dir).join(', '), true); });
 })();
