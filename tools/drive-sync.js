@@ -42,8 +42,11 @@ async function upload(parent, name, url) {
 async function installers(app) {
   const j = await (await fetch(CRM + 'download?p=' + app)).json();
   const url = String(j.url || '');
+  // Mac build published beside a Windows one on our own server
+  let extra = [];
+  try { const m = await (await fetch(CRM + 'download?p=' + app + '&mac=1')).json(); if (m.url && m.url !== url && !/github\.com/.test(m.url)) extra = [{ name: decodeURIComponent(m.url.split('/').pop().split('?')[0]), url: m.url }]; } catch (e) {}
   const m = url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/latest/);
-  if (!m) return url ? [{ name: decodeURIComponent(url.split('/').pop().split('?')[0]), url }] : [];
+  if (!m) return (url ? [{ name: decodeURIComponent(url.split('/').pop().split('?')[0]), url }] : []).concat(extra);
   const rel = await (await fetch(`https://api.github.com/repos/${m[1]}/releases/latest`, { headers: { 'User-Agent': 'endora-drive-sync' } })).json();
   return (rel.assets || []).filter((a) => KEEP.test(a.name)).map((a) => ({ name: a.name, url: a.browser_download_url }));
 }
