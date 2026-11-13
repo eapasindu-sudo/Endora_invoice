@@ -51,6 +51,9 @@ async function installers(app) {
       extra = [...y.matchAll(/url:\s*(\S+\.dmg)/g)].map((x) => ({ name: x[1], url: base + encodeURIComponent(x[1]) }));
     }
   } catch (e) {}
+  if (app === 'playout') { // the Mac build is a zip on the GitHub release
+    try { const r = await (await fetch('https://api.github.com/repos/eapasindu-sudo/playout/releases/latest', { headers: { 'User-Agent': 'endora-drive-sync' } })).json(); extra = extra.concat((r.assets || []).filter((a) => /mac\.zip$/i.test(a.name)).map((a) => ({ name: a.name, url: a.browser_download_url }))); } catch (e) {}
+  }
   const m = url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/latest/);
   if (!m) return (url ? [{ name: decodeURIComponent(url.split('/').pop().split('?')[0]), url }] : []).concat(extra);
   const rel = await (await fetch(`https://api.github.com/repos/${m[1]}/releases/latest`, { headers: { 'User-Agent': 'endora-drive-sync' } })).json();
