@@ -6,7 +6,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $dimensions = $pdf->getPageDimensions();
 $cur   = $invoice->currency_name;
 $money = function ($v) use ($cur) { return $cur . ' ' . app_format_number($v); };
-$brs   = function ($t) { return preg_replace('/(<br \/>){3,}/', '<br /><br />', preg_replace('/\r?\n/', '<br />', trim((string) $t))); };
+$brs   = function ($t) {
+    $t = preg_replace('/<br\s*\/?>/i', "\n", (string) $t);
+    $t = str_replace("\r", '', $t);
+    $t = preg_replace('/[ \t]+/', ' ', $t);
+    $t = preg_replace('/ ?\n ?/', "\n", trim($t));
+    return str_replace("\n", '<br />', preg_replace("/\n{3,}/", "\n\n", $t));
+};
 $gold  = '#c8a96a'; $ink = '#2a2420'; $maroon = '#7a1f2b'; $cream = '#faf6ee'; $mut = '#7d7066';
 $lbl   = function ($t) use ($gold) { return '<span style="font-size:7.5pt;color:#a88a4d;">' . strtoupper($t) . '</span><br />'; };
 
