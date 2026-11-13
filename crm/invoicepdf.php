@@ -112,7 +112,7 @@ if (count($invoice->payments) > 0 && get_option('show_transactions_on_invoice_pd
 
 // --- bank details (payment modes shown on the PDF), note, terms
 $box = function ($title, $html) use ($cream, $lbl) {
-    return '<table cellpadding="8" width="100%"><tr><td style="background-color:' . $cream . ';font-size:8.5pt;line-height:1.55;">' . $lbl($title) . $html . '</td></tr></table>';
+    return '<table cellpadding="8" width="100%"><tr><td style="background-color:' . $cream . ';font-size:7.8pt;line-height:1.4;">' . $lbl($title) . $html . '</td></tr></table>';
 };
 if (found_invoice_mode($payment_modes, $invoice->id, true, true)) {
     $b = '';
@@ -139,7 +139,7 @@ if (!empty($invoice->terms)) {
 }
 // --- LankaQR (unpaid invoices only)
 if (file_exists(FCPATH . 'uploads/endora_lankaqr.png') && (int) $invoice->status !== 2) {
-    if ($pdf->GetY() > $pdf->getPageHeight() - 75) {
+    if ($pdf->GetY() > $pdf->getPageHeight() - 65) {
         $pdf->AddPage();
     }
     $pdf->Ln(3);
@@ -147,8 +147,8 @@ if (file_exists(FCPATH . 'uploads/endora_lankaqr.png') && (int) $invoice->status
     $pdf->SetTextColor(168, 138, 77);
     $pdf->Cell(0, 0, 'SCAN & PAY WITH LANKAQR (ANY BANK APP)', 0, 1, 'L', 0, '', 0);
     $pdf->SetTextColor(0, 0, 0);
-    $pdf->Image(FCPATH . 'uploads/endora_lankaqr.png', '', $pdf->GetY() + 2, 36, 36, 'PNG');
-    $pdf->SetY($pdf->GetY() + 40);
+    $pdf->Image(FCPATH . 'uploads/endora_lankaqr.png', '', $pdf->GetY() + 2, 30, 30, 'PNG');
+    $pdf->SetY($pdf->GetY() + 34);
     $pdf->SetFont($font_name, '', $font_size - 1);
     $pdf->Cell(0, 0, 'MR E A P DILSHAN – please send the payment screenshot on WhatsApp after paying.', 0, 1, 'L', 0, '', 0);
     $pdf->SetFont($font_name, '', $font_size);
