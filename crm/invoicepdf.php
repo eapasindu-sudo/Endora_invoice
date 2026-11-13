@@ -143,7 +143,7 @@ if (file_exists(FCPATH . 'uploads/endora_lankaqr.png') && (int) $invoice->status
     $pdf->Image(FCPATH . 'uploads/endora_lankaqr.png', '', $pdf->GetY() + 2, 36, 36, 'PNG');
     $pdf->SetY($pdf->GetY() + 40);
     $pdf->SetFont($font_name, '', $font_size - 1);
-    $pdf->Cell(0, 0, 'MR E A P DILSHAN \u2013 please send the payment screenshot on WhatsApp after paying.', 0, 1, 'L', 0, '', 0);
+    $pdf->Cell(0, 0, 'MR E A P DILSHAN – please send the payment screenshot on WhatsApp after paying.', 0, 1, 'L', 0, '', 0);
     $pdf->SetFont($font_name, '', $font_size);
 }
 $pdf->Ln(4);
