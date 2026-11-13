@@ -58,7 +58,11 @@ $rows  = '';
 foreach ($invoice->items as $it) {
     $desc = '<b>' . $it['description'] . '</b>';
     if (trim((string) $it['long_description']) !== '') {
-        $desc .= '<br /><span style="color:' . $mut . ';font-size:8pt;line-height:1.25;">' . $brs($it['long_description']) . '</span>';
+        foreach (preg_split('/(?:<br \/>)+/', $brs($it['long_description'])) as $ln) {
+            if (trim($ln) !== '') {
+                $desc .= '<div style="color:' . $mut . ';font-size:8pt;line-height:1.05;">' . $ln . '</div>';
+            }
+        }
     }
     $q = (float) $it['qty'];
     $rows .= '<tr><td width="52%" style="border-bottom:1px solid #eee3d0;">' . $desc . '</td><td width="8%" align="right" style="border-bottom:1px solid #eee3d0;">' . $q . '</td><td width="19%" align="right" style="border-bottom:1px solid #eee3d0;">' . app_format_number($it['rate']) . '</td><td width="21%" align="right" style="border-bottom:1px solid #eee3d0;">' . app_format_number($q * (float) $it['rate']) . '</td></tr>';
