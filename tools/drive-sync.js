@@ -1,6 +1,6 @@
 'use strict';
 // Copies the newest installer of every Endora Live Tools app into Google Drive:
-//   Endora Live Tools/<App>/<installer>  – a new version is uploaded, older ones are deleted.
+//   ewf tools/<App>/<installer>  – a new version is uploaded, older ones are deleted.
 // Runs in GitHub Actions (hourly and after each release). Needs the secrets GDRIVE_CLIENT_ID,
 // GDRIVE_CLIENT_SECRET and GDRIVE_REFRESH_TOKEN. Writes drive-manifest.json for the download links.
 const fs = require('fs');
@@ -62,7 +62,15 @@ async function installers(app) {
 
 (async () => {
   await token();
-  const root = await folder('Endora Live Tools');
+  // the software folder is called "ewf tools" (an older "Endora Live Tools" folder is renamed, keeping its files and links)
+  let root;
+  const cur = await g(`files?q=${q("name='ewf tools' and mimeType='application/vnd.google-apps.folder' and trashed=false")}&fields=files(id)`);
+  if (cur.files.length) root = cur.files[0].id;
+  else {
+    const old = await g(`files?q=${q("name='Endora Live Tools' and mimeType='application/vnd.google-apps.folder' and trashed=false")}&fields=files(id)`);
+    if (old.files.length) { root = old.files[0].id; await g('files/' + root, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'ewf tools' }) }); }
+    else root = await folder('ewf tools');
+  }
   const manifest = { updated: new Date().toISOString(), root, apps: {} };
   for (const [app, title] of Object.entries(APPS)) {
     try {
