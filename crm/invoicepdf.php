@@ -130,6 +130,22 @@ if (!empty($invoice->terms)) {
     $pdf->Ln(2);
     $pdf->writeHTML($box(_l('terms_and_conditions'), $invoice->terms), true, false, false, false, '');
 }
+// --- LankaQR (unpaid invoices only)
+if (file_exists(FCPATH . 'uploads/endora_lankaqr.png') && (int) $invoice->status !== 2) {
+    if ($pdf->GetY() > $pdf->getPageHeight() - 75) {
+        $pdf->AddPage();
+    }
+    $pdf->Ln(3);
+    $pdf->SetFont($font_name, 'B', $font_size);
+    $pdf->SetTextColor(168, 138, 77);
+    $pdf->Cell(0, 0, 'SCAN & PAY WITH LANKAQR (ANY BANK APP)', 0, 1, 'L', 0, '', 0);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Image(FCPATH . 'uploads/endora_lankaqr.png', '', $pdf->GetY() + 2, 36, 36, 'PNG');
+    $pdf->SetY($pdf->GetY() + 40);
+    $pdf->SetFont($font_name, '', $font_size - 1);
+    $pdf->Cell(0, 0, 'MR E A P DILSHAN \u2013 please send the payment screenshot on WhatsApp after paying.', 0, 1, 'L', 0, '', 0);
+    $pdf->SetFont($font_name, '', $font_size);
+}
 $pdf->Ln(4);
 $pdf->writeHTML('<div style="text-align:center;font-family:times;font-style:italic;color:#a88a4d;font-size:12pt;">Thank you for choosing ' . get_option('invoice_company_name') . '.</div>', true, false, false, false, '');
 
