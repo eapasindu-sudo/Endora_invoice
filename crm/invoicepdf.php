@@ -5,7 +5,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /* Endora invoice PDF: same look as the Endora Invoice app (gold line, dark table head, maroon balance box). */
 $dimensions = $pdf->getPageDimensions();
 $cur   = $invoice->currency_name;
-$money = function ($v) use ($cur) { return app_format_money($v, $cur); };
+$money = function ($v) use ($cur) { return $cur . ' ' . app_format_number($v); };
+$brs   = function ($t) { return preg_replace('/(<br \/>){3,}/', '<br /><br />', preg_replace('/\r?\n/', '<br />', trim((string) $t))); };
 $gold  = '#c8a96a'; $ink = '#2a2420'; $maroon = '#7a1f2b'; $cream = '#faf6ee'; $mut = '#7d7066';
 $lbl   = function ($t) use ($gold) { return '<span style="font-size:7.5pt;color:#a88a4d;">' . strtoupper($t) . '</span><br />'; };
 
@@ -51,12 +52,12 @@ $rows  = '';
 foreach ($invoice->items as $it) {
     $desc = '<b>' . $it['description'] . '</b>';
     if (trim((string) $it['long_description']) !== '') {
-        $desc .= '<br /><span style="color:' . $mut . ';font-size:8.5pt;">' . nl2br($it['long_description']) . '</span>';
+        $desc .= '<br /><span style="color:' . $mut . ';font-size:8pt;line-height:1.25;">' . $brs($it['long_description']) . '</span>';
     }
     $q = (float) $it['qty'];
     $rows .= '<tr><td width="52%" style="border-bottom:1px solid #eee3d0;">' . $desc . '</td><td width="8%" align="right" style="border-bottom:1px solid #eee3d0;">' . $q . '</td><td width="19%" align="right" style="border-bottom:1px solid #eee3d0;">' . app_format_number($it['rate']) . '</td><td width="21%" align="right" style="border-bottom:1px solid #eee3d0;">' . app_format_number($q * (float) $it['rate']) . '</td></tr>';
 }
-$pdf->writeHTML('<table cellpadding="7" cellspacing="0" width="100%"><tr><th width="52%" ' . $th . '>DESCRIPTION</th><th width="8%" align="right" ' . $th . '>QTY</th><th width="19%" align="right" ' . $th . '>PRICE (' . $cur . ')</th><th width="21%" align="right" ' . $th . '>AMOUNT (' . $cur . ')</th></tr>' . $rows . '</table>', true, false, false, false, '');
+$pdf->writeHTML('<table cellpadding="7" cellspacing="0" width="100%"><tr><th width="52%" ' . $th . '>DESCRIPTION</th><th width="8%" align="right" ' . $th . '>QTY</th><th width="19%" align="right" ' . $th . '>PRICE</th><th width="21%" align="right" ' . $th . '>AMOUNT</th></tr>' . $rows . '</table>', true, false, false, false, '');
 $pdf->Ln(3);
 
 // --- totals
@@ -114,7 +115,7 @@ if (found_invoice_mode($payment_modes, $invoice->id, true, true)) {
             continue;
         }
         if (isset($mode['show_on_pdf']) && $mode['show_on_pdf'] == 1) {
-            $b .= '<b>' . $mode['name'] . '</b><br />' . $mode['description'] . '<br />';
+            $b .= '<b>' . $mode['name'] . '</b><br />' . $brs($mode['description']) . '<br />';
         }
     }
     if ($b !== '') {
@@ -124,11 +125,11 @@ if (found_invoice_mode($payment_modes, $invoice->id, true, true)) {
 }
 if (!empty($invoice->clientnote)) {
     $pdf->Ln(2);
-    $pdf->writeHTML($box(_l('invoice_note'), $invoice->clientnote), true, false, false, false, '');
+    $pdf->writeHTML($box(_l('invoice_note'), $brs($invoice->clientnote)), true, false, false, false, '');
 }
 if (!empty($invoice->terms)) {
     $pdf->Ln(2);
-    $pdf->writeHTML($box(_l('terms_and_conditions'), $invoice->terms), true, false, false, false, '');
+    $pdf->writeHTML($box(_l('terms_and_conditions'), $brs($invoice->terms)), true, false, false, false, '');
 }
 // --- LankaQR (unpaid invoices only)
 if (file_exists(FCPATH . 'uploads/endora_lankaqr.png') && (int) $invoice->status !== 2) {
