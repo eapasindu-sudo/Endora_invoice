@@ -117,7 +117,7 @@ function endora_bridge_shop_lk_phone($raw)
 function endora_bridge_shop_key_message($lic, $one_line = false)
 {
     $pr = endora_bridge_shop_products()[$lic->product] ?? [$lic->product];
-    $pl = endora_bridge_shop_plan($lic->product, $lic->plan) ?: ['', 1];
+    $pl = endora_bridge_shop_plan($lic->product, $lic->plan) ?: [$lic->plan === 'free' ? 'Lifetime licence + updates' : '', 1];
     $dl = endora_bridge_shop_download($lic->product) !== '' ? 'https://tools.endoraweddingfilms.com/dl.php?app=' . rawurlencode($lic->product) : '';
     if ($one_line) {
         // WhatsApp templates cannot carry line breaks, so this version reads as one clean paragraph (no " · " separators).

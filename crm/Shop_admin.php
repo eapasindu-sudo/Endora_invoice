@@ -24,6 +24,13 @@ class Shop_admin extends Ops
         $prods = endora_bridge_shop_products();
         $plans = endora_bridge_shop_plans();
         $this->head('&#128273; Software orders', 'Orders from tools.endoraweddingfilms.com. Check the slip on the invoice, then press Approve: the payment is recorded and the licence key goes to the client on WhatsApp.');
+        // Free keys for the owner, the team and friends.
+        echo '<h2>Create a free key</h2><div class="box">' . form_open(admin_url('endora_bridge/shop_admin/free')) . '<div class="row"><div><label>Software</label><select name="product">';
+        foreach ($prods as $id => $pr) {
+            echo '<option value="' . $id . '">' . html_escape($pr[0]) . '</option>';
+        }
+        echo '</select></div><div><label>For (name)</label><input name="name" required placeholder="e.g. Endora team / friend name"></div></div><div class="row"><div><label>WhatsApp (optional, to send the key)</label><input name="phone" placeholder="07X XXX XXXX"></div><div><label>Computers</label><input name="seats" type="number" min="1" max="20" value="3"></div></div>'
+            . '<button class="btn gold" style="width:100%;margin-top:10px">Create lifetime key</button>' . form_close() . '<p class="m">Free keys never expire. Leave WhatsApp empty to only show the key here.</p></div>';
         $st = endora_bridge_shop_stats();
         echo '<h2>Clicks on tools.endoraweddingfilms.com</h2><div class="box" style="overflow-x:auto"><table><tr><th>Software</th><th>Page views</th><th>Trial</th><th>Buy</th><th>Downloads</th></tr>';
         $cell = function ($a, $e) use ($st) { $v = $st[$a][$e] ?? [0, 0]; return '<td><b>' . $v[0] . '</b>' . ($v[1] ? ' <span class="m">(' . $v[1] . ' this week)</span>' : '') . '</td>'; };
@@ -103,6 +110,32 @@ class Shop_admin extends Ops
             @unlink($file);
         }
         return !empty($res['ok']) && empty($res['queued']);
+    }
+
+    public function free()
+    {
+        if ($this->input->method() !== 'post') {
+            $this->go('');
+        }
+        $prods   = endora_bridge_shop_products();
+        $product = (string) $this->input->post('product');
+        $name    = mb_substr(trim(strip_tags((string) $this->input->post('name'))), 0, 120);
+        if (!isset($prods[$product]) || $name === '') {
+            $this->go('err=' . rawurlencode('Choose the software and type a name.'));
+        }
+        $phone = endora_bridge_shop_lk_phone($this->input->post('phone'));
+        $p     = db_prefix();
+        do {
+            $key = endora_bridge_shop_newkey($prods[$product][1]);
+        } while ($this->db->where('lic_key', $key)->count_all_results($p . 'endora_licenses'));
+        $this->db->insert($p . 'endora_licenses', ['lic_key' => $key, 'product' => $product, 'plan' => 'free', 'seats' => max(1, min(20, (int) $this->input->post('seats'))), 'clientid' => 0, 'invoiceid' => 0, 'name' => $name, 'phone' => $phone, 'status' => 'active', 'machines' => '[]', 'created_at' => date('Y-m-d H:i:s'), 'approved_at' => date('Y-m-d H:i:s'), 'expires_at' => null]);
+        $msg = 'Free key for ' . $name . ': ' . $key;
+        if ($phone !== '') {
+            $r   = $this->db->where('lic_key', $key)->get($p . 'endora_licenses')->row();
+            $ok  = $this->send_key($r);
+            $msg .= $ok ? ' (sent on WhatsApp)' : ' (WhatsApp did not send – copy the key)';
+        }
+        $this->go('m=' . rawurlencode($msg));
     }
 
     private function row($id)
