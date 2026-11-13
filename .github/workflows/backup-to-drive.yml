@@ -1,0 +1,20 @@
+# Daily: copy the newest full-site backup from the server to Google Drive (private folder, 7 days kept).
+name: Backup to Drive
+on:
+  schedule: [{ cron: '30 0 * * *' }]   # 06:00 Sri Lanka, after the 03:30 server backup
+  workflow_dispatch:
+concurrency: backup-to-drive
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node tools/backup-to-drive.js
+        env:
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          BACKUP_KEY: ${{ secrets.BACKUP_KEY }}
