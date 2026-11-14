@@ -1,0 +1,139 @@
+{
+ "updated": "2026-11-14T17:04:00.311Z",
+ "root": "1e0-6vEeHKaseGBPe_zO8uLLcbXnltaoV",
+ "apps": {
+  "atem-switcher": {
+   "folder": "1UWafaPTlGo5EXiV35I9VP1qkkCQgmOy8",
+   "files": [
+    {
+     "id": "1J287Yf8lx9TlhfDNEgy4-EAGJqhl2m6r",
+     "name": "ATEM-Switcher-mac-arm64.dmg"
+    },
+    {
+     "id": "1h9PFnYWyDD-qqIRdi3yVL-HRsWyQveSO",
+     "name": "ATEM-Switcher-mac-x64.dmg"
+    },
+    {
+     "id": "1wreLhPaICgmrf4EOsatsIruIxmBVS7yL",
+     "name": "ATEM-Switcher-Setup.exe"
+    }
+   ]
+  },
+  "atem-tally": {
+   "folder": "1MY55iw7U6fgmibL6BJyqxg8n4EEea_tx",
+   "files": [
+    {
+     "id": "1qhV83QpMdhJgooGqScbyM-_1X9S60fA3",
+     "name": "ATEM-Tally.apk"
+    }
+   ]
+  },
+  "atem-ccu": {
+   "folder": "1NRFJtRbi00CmKTojECBy5GQQSrwm0xdd",
+   "files": [
+    {
+     "id": "1DzRKAX0-EaqdhTaOXak6BpWLkOCz-IJU",
+     "name": "ATEM-Switcher-mac-arm64.dmg"
+    },
+    {
+     "id": "1XpP06xRJHojz2GxWK-VaDXkUyUawx1Y0",
+     "name": "ATEM-Switcher-mac-x64.dmg"
+    },
+    {
+     "id": "1oOG1vQgnf-VE3V98TRHJsDKVrh0liY6j",
+     "name": "ATEM-Switcher-Setup.exe"
+    }
+   ]
+  },
+  "cricket-scorer": {
+   "folder": "14EMsuKTox21bs4rbgdkXrumWWBHmXU6r",
+   "files": [
+    {
+     "id": "19lV7OlYbzVHq6Lzt-MZNXPtjhTho7-p5",
+     "name": "CricketScorer-Setup.exe"
+    },
+    {
+     "id": "1RPLFBuxvPPwS4bGgKMu1xkAjeX77VvLs",
+     "name": "CricketScorer-arm64.dmg"
+    },
+    {
+     "id": "1fFcWZ3S5vqv4kobYizr95ig1nJpUrMED",
+     "name": "CricketScorer-x64.dmg"
+    }
+   ]
+  },
+  "playout": {
+   "folder": "19sFF5xYz_VdF-tt7waPT3j5c2ZTu9sbw",
+   "files": [
+    {
+     "id": "19OUBr6ffJ90KiQpdJCvQg5EBxAMdHGJt",
+     "name": "Playout-Setup.exe"
+    },
+    {
+     "id": "1_bd5kdf9HPI1zHe6gfJmsKexCdEg9Aju",
+     "name": "Playout-mac.zip"
+    }
+   ]
+  },
+  "replay": {
+   "folder": "1cPoUpgHQqngATlFC9dWn9DmygeVESBIN",
+   "files": [
+    {
+     "id": "15V1icVpMwnOEAr9cErA9KLGItRhGJH6J",
+     "name": "EndoraReplay-win-Setup.exe"
+    }
+   ]
+  },
+  "led-display": {
+   "folder": "1b7V48QQr6a7ZiV91QYcWSMaHTx2Y2dCZ",
+   "files": [
+    {
+     "id": "1bS3ozqU-9qEe3N4qobx-ed22UGo5GAxT",
+     "name": "LEDDisplay-Setup.exe"
+    },
+    {
+     "id": "1ZLpF6X4rsbZixoqdu9R4VUsMByoguHsE",
+     "name": "LEDDisplay-arm64.dmg"
+    },
+    {
+     "id": "1MVu5tlzXOgWvc6lISfNJrrmdvJDq0Ckl",
+     "name": "LEDDisplay-x64.dmg"
+    }
+   ]
+  },
+  "album": {
+   "folder": "1XPGzZ5xbLYoAFNjo87K9FI_a1-NgWU41",
+   "files": [
+    {
+     "id": "1oWog8Tf0T0qXe1SP3c-IXibYKyXAgt4p",
+     "name": "Endora-Album-1.0.10-arm64.dmg"
+    },
+    {
+     "id": "1IfN6imsjWBymk_nLkYpfzgGEnYyP_9X4",
+     "name": "Endora-Album-1.0.10-x64.dmg"
+    },
+    {
+     "id": "1FUylJH0nCVjRHxbcAtSXLXRj1WeyKCI8",
+     "name": "Endora-Album-Setup-1.0.10.exe"
+    }
+   ]
+  },
+  "invoice": {
+   "folder": "1uqUN89AXbaMb85FH_ybMZtsF0x4spx2T",
+   "files": [
+    {
+     "id": "1ha8wQmponjgxKziYwhKa4Lvdy9HfUHcs",
+     "name": "Endora-Invoice-1.0.7-mac.dmg"
+    },
+    {
+     "id": "1VHZBBMCtvrrOr1jInKfDm3GMRfwnhiYw",
+     "name": "Endora-Invoice-1.0.7-mac.zip"
+    },
+    {
+     "id": "1KOUKs9ToUVuAPUeuj__OExZmsdNtbxMu",
+     "name": "Endora-Invoice-Setup-1.0.7.exe"
+    }
+   ]
+  }
+ }
+}
