@@ -33,6 +33,18 @@ x-l{display:inline-block}
 .count b{transition:color .4s}
 .count div{animation:none}
 
+/* seat finder and guest wall */
+.inl{display:flex;gap:8px;margin-top:14px}.inl input{flex:1}.inl .btn{margin:0;padding:0 18px}
+.sheet input,.sheet textarea{width:100%;font:300 17px "Jost",sans-serif;color:var(--jasmine);background:var(--ink2);border:1px solid var(--brass);border-radius:10px;padding:12px 14px;min-height:48px;margin-top:10px}
+.seatcard{margin:14px auto 0;max-width:320px;padding:16px;border:1px solid var(--brass);border-radius:14px}
+.seatcard b{display:block;font:400 28px "Cormorant",serif;color:var(--jasmine)}.seatcard small{display:block;color:var(--brass);font-size:17px}
+.feed{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;text-align:left}
+.pol{margin:0;background:#fffdf7;color:#2a2420;padding:8px 8px 12px;border-radius:3px;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.pol:nth-child(odd){transform:rotate(-2deg)}.pol:nth-child(even){transform:rotate(1.8deg)}
+.pol img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.pol figcaption{font:italic 400 17px/1.25 "Cormorant",serif;padding-top:8px}.pol figcaption b{display:block;font:500 13px "Jost",sans-serif;font-style:normal;color:#7a6a55;margin-top:4px}
+.pol audio{width:100%;height:36px}.pol.wish{grid-column:span 2}
+.sheet .btn{color:var(--jasmine)}.sheet label.btn{margin-top:0}
 /* ===== Monsoon: rain on the green hills ===== */
 :root,[data-theme=monsoon]{--g1:rgba(210,162,76,.18);--g2:rgba(70,140,110,.22)}
 .rp{transform-box:fill-box;transform-origin:center;opacity:0;animation:ripple 3.6s ease-out infinite}
@@ -102,3 +114,4 @@ html[data-theme] .rv.in{opacity:1;transform:none;filter:none}
  .rv,.rv.in{opacity:1;transform:none;filter:none;clip-path:none;transition:none}
  .rp,.drop,.flame,.lglow,.bloom,.m1,.m2,.m3,.mc,.lotus,.wv{animation:none}
 }
+#wallf .btn.fill,#rsvp .btn.fill{margin-top:20px}#wallf .btns{margin-bottom:4px}

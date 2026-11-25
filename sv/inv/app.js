@@ -4,11 +4,17 @@
       story: "Our story", events: "The celebrations", gallery: "Moments", map: "Open in Maps", cal: "Add to calendar", rsvp: "Will you join us?", yes: "Yes, I'll be there", no: "Sorry, I can't",
       yourname: "Your name", yourphone: "Your phone number (optional)", howmany: "Attending", note: "A message for the couple (optional)", send: "Send my reply", thanks: "Thank you! Your reply has been sent.", change: "You can change your reply any time.",
       days: "days", hours: "hours", mins: "minutes", secs: "seconds", today: "The day is here", past: "With love, thank you for celebrating with us", pick: "Choose yes or no for each event.",
+       seat: "Find your seat", seatph: "Type your name", seatgo: "Search", seatnone: "We could not find that name yet. Ask a host on the day.", tbl: "Table", seatno: "Seat", yourseat: "Your seat",
+      wall: "Share your moments", wallnote: "Leave a wish, a photo or a voice message for the couple.", addphoto: "Add a photo", rec: "Record a voice message", stop: "Stop recording", post: "Post", posted: "Posted. Thank you!", wish: "Your wish", recorded: "Voice message ready",
+      album: "Our album", albumbtn: "View the photos", filmbtn: "Watch the wedding film", nowall: "Be the first to share a moment.",
       by: "Invitation film by", loc: "en-GB", notfound: "This invitation link is not valid. Please check the link you received.", wait: "Sending…", err: "Could not send. Please try again.", music: "Music" },
     si: { lead: "අපේ මංගල උත්සවයට ඔබව ආරාධනා කරමු", dear: "හිතවත් {name},", play: "ආරාධනය නරඹන්න", skip: "විස්තර වෙත යන්න", sound: "ශබ්දය ඇරින්න", mute: "ශබ්දය නවත්වන්න", replay: "නැවත නරඹන්න", see: "ආරාධනය විවෘත කරන්න", below: "විස්තර පහතින්",
       story: "අපේ කතාව", events: "උත්සව", gallery: "මතක", map: "Maps හි විවෘත කරන්න", cal: "Calendar එකට එක් කරන්න", rsvp: "ඔබ පැමිණෙනවාද?", yes: "ඔව්, පැමිණෙනවා", no: "සමාවෙන්න, බැහැ",
       yourname: "ඔබේ නම", yourphone: "ඔබේ දුරකථන අංකය (අවශ්‍ය නම්)", howmany: "පැමිණෙන ගණන", note: "යුවළට පණිවිඩයක් (අවශ්‍ය නම්)", send: "පිළිතුර යවන්න", thanks: "ස්තූතියි! ඔබේ පිළිතුර ලැබුණා.", change: "ඕනෑම වෙලාවක පිළිතුර වෙනස් කළ හැක.",
       days: "දින", hours: "පැය", mins: "මිනිත්තු", secs: "තත්පර", today: "අද ඒ දවසයි", past: "අප සමඟ සතුටු වූ ඔබට ස්තූතියි", pick: "හැම උත්සවයටම ඔව් හෝ නැහැ කියන්න.",
+       seat: "ඔබේ අසුන සොයන්න", seatph: "ඔබේ නම ලියන්න", seatgo: "සොයන්න", seatnone: "එම නම තවම හමු වුණේ නැහැ. දවසේ දී සත්කාරකයෙකුගෙන් අහන්න.", tbl: "මේසය", seatno: "අසුන", yourseat: "ඔබේ අසුන",
+      wall: "ඔබේ මතක බෙදාගන්න", wallnote: "යුවළට සුබපැතුමක්, ඡායාරූපයක් හෝ හඬ පණිවිඩයක් තබන්න.", addphoto: "ඡායාරූපයක් එක් කරන්න", rec: "හඬ පණිවිඩයක් පටිගත කරන්න", stop: "නවත්වන්න", post: "පළ කරන්න", posted: "පළ කළා. ස්තූතියි!", wish: "ඔබේ සුබපැතුම", recorded: "හඬ පණිවිඩය සූදානම්",
+      album: "අපේ ඇල්බමය", albumbtn: "ඡායාරූප බලන්න", filmbtn: "මංගල චිත්‍රපටය නරඹන්න", nowall: "පළමුවෙන් මතකයක් බෙදාගන්න.",
       by: "ආරාධනා චිත්‍රපටය", loc: "si-LK", notfound: "මෙම ආරාධනා සබැඳිය වලංගු නැත. ඔබට ලැබුණු සබැඳිය පරීක්ෂා කරන්න.", wait: "යවමින්…", err: "යවන්න බැරි වුණා. නැවත උත්සාහ කරන්න.", music: "සංගීතය" }
   };
 
@@ -68,6 +74,21 @@
       events: function () { return '<div class="block"><h2>' + t.events + '</h2>' + evs.map(evCard).join('') + '</div>'; },
       countdown: function () { return '<div class="block"><div class="count" id="count" aria-label="countdown"></div></div>'; },
       gallery: function () { return (c.gallery && c.gallery.length) ? '<div class="block"><h2>' + t.gallery + '</h2><div class="gal">' + c.gallery.map(function (u) { return '<button type="button" class="gi" data-u="' + esc(u) + '"><img loading="lazy" src="' + esc(u) + '" alt=""></button>'; }).join('') + '</div></div>' : ''; },
+      seat: function () {
+        var mine = g && g.tbl ? '<div class="seatcard"><small>' + t.yourseat + '</small><b>' + t.tbl + ' ' + esc(g.tbl) + (g.seat ? ' · ' + t.seatno + ' ' + esc(g.seat) : '') + '</b></div>' : '';
+        return '<div class="block" id="b-seat"><h2>' + t.seat + '</h2>' + mine + '<form id="seatf" class="inl"><input id="seatq" placeholder="' + t.seatph + '" autocomplete="off" aria-label="' + t.seatph + '"><button class="btn" type="submit">' + t.seatgo + '</button></form><div id="seatres" aria-live="polite"></div></div>';
+      },
+      wall: function () {
+        return '<div class="block" id="b-wall"><h2>' + t.wall + '</h2><p class="note">' + t.wallnote + '</p><form id="wallf" novalidate>' +
+          '<input id="wname" maxlength="80" placeholder="' + t.yourname + '" value="' + esc(g ? g.name : '') + '" aria-label="' + t.yourname + '"><textarea id="wtext" rows="3" maxlength="500" placeholder="' + t.wish + '" aria-label="' + t.wish + '"></textarea>' +
+          '<div class="btns"><label class="btn" for="wphoto">' + t.addphoto + '</label><input id="wphoto" type="file" accept="image/*" hidden>' + (window.MediaRecorder ? '<button class="btn" type="button" id="wrec">' + t.rec + '</button>' : '') + '</div>' +
+          '<p class="note" id="wchosen"></p><button class="btn fill" type="submit" id="wsend">' + t.post + '</button><p class="msgline" id="wmsg" role="status"></p></form><div id="wfeed" class="feed"></div></div>';
+      },
+      album: function () {
+        var a = c.album || {};
+        if (!a.url && !a.film) return '';
+        return '<div class="block"><h2>' + t.album + '</h2>' + (a.note ? '<p class="msg" style="font-size:20px">' + esc(a.note) + '</p>' : '') + '<div class="btns">' + (a.url ? '<a class="btn fill" href="' + esc(a.url) + '" target="_blank" rel="noopener">' + t.albumbtn + '</a>' : '') + (a.film ? '<a class="btn" href="' + esc(a.film) + '" target="_blank" rel="noopener">' + t.filmbtn + '</a>' : '') + '</div></div>';
+      },
       rsvp: function () {
         var known = !!g, max = known ? g.max : 4;
         return '<div class="block"><h2>' + t.rsvp + '</h2><form id="rsvp" novalidate>' +
@@ -155,6 +176,48 @@
       };
       tick(); setInterval(tick, 1000);
     }
+
+    /* find your seat */
+    var sf = document.getElementById('seatf');
+    if (sf) sf.addEventListener('submit', function (e) {
+      e.preventDefault(); var r = document.getElementById('seatres'), q = document.getElementById('seatq').value.trim();
+      if (q.length < 3) return;
+      if (slug.indexOf('demo') === 0) { r.innerHTML = '<div class="seatcard"><b>' + esc(q) + '</b><small>' + t.tbl + ' 7 · ' + t.seatno + ' 3</small></div>'; return; }
+      api('seat_find', { slug: slug, q: q }).then(function (x) { r.innerHTML = (x.found && x.found.length) ? x.found.map(function (f) { return '<div class="seatcard"><b>' + esc(f.name) + '</b><small>' + t.tbl + ' ' + esc(f.tbl) + (f.seat ? ' · ' + t.seatno + ' ' + esc(f.seat) : '') + '</small></div>'; }).join('') : '<p class="note">' + t.seatnone + '</p>'; });
+    });
+    /* guest wall: photos, wishes, voice messages */
+    var wf = document.getElementById('wallf');
+    if (wf) {
+      var feed = document.getElementById('wfeed'), audioBlob = null, mr = null, chosen = document.getElementById('wchosen'), recb = document.getElementById('wrec');
+      var drawWall = function (items) {
+        feed.innerHTML = items.length ? items.map(function (i) { return '<figure class="pol ' + i.kind + '">' + (i.kind === 'photo' ? '<img loading="lazy" src="' + esc(i.url) + '" alt="">' : '') + (i.kind === 'audio' ? '<audio controls preload="none" src="' + esc(i.url) + '"></audio>' : '') + ((i.text || i.name) ? '<figcaption>' + (i.text ? '<span>' + esc(i.text) + '</span>' : '') + (i.name ? '<b>' + esc(i.name) + '</b>' : '') + '</figcaption>' : '') + '</figure>'; }).join('') : '<p class="note">' + t.nowall + '</p>';
+      };
+      if (slug.indexOf('demo') === 0) drawWall([{ kind: 'wish', name: 'Kasun', text: 'Congratulations, we are so happy for you both!' }, { kind: 'wish', name: 'Amma', text: 'May your home always be full of light.' }]);
+      else api('wall', { slug: slug }).then(function (x) { drawWall(x.items || []); });
+      document.getElementById('wphoto').onchange = function () { chosen.textContent = this.files[0] ? this.files[0].name : ''; };
+      if (recb) recb.onclick = function () {
+        if (mr && mr.state === 'recording') { mr.stop(); return; }
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(function (st) {
+          var ch = []; mr = new MediaRecorder(st); mr.ondataavailable = function (e) { if (e.data.size) ch.push(e.data); };
+          mr.onstop = function () { st.getTracks().forEach(function (k) { k.stop(); }); audioBlob = new Blob(ch, { type: mr.mimeType || 'audio/webm' }); recb.textContent = t.rec; chosen.textContent = t.recorded; clearTimeout(mr._t); };
+          mr.start(); recb.textContent = t.stop; mr._t = setTimeout(function () { if (mr.state === 'recording') mr.stop(); }, 45000);
+        }).catch(function () {});
+      };
+      wf.addEventListener('submit', function (e) {
+        e.preventDefault(); var m = document.getElementById('wmsg'), fd = new FormData(), ph = document.getElementById('wphoto').files[0];
+        fd.append('slug', slug); fd.append('name', document.getElementById('wname').value); fd.append('text', document.getElementById('wtext').value);
+        if (ph) fd.append('photo', ph); else if (audioBlob) fd.append('audio', audioBlob, 'voice.' + (audioBlob.type.indexOf('mp4') > -1 ? 'm4a' : 'webm'));
+        if (!ph && !audioBlob && !document.getElementById('wtext').value.trim()) { m.textContent = t.wish; return; }
+        if (slug.indexOf('demo') === 0) { m.textContent = t.posted; return; }
+        var b = document.getElementById('wsend'); b.disabled = true; m.textContent = t.wait;
+        fetch(API_BASE + 'wall_post', { method: 'POST', body: fd }).then(function (r) { return r.json(); }).then(function (x) {
+          b.disabled = false; if (!x.ok) { m.textContent = x.error || t.err; return; }
+          m.textContent = t.posted; drawWall(x.items); wf.reset(); audioBlob = null; chosen.textContent = '';
+        }).catch(function () { b.disabled = false; m.textContent = t.err; });
+      });
+    }
+    var fq = new URLSearchParams(location.search).get('f');
+    if (fq) { var tg = document.getElementById('b-' + fq); if (tg) { document.getElementById('gate').classList.add('gone'); setTimeout(function () { tg.scrollIntoView(); }, 300); } }
 
     var form = document.getElementById('rsvp');
     if (form) form.addEventListener('submit', function (ev) {
