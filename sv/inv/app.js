@@ -7,7 +7,7 @@
        seat: "Find your seat", seatph: "Type your name", seatgo: "Search", seatnone: "We could not find that name yet. Ask a host on the day.", tbl: "Table", seatno: "Seat", yourseat: "Your seat",
       wall: "Share your moments", wallnote: "Leave a wish, a photo or a voice message for the couple.", addphoto: "Add a photo", rec: "Record a voice message", stop: "Stop recording", post: "Post", posted: "Posted. Thank you!", wish: "Your wish", recorded: "Voice message ready",
       album: "Our album", albumbtn: "View the photos", filmbtn: "Watch the wedding film", nowall: "Be the first to share a moment.",
-      by: "Invitation film by", loc: "en-GB", notfound: "This invitation link is not valid. Please check the link you received.", wait: "Sending…", err: "Could not send. Please try again.", music: "Music" },
+      tap: "Tap to open", tapv: "Tap to play", call: "Call us", wa: "Reply on WhatsApp", wahi: "Hi! About the wedding of {couple}:", by: "Invitation film by", loc: "en-GB", notfound: "This invitation link is not valid. Please check the link you received.", wait: "Sending…", err: "Could not send. Please try again.", music: "Music" },
     si: { lead: "අපේ මංගල උත්සවයට ඔබව ආරාධනා කරමු", dear: "හිතවත් {name},", play: "ආරාධනය නරඹන්න", skip: "විස්තර වෙත යන්න", sound: "ශබ්දය ඇරින්න", mute: "ශබ්දය නවත්වන්න", replay: "නැවත නරඹන්න", see: "ආරාධනය විවෘත කරන්න", below: "විස්තර පහතින්",
       story: "අපේ කතාව", events: "උත්සව", gallery: "මතක", map: "Maps හි විවෘත කරන්න", cal: "Calendar එකට එක් කරන්න", rsvp: "ඔබ පැමිණෙනවාද?", yes: "ඔව්, පැමිණෙනවා", no: "සමාවෙන්න, බැහැ",
       yourname: "ඔබේ නම", yourphone: "ඔබේ දුරකථන අංකය (අවශ්‍ය නම්)", howmany: "පැමිණෙන ගණන", note: "යුවළට පණිවිඩයක් (අවශ්‍ය නම්)", send: "පිළිතුර යවන්න", thanks: "ස්තූතියි! ඔබේ පිළිතුර ලැබුණා.", change: "ඕනෑම වෙලාවක පිළිතුර වෙනස් කළ හැක.",
@@ -15,7 +15,7 @@
        seat: "ඔබේ අසුන සොයන්න", seatph: "ඔබේ නම ලියන්න", seatgo: "සොයන්න", seatnone: "එම නම තවම හමු වුණේ නැහැ. දවසේ දී සත්කාරකයෙකුගෙන් අහන්න.", tbl: "මේසය", seatno: "අසුන", yourseat: "ඔබේ අසුන",
       wall: "ඔබේ මතක බෙදාගන්න", wallnote: "යුවළට සුබපැතුමක්, ඡායාරූපයක් හෝ හඬ පණිවිඩයක් තබන්න.", addphoto: "ඡායාරූපයක් එක් කරන්න", rec: "හඬ පණිවිඩයක් පටිගත කරන්න", stop: "නවත්වන්න", post: "පළ කරන්න", posted: "පළ කළා. ස්තූතියි!", wish: "ඔබේ සුබපැතුම", recorded: "හඬ පණිවිඩය සූදානම්",
       album: "අපේ ඇල්බමය", albumbtn: "ඡායාරූප බලන්න", filmbtn: "මංගල චිත්‍රපටය නරඹන්න", nowall: "පළමුවෙන් මතකයක් බෙදාගන්න.",
-      by: "ආරාධනා චිත්‍රපටය", loc: "si-LK", notfound: "මෙම ආරාධනා සබැඳිය වලංගු නැත. ඔබට ලැබුණු සබැඳිය පරීක්ෂා කරන්න.", wait: "යවමින්…", err: "යවන්න බැරි වුණා. නැවත උත්සාහ කරන්න.", music: "සංගීතය" }
+      tap: "විවෘත කිරීමට ස්පර්ශ කරන්න", tapv: "නැරඹීමට ස්පර්ශ කරන්න", call: "අමතන්න", wa: "WhatsApp එකෙන් පිළිතුරු දෙන්න", wahi: "{couple} ගේ මංගල උත්සවය ගැන:", by: "ආරාධනා චිත්‍රපටය", loc: "si-LK", notfound: "මෙම ආරාධනා සබැඳිය වලංගු නැත. ඔබට ලැබුණු සබැඳිය පරීක්ෂා කරන්න.", wait: "යවමින්…", err: "යවන්න බැරි වුණා. නැවත උත්සාහ කරන්න.", music: "සංගීතය" }
   };
 
   /* One animated emblem per theme, drawn at the top of the opening card. */
@@ -26,6 +26,18 @@
     kandyan: '<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4"><circle class="m1" cx="100" cy="100" r="94" stroke-dasharray="2 7"/><circle cx="100" cy="100" r="82"/><circle class="m2" cx="100" cy="100" r="70" stroke-dasharray="14 5 3 5"/><g class="m3">' + Array.apply(null, Array(12)).map(function (_, k) { return '<path d="M100 38q9 14 0 26q-9-12 0-26z" transform="rotate(' + k * 30 + ' 100 100)"/>'; }).join('') + '</g><circle cx="100" cy="100" r="32"/><circle cx="100" cy="100" r="22" stroke-dasharray="3 4" class="m1"/></g><circle cx="100" cy="100" r="8" fill="currentColor" class="mc"/></svg>',
     nelum: '<svg viewBox="0 0 160 120" aria-hidden="true"><g class="lotus">' + [-72, -48, -24, 24, 48, 72, 0].map(function (a, i) { return '<g transform="rotate(' + a + ' 80 98)"><path class="lp" style="--d:' + (i * 0.16) + 's" d="M80 98C65 74 65 42 80 14c15 28 15 60 0 84z"/></g>'; }).join('') + '</g><g fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"><ellipse class="wv" cx="80" cy="104" rx="46" ry="6"/><ellipse class="wv w2" cx="80" cy="104" rx="46" ry="6"/></g></svg>'
   };
+
+  ORN.blush = (function () {
+    var cx = 80, cy = 62, r = 42, g = '';
+    for (var k = 0; k < 8; k++) {
+      var th = 75 - k * 21, rad = th * Math.PI / 180, x = cx + r * Math.cos(rad), y = cy + r * Math.sin(rad);
+      g += '<ellipse class="lf" style="--k:' + k + '" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" rx="4.6" ry="10" transform="rotate(' + (th + 28) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
+      g += '<ellipse class="lf in2" style="--k:' + k + '" cx="' + (cx + (r - 9) * Math.cos(rad)).toFixed(1) + '" cy="' + (cy + (r - 9) * Math.sin(rad)).toFixed(1) + '" rx="3.4" ry="7" transform="rotate(' + (th - 24) + ' ' + (cx + (r - 9) * Math.cos(rad)).toFixed(1) + ' ' + (cy + (r - 9) * Math.sin(rad)).toFixed(1) + ')"/>';
+    }
+    var a = function (d) { var rr = d * Math.PI / 180; return (cx + r * Math.cos(rr)).toFixed(1) + ' ' + (cy + r * Math.sin(rr)).toFixed(1); };
+    var side = '<path class="stem" d="M' + a(80) + ' A' + r + ' ' + r + ' 0 0 0 ' + a(-78) + '" fill="none" stroke="currentColor" stroke-width="1.2"/>' + g;
+    return '<svg viewBox="0 0 160 124" aria-hidden="true"><g>' + side + '</g><g transform="translate(160 0) scale(-1 1)">' + side + '</g><path d="M80 112l5 6-5 6-5-6z" fill="currentColor"/></svg>';
+  })();
 
   var app = document.getElementById('app');
   var parts = location.pathname.split('/').filter(Boolean);
@@ -49,11 +61,12 @@
     .catch(function () { app.innerHTML = '<p class="err">' + L.en.notfound + '</p>'; });
 
   function render(c, g) {
-    var t = L[c.lang] || L.en, theme = c.theme || 'monsoon';
+    var lang = c.lang; try { var ls = localStorage.getItem('inv_lang'); if (ls && L[ls]) lang = ls; } catch (e) {}
+    var t = L[lang] || L.en, theme = c.theme || 'monsoon';
     document.documentElement.setAttribute('data-theme', theme);
     var names = c.names || [], title = names.join(' & ');
     document.title = title + ' – Wedding invitation';
-    document.documentElement.lang = c.lang === 'si' ? 'si' : 'en';
+    document.documentElement.lang = L[lang] ? lang : 'en';
     var fd = new Intl.DateTimeFormat(t.loc, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' });
     var ft = new Intl.DateTimeFormat(t.loc, { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Colombo' });
     var evs = (c.events || []).filter(function (e) { return !g || !g.events.length || g.events.indexOf(e.id) > -1; });
@@ -97,14 +110,14 @@
             return '<fieldset class="rv" data-e="' + esc(e.id) + '"><legend>' + esc(e.title || '') + '</legend><div class="chips"><label class="chip"><input type="radio" name="s_' + esc(e.id) + '" value="accepted"' + (r.s === 'accepted' ? ' checked' : '') + '><span>' + t.yes + '</span></label><label class="chip"><input type="radio" name="s_' + esc(e.id) + '" value="declined"' + (r.s === 'declined' ? ' checked' : '') + '><span>' + t.no + '</span></label></div>' +
               (max > 1 ? '<label class="cnt">' + t.howmany + ' <select name="n_' + esc(e.id) + '">' + Array.apply(null, Array(max)).map(function (_, k) { return '<option' + ((r.n || max) === k + 1 ? ' selected' : '') + '>' + (k + 1) + '</option>'; }).join('') + '</select></label>' : '') + '</fieldset>'; }).join('') +
           '<label for="gmsg">' + t.note + '</label><textarea id="gmsg" rows="3" maxlength="400">' + esc(g && g.msg || '') + '</textarea>' +
-          '<button class="btn fill" type="submit" id="rsend">' + t.send + '</button><p class="msgline" id="rmsg" role="status"></p><p class="note">' + t.change + '</p></form></div>';
+          '<button class="btn fill" type="submit" id="rsend">' + t.send + '</button>' + (c.rsvp_phone ? '<a class="btn" style="margin-top:12px;width:100%" target="_blank" rel="noopener" href="https://wa.me/' + esc(c.rsvp_phone) + '?text=' + encodeURIComponent(t.wahi.replace('{couple}', title)) + '">' + t.wa + '</a><a class="btn" style="margin-top:12px;width:100%" href="tel:+' + esc(c.rsvp_phone) + '">' + t.call + '</a>' : '') + '<p class="msgline" id="rmsg" role="status"></p><p class="note">' + t.change + '</p></form></div>';
       }
     };
     var body = '';
     if (c.message) body += '<div class="block"><p class="msg">' + esc(c.message) + '</p></div>';
     order.forEach(function (k) { if (secHtml[k]) body += secHtml[k](); });
     var greet = g ? '<p class="dear">' + esc(t.dear.replace('{name}', g.name)) + '</p>' : '';
-    var n0 = Array.from(names[0] || '').length;
+    var n0 = Array.from(names[0] || '').length, greetName = g ? g.name : '', noMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
     app.innerHTML =
       '<canvas id="fx" aria-hidden="true"></canvas>' +
@@ -113,11 +126,14 @@
         '<div class="shade"></div>' +
         (hasVideo ? '<div class="hud"><span></span><button id="mute" type="button">' + t.mute + '</button></div><button class="play replay" id="replay" type="button">' + t.replay + '</button>' : '') +
         '<p class="hint">' + t.below + '</p>' +
-        '<div class="gate" id="gate"><div class="bars"></div><div class="glow"></div><div class="orn">' + (ORN[theme] || ORN.monsoon) + '</div>' + greet + '<p class="lead">' + t.lead + '</p>' +
+        '<div class="gate wait" id="gate"><div class="bars"></div><div class="glow"></div><div class="orn">' + (ORN[theme] || ORN.monsoon) + '</div>' + greet + '<p class="lead">' + t.lead + '</p>' +
           '<h1 class="names" aria-label="' + esc(title) + '"><span aria-hidden="true">' + letters(names[0] || '', 0) + '</span><i aria-hidden="true">&amp;</i><span aria-hidden="true">' + letters(names[1] || '', n0 + 2) + '</span></h1>' +
           '<p class="when">' + esc(fd.format(start0)) + '</p>' +
           '<button class="play" id="open" type="button"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 1l11 6-11 6z"/></svg>' + (hasVideo ? t.play : t.see) + '</button>' +
           (hasVideo ? '<button class="skip" id="skip" type="button">' + t.skip + '</button>' : '') + '</div>' +
+      '<div class="env" id="env" role="button" tabindex="0" aria-label="' + t.tap + '"><div class="env-back"></div><div class="flap"></div><div class="pocket"></div>' +
+        '<div class="env-txt"><p>' + t.lead + '</p><b>' + esc(title) + '</b></div>' +
+        '<button class="seal" id="envtap" type="button" aria-label="' + t.tap + '"><span>' + esc((names[0] || '').charAt(0)) + '&amp;' + esc((names[1] || '').charAt(0)) + '</span></button><p class="taphint">' + (greetName ? esc(t.dear.replace('{name}', greetName)) + ' ' : '') + t.tap + '</p></div>' +
       '</section>' +
       '<section class="sheet" id="sheet">' + body + '</section>' +
       (hasMusic ? '<audio id="aud" loop preload="none" src="' + esc(c.music) + '"></audio><button class="mus" id="mus" type="button" aria-label="' + t.music + '">♪</button>' : '') +
@@ -135,6 +151,17 @@
 
     var stage = document.getElementById('stage'), gate = document.getElementById('gate'), v = document.getElementById('v'), aud = document.getElementById('aud');
     function toSheet() { document.getElementById('sheet').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' }); }
+    var env = document.getElementById('env');
+    function openEnv() {
+      if (!env || env.classList.contains('open')) return;
+      env.classList.add('open');
+      setTimeout(function () { gate.classList.remove('wait'); env.classList.add('leave'); }, 1300);
+      setTimeout(function () { env.remove(); }, 2900);
+    }
+    if (env) {
+      if (noMotion) { env.remove(); gate.classList.remove('wait'); }
+      else { env.addEventListener('click', openEnv); env.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnv(); } }); }
+    }
     document.getElementById('open').onclick = function () {
       gate.classList.add('gone');
       if (aud) { var q = aud.play(); if (q && q.catch) q.catch(function () {}); document.getElementById('mus').classList.add('on'); }

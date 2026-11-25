@@ -5,7 +5,8 @@ var K={
  poruwa:{n:46,c:'rgba(240,190,90,',t:'ember'},
  jasmine:{n:22,c:'rgba(255,255,255,',t:'petal'},
  kandyan:{n:70,c:'rgba(255,214,140,',t:'star'},
- nelum:{n:20,c:'rgba(232,150,176,',t:'lotus'}
+ nelum:{n:20,c:'rgba(232,150,176,',t:'lotus'},
+ blush:{n:46,c:'rgba(190,136,80,',t:'star'}
 };
 window.startFx=function(theme){
  var cfg=K[theme]||K.monsoon,cv=document.getElementById('fx');
