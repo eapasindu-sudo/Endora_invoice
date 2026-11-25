@@ -7,7 +7,7 @@
        seat: "Find your seat", seatph: "Type your name", seatgo: "Search", seatnone: "We could not find that name yet. Ask a host on the day.", tbl: "Table", seatno: "Seat", yourseat: "Your seat",
       wall: "Share your moments", wallnote: "Leave a wish, a photo or a voice message for the couple.", addphoto: "Add a photo", rec: "Record a voice message", stop: "Stop recording", post: "Post", posted: "Posted. Thank you!", wish: "Your wish", recorded: "Voice message ready",
       album: "Our album", albumbtn: "View the photos", filmbtn: "Watch the wedding film", nowall: "Be the first to share a moment.",
-      tap: "Tap to open", tapv: "Tap to play", call: "Call us", wa: "Reply on WhatsApp", wahi: "Hi! About the wedding of {couple}:", by: "Invitation film by", loc: "en-GB", notfound: "This invitation link is not valid. Please check the link you received.", wait: "Sending…", err: "Could not send. Please try again.", music: "Music" },
+      tap: "Tap to open", tapv: "Tap to play", save: "Save the date", navd: "Details", navm: "Moments", navw: "Wishes", navr: "RSVP", call: "Call us", wa: "Reply on WhatsApp", wahi: "Hi! About the wedding of {couple}:", by: "Invitation film by", loc: "en-GB", notfound: "This invitation link is not valid. Please check the link you received.", wait: "Sending…", err: "Could not send. Please try again.", music: "Music" },
     si: { lead: "අපේ මංගල උත්සවයට ඔබව ආරාධනා කරමු", dear: "හිතවත් {name},", play: "ආරාධනය නරඹන්න", skip: "විස්තර වෙත යන්න", sound: "ශබ්දය ඇරින්න", mute: "ශබ්දය නවත්වන්න", replay: "නැවත නරඹන්න", see: "ආරාධනය විවෘත කරන්න", below: "විස්තර පහතින්",
       story: "අපේ කතාව", events: "උත්සව", gallery: "මතක", map: "Maps හි විවෘත කරන්න", cal: "Calendar එකට එක් කරන්න", rsvp: "ඔබ පැමිණෙනවාද?", yes: "ඔව්, පැමිණෙනවා", no: "සමාවෙන්න, බැහැ",
       yourname: "ඔබේ නම", yourphone: "ඔබේ දුරකථන අංකය (අවශ්‍ය නම්)", howmany: "පැමිණෙන ගණන", note: "යුවළට පණිවිඩයක් (අවශ්‍ය නම්)", send: "පිළිතුර යවන්න", thanks: "ස්තූතියි! ඔබේ පිළිතුර ලැබුණා.", change: "ඕනෑම වෙලාවක පිළිතුර වෙනස් කළ හැක.",
@@ -15,7 +15,7 @@
        seat: "ඔබේ අසුන සොයන්න", seatph: "ඔබේ නම ලියන්න", seatgo: "සොයන්න", seatnone: "එම නම තවම හමු වුණේ නැහැ. දවසේ දී සත්කාරකයෙකුගෙන් අහන්න.", tbl: "මේසය", seatno: "අසුන", yourseat: "ඔබේ අසුන",
       wall: "ඔබේ මතක බෙදාගන්න", wallnote: "යුවළට සුබපැතුමක්, ඡායාරූපයක් හෝ හඬ පණිවිඩයක් තබන්න.", addphoto: "ඡායාරූපයක් එක් කරන්න", rec: "හඬ පණිවිඩයක් පටිගත කරන්න", stop: "නවත්වන්න", post: "පළ කරන්න", posted: "පළ කළා. ස්තූතියි!", wish: "ඔබේ සුබපැතුම", recorded: "හඬ පණිවිඩය සූදානම්",
       album: "අපේ ඇල්බමය", albumbtn: "ඡායාරූප බලන්න", filmbtn: "මංගල චිත්‍රපටය නරඹන්න", nowall: "පළමුවෙන් මතකයක් බෙදාගන්න.",
-      tap: "විවෘත කිරීමට ස්පර්ශ කරන්න", tapv: "නැරඹීමට ස්පර්ශ කරන්න", call: "අමතන්න", wa: "WhatsApp එකෙන් පිළිතුරු දෙන්න", wahi: "{couple} ගේ මංගල උත්සවය ගැන:", by: "ආරාධනා චිත්‍රපටය", loc: "si-LK", notfound: "මෙම ආරාධනා සබැඳිය වලංගු නැත. ඔබට ලැබුණු සබැඳිය පරීක්ෂා කරන්න.", wait: "යවමින්…", err: "යවන්න බැරි වුණා. නැවත උත්සාහ කරන්න.", music: "සංගීතය" }
+      tap: "විවෘත කිරීමට ස්පර්ශ කරන්න", save: "දිනය සටහන් කර ගන්න", navd: "විස්තර", navm: "මතක", navw: "සුබපැතුම්", navr: "පිළිතුර", tapv: "නැරඹීමට ස්පර්ශ කරන්න", call: "අමතන්න", wa: "WhatsApp එකෙන් පිළිතුරු දෙන්න", wahi: "{couple} ගේ මංගල උත්සවය ගැන:", by: "ආරාධනා චිත්‍රපටය", loc: "si-LK", notfound: "මෙම ආරාධනා සබැඳිය වලංගු නැත. ඔබට ලැබුණු සබැඳිය පරීක්ෂා කරන්න.", wait: "යවමින්…", err: "යවන්න බැරි වුණා. නැවත උත්සාහ කරන්න.", music: "සංගීතය" }
   };
 
   /* One animated emblem per theme, drawn at the top of the opening card. */
@@ -84,9 +84,9 @@
     }
     var secHtml = {
       story: function () { return (c.story && c.story.length) ? '<div class="block"><h2>' + t.story + '</h2>' + c.story.map(function (s) { return '<div class="chapter">' + (s.title ? '<h3>' + esc(s.title) + '</h3>' : '') + '<p>' + esc(s.text) + '</p></div>'; }).join('') + '</div>' : ''; },
-      events: function () { return '<div class="block"><h2>' + t.events + '</h2>' + evs.map(evCard).join('') + '</div>'; },
+      events: function () { return '<div class="block" id="b-events"><h2>' + t.events + '</h2>' + evs.map(evCard).join('') + '</div>'; },
       countdown: function () { return '<div class="block"><div class="count" id="count" aria-label="countdown"></div></div>'; },
-      gallery: function () { return (c.gallery && c.gallery.length) ? '<div class="block"><h2>' + t.gallery + '</h2><div class="gal">' + c.gallery.map(function (u) { return '<button type="button" class="gi" data-u="' + esc(u) + '"><img loading="lazy" src="' + esc(u) + '" alt=""></button>'; }).join('') + '</div></div>' : ''; },
+      gallery: function () { return (c.gallery && c.gallery.length) ? '<div class="block" id="b-gallery"><h2>' + t.gallery + '</h2><div class="gal">' + c.gallery.map(function (u) { return '<button type="button" class="gi" data-u="' + esc(u) + '"><img loading="lazy" src="' + esc(u) + '" alt=""></button>'; }).join('') + '</div></div>' : ''; },
       seat: function () {
         var mine = g && g.tbl ? '<div class="seatcard"><small>' + t.yourseat + '</small><b>' + t.tbl + ' ' + esc(g.tbl) + (g.seat ? ' · ' + t.seatno + ' ' + esc(g.seat) : '') + '</b></div>' : '';
         return '<div class="block" id="b-seat"><h2>' + t.seat + '</h2>' + mine + '<form id="seatf" class="inl"><input id="seatq" placeholder="' + t.seatph + '" autocomplete="off" aria-label="' + t.seatph + '"><button class="btn" type="submit">' + t.seatgo + '</button></form><div id="seatres" aria-live="polite"></div></div>';
@@ -104,7 +104,7 @@
       },
       rsvp: function () {
         var known = !!g, max = known ? g.max : 4;
-        return '<div class="block"><h2>' + t.rsvp + '</h2><form id="rsvp" novalidate>' +
+        return '<div class="block" id="b-rsvp"><h2>' + t.rsvp + '</h2><form id="rsvp" novalidate>' +
           (known ? '' : '<label for="gname">' + t.yourname + '</label><input id="gname" maxlength="120" autocomplete="name"><label for="gphone">' + t.yourphone + '</label><input id="gphone" inputmode="tel" autocomplete="tel">') +
           evs.map(function (e) { var r = (g && g.rsvp && g.rsvp[e.id]) || {};
             return '<fieldset class="rv" data-e="' + esc(e.id) + '"><legend>' + esc(e.title || '') + '</legend><div class="chips"><label class="chip"><input type="radio" name="s_' + esc(e.id) + '" value="accepted"' + (r.s === 'accepted' ? ' checked' : '') + '><span>' + t.yes + '</span></label><label class="chip"><input type="radio" name="s_' + esc(e.id) + '" value="declined"' + (r.s === 'declined' ? ' checked' : '') + '><span>' + t.no + '</span></label></div>' +
@@ -116,6 +116,11 @@
     var body = '';
     if (c.message) body += '<div class="block"><p class="msg">' + esc(c.message) + '</p></div>';
     order.forEach(function (k) { if (secHtml[k]) body += secHtml[k](); });
+    if (c.gallery && c.gallery.length) body = '<div class="hero"><img src="' + esc(c.gallery[0]) + '" alt=""></div>' + body;
+    var sd = new Intl.DateTimeFormat(t.loc, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).format(start0);
+    body += '<div class="block savedate"><p class="sdl">' + t.save + '</p><p class="date">' + esc(sd) + '</p><p class="sdn">' + esc(title) + '</p></div>';
+    var navItems = [['b-events', t.navd], ['b-gallery', t.navm], ['b-wall', t.navw], ['b-rsvp', t.rsvp.length > 14 ? t.navr : t.rsvp]].filter(function (x) { return body.indexOf('id="' + x[0] + '"') > -1; });
+    var nav = '<nav class="bnav" aria-label="Sections">' + navItems.map(function (x) { return '<button type="button" data-go="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') + '</nav>';
     var greet = g ? '<p class="dear">' + esc(t.dear.replace('{name}', g.name)) + '</p>' : '';
     var n0 = Array.from(names[0] || '').length, greetName = g ? g.name : '', noMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
@@ -138,7 +143,7 @@
       '<section class="sheet" id="sheet">' + body + '</section>' +
       (hasMusic ? '<audio id="aud" loop preload="none" src="' + esc(c.music) + '"></audio><button class="mus" id="mus" type="button" aria-label="' + t.music + '">♪</button>' : '') +
       '<div class="lb" id="lb" hidden><img alt=""></div>' +
-      '<footer class="foot">' + t.by + ' <a href="https://www.endoraweddingfilms.com" target="_blank" rel="noopener">Endora Wedding Films</a></footer>';
+      nav + '<footer class="foot">' + t.by + ' <a href="https://www.endoraweddingfilms.com" target="_blank" rel="noopener">Endora Wedding Films</a></footer>';
 
     if (window.startFx) window.startFx(theme);
 
@@ -163,19 +168,20 @@
       else { env.addEventListener('click', openEnv); env.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnv(); } }); }
     }
     document.getElementById('open').onclick = function () {
-      gate.classList.add('gone');
+      gate.classList.add('gone'); document.body.classList.add('opened');
       if (aud) { var q = aud.play(); if (q && q.catch) q.catch(function () {}); document.getElementById('mus').classList.add('on'); }
       if (!v) { setTimeout(toSheet, 500); return; }
       v.muted = false;
       var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; document.getElementById('mute').textContent = t.sound; v.play(); });
     };
-    var skip = document.getElementById('skip'); if (skip) skip.onclick = function () { gate.classList.add('gone'); setTimeout(toSheet, 400); };
+    var skip = document.getElementById('skip'); if (skip) skip.onclick = function () { gate.classList.add('gone'); document.body.classList.add('opened'); setTimeout(toSheet, 400); };
     if (v) {
       var mb = document.getElementById('mute');
       mb.onclick = function () { v.muted = !v.muted; mb.textContent = v.muted ? t.sound : t.mute; };
       v.addEventListener('ended', function () { stage.classList.add('ended'); });
       document.getElementById('replay').onclick = function () { stage.classList.remove('ended'); v.currentTime = 0; v.play(); };
     }
+    Array.prototype.forEach.call(document.querySelectorAll('.bnav button'), function (b) { b.onclick = function () { var el = document.getElementById(b.getAttribute('data-go')); if (el) el.scrollIntoView({ behavior: noMotion ? 'auto' : 'smooth', block: 'start' }); }; });
     var mus = document.getElementById('mus');
     if (mus) mus.onclick = function () { if (aud.paused) { aud.play(); mus.classList.add('on'); } else { aud.pause(); mus.classList.remove('on'); } };
 

@@ -176,3 +176,18 @@ html[data-theme] .rv.in{opacity:1;transform:none;filter:none}
 [data-theme=blush] .seal:before{border-color:rgba(107,69,34,.55)}
 [data-theme=blush] .env-txt b{color:var(--jasmine)}
 [data-theme=blush] .gate .bars:before,[data-theme=blush] .gate .bars:after{background:#2a1a1c}
+
+/* hero photo, bottom bar, save the date, collage */
+.hero{margin:-18px auto 30px;width:min(80%,300px);aspect-ratio:3/4;border-radius:999px 999px 14px 14px;overflow:hidden;border:1px solid var(--brass);box-shadow:0 18px 44px rgba(0,0,0,.25)}
+.hero img{width:100%;height:100%;object-fit:cover;display:block;animation:kb 18s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.12) translateY(-2%)}}
+.savedate{text-align:center}.savedate .sdl{font:italic 400 24px "Cormorant",serif;color:var(--brass)}.savedate .sdn{font:italic 400 28px "Cormorant",serif;color:var(--jasmine)}
+.bnav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9;display:none;gap:2px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--ink) 88%,transparent);border:1px solid var(--brass);backdrop-filter:blur(10px);box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.opened .bnav{display:flex}
+.bnav button{min-height:42px;padding:0 15px;border-radius:999px;border:0;background:none;color:var(--jasmine);font:400 14px "Jost",sans-serif;cursor:pointer;white-space:nowrap}
+.bnav button:active,.bnav button:focus-visible{background:var(--brass);color:var(--ink)}
+.opened .foot{padding-bottom:96px}
+.opened .mus{bottom:calc(76px + env(safe-area-inset-bottom))}
+.gal{display:grid;gap:8px;margin-top:18px;grid-template-columns:repeat(6,1fr);grid-auto-rows:70px}.gi{padding:0;border:0;background:none;cursor:pointer;overflow:hidden;border-radius:8px}.gi img{width:100%;height:100%;object-fit:cover;display:block}
+.gal .gi{aspect-ratio:auto!important;grid-column:span 3;grid-row:span 3}
+.gal .gi:nth-child(5n+1){grid-column:span 4;grid-row:span 4}.gal .gi:nth-child(5n+2){grid-column:span 2;grid-row:span 2}.gal .gi:nth-child(5n+3){grid-column:span 2;grid-row:span 2}
