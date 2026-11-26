@@ -1,4 +1,3 @@
-@font-face{font-family:"Josefin Sans";src:url(/fonts/josefin-sans-var.ttf) format("truetype");font-weight:100 700;font-display:swap}
 /* Cinematic layer: opening sequence, emblems, scroll reveals, and one personality per theme. */
 x-l{display:inline-block}
 #fx{position:fixed;inset:0;z-index:8;pointer-events:none}
@@ -193,133 +192,108 @@ html[data-theme] .rv.in{opacity:1;transform:none;filter:none}
 .gal .gi{aspect-ratio:auto!important;grid-column:span 3;grid-row:span 3}
 .gal .gi:nth-child(5n+1){grid-column:span 4;grid-row:span 4}.gal .gi:nth-child(5n+2){grid-column:span 2;grid-row:span 2}.gal .gi:nth-child(5n+3){grid-column:span 2;grid-row:span 2}
 
-/* ===== Mangalam: parchment, mandala and the perahera (from Dilshan & Madhushika's own invitation) ===== */
-[data-theme=mangalam]{--ink:#ebdfc8;--ink2:#ded6b7;--jasmine:#71041d;--brass:#8a6a3a;--betel:#71041d;--mute:#6f5b44;--onfill:#fff;--g1:rgba(255,255,255,.5);--g2:rgba(138,106,58,.12);--orn:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%2016%22%20fill%3D%22none%22%20stroke%3D%22%238a6a3a%22%20stroke-width%3D%221.3%22%3E%3Cpath%20d%3D%22M2%208h38M60%208h38%22%2F%3E%3Cpath%20d%3D%22M50%202l6%206-6%206-6-6z%22%20fill%3D%22%238a6a3a%22%2F%3E%3C%2Fsvg%3E")}
-html[data-theme=mangalam],[data-theme=mangalam] body{background:#efe6cc radial-gradient(70% 28% at 20% 12%,rgba(255,255,255,.55),transparent),radial-gradient(60% 30% at 85% 60%,rgba(255,255,255,.4),transparent),radial-gradient(60% 30% at 10% 85%,rgba(160,130,80,.12),transparent) fixed}
+@font-face{font-family:"AbeatbyKai";src:url(/fonts/abeatbykai--abeakrg.ttf) format("truetype");font-display:swap}
+@font-face{font-family:"BugsLife";src:url(/fonts/bugslife--a-bug-s-life-debugged.ttf) format("truetype");font-display:swap}
+@font-face{font-family:"Aaargh";src:url(/fonts/aaargh--aaargh.ttf) format("truetype");font-display:swap}
+@font-face{font-family:"Caslon";src:url(/fonts/librecaslon.ttf) format("truetype");font-weight:400 700;font-display:swap}
+@font-face{font-family:"Carlito";src:url(/fonts/carlito.ttf) format("truetype");font-display:swap}
+/* ===== Mangalam v4: built from the PSD pages (exact assets, fonts, colours; 1080-px design units) ===== */
+[data-theme=mangalam]{--ink:#e9ddc7;--ink2:#ded6b7;--jasmine:#71041d;--brass:#8a6a3a;--betel:#71041d;--mute:#6f5b44;--onfill:#fff;--g1:rgba(255,255,255,.5);--g2:rgba(138,106,58,.12);--orn:none;--kai:"AbeatbyKai","Aaargh",sans-serif;--bug:"BugsLife","AbeatbyKai",sans-serif;--aar:"Aaargh",sans-serif;--cas:"Caslon","Cormorant",serif;--cal:"Carlito","Aaargh",sans-serif}
+html[data-theme=mangalam],[data-theme=mangalam] body{background:#e9ddc7 url(/t/mangalam/cloud.jpg) top center/100% auto repeat-y fixed}
 [data-theme=mangalam] .stage,[data-theme=mangalam] .gate{background:transparent}
-[data-theme=mangalam] .gate{background:#efe6cc radial-gradient(70% 30% at 25% 40%,rgba(255,255,255,.6),transparent),radial-gradient(60% 30% at 80% 70%,rgba(255,255,255,.45),transparent)}
-[data-theme=mangalam] .gate .glow,[data-theme=mangalam] .gate .orn{display:none}
-[data-theme=mangalam] .gate{padding-top:0;padding-bottom:0}
-[data-theme=mangalam] .gate:before{content:"";position:absolute;z-index:0;inset:0;background:url(/t/mangalam/bg.jpg) center top/cover no-repeat;animation:mandala 3.6s .2s ease-out both}
-@keyframes mandala{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:none}}
-[data-theme=mangalam] .gate>*{position:relative;z-index:2}
-[data-theme=mangalam] .gate .lead{margin-top:26vh;letter-spacing:.34em;text-transform:uppercase;font:400 15px "Jost",sans-serif;color:var(--brass)}
-[data-theme=mangalam] .names{font-weight:300;text-transform:uppercase;letter-spacing:.06em;color:var(--jasmine);font-size:clamp(34px,10.4vw,56px);white-space:nowrap}
-[data-theme=mangalam] .names i{color:var(--brass)}
-[data-theme=mangalam] .gate .when{font:400 19px "Cormorant",serif;letter-spacing:.06em;color:var(--jasmine)}
-[data-theme=mangalam] .gate .bars:before,[data-theme=mangalam] .gate .bars:after{background:#3a2a1c}
-[data-theme=mangalam] .sheet{padding-top:150px;padding-bottom:170px}
-[data-theme=mangalam] .mg-h h1{font:500 20px/1 "Cormorant",serif;letter-spacing:.16em;white-space:nowrap;color:var(--jasmine);text-align:center}
-[data-theme=mangalam] .mg-h{padding-bottom:6px!important}
-[data-theme=mangalam].opened:before,[data-theme=mangalam] .opened:before{}
+[data-theme=mangalam] .block+.block:before{display:none}
+[data-theme=mangalam] .gate .glow,[data-theme=mangalam] .gate .orn,[data-theme=mangalam] .gate .rule,[data-theme=mangalam] .gate .dear{display:none}
+/* ---- gate = page 1 ---- */
+[data-theme=mangalam] .gate{container-type:size;display:block;padding:0;background:#efe6d0 url(/t/mangalam/bg.jpg) center/cover no-repeat;--g:calc(100cqh/1920)}
+[data-theme=mangalam] .gate>*{position:absolute;left:0;right:0;margin:0;text-align:center;z-index:2}
+[data-theme=mangalam] .gate .lead{top:calc(var(--g)*744);max-width:none;font:400 calc(var(--g)*58.3)/1.2 var(--cas);letter-spacing:.4em;color:#000;text-transform:uppercase;padding-left:.4em}
+[data-theme=mangalam] .gate .names{top:calc(var(--g)*1010);font:400 calc(var(--g)*121.9)/calc(var(--g)*125) var(--aar);color:#930000;letter-spacing:0}
+[data-theme=mangalam] .names span,[data-theme=mangalam] .names i{display:inline;font:inherit;color:inherit}
+[data-theme=mangalam] .names i{font-style:normal;margin-left:.25em}
+[data-theme=mangalam] .names span:last-child{display:block}
+[data-theme=mangalam] .gate .when{top:calc(var(--g)*1440);font:400 calc(var(--g)*45.8)/1.2 var(--cas);letter-spacing:.1em;color:#000}
+[data-theme=mangalam] .gate .when sup{font-size:.6em;vertical-align:.5em;letter-spacing:0}
+[data-theme=mangalam] .gate .play{left:50%;right:auto;transform:translateX(-50%);top:calc(var(--g)*1560);width:auto;border-color:#930000;color:#930000;background:rgba(255,255,255,.35)}
+[data-theme=mangalam] .gate .skip{top:calc(var(--g)*1640);color:#6f5b44}
+[data-theme=mangalam] .mg-gd{position:absolute;left:0;right:0;top:calc(var(--g)*845);height:calc(var(--g)*48);z-index:2}
+[data-theme=mangalam] .mg-gd img{position:absolute}
+/* ---- fixed mandala + perahera while reading ---- */
 html[data-theme=mangalam] body.opened:before{content:"";position:fixed;z-index:8;top:0;left:0;right:0;margin:0 auto;width:min(100%,540px);height:210px;pointer-events:none;background:url(/t/mangalam/bg.jpg) center top/100% auto no-repeat,#efe6cc;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent);animation:mgfade 2.4s ease-out both}
 @keyframes mgfade{from{opacity:0}to{opacity:1}}
 html[data-theme=mangalam] body.opened:after{content:"";position:fixed;z-index:8;bottom:0;left:50%;width:min(100%,540px);aspect-ratio:1080/220;transform:translateX(-50%);pointer-events:none;background:url(/t/mangalam/strip.jpg) center bottom/100% auto no-repeat;-webkit-mask-image:linear-gradient(transparent,#000 40%);mask-image:linear-gradient(transparent,#000 40%)}
 [data-theme=mangalam] .bnav{bottom:calc(64px + env(safe-area-inset-bottom));z-index:12}
-[data-theme=mangalam] .foot:before{display:none}
-[data-theme=mangalam] .rv{transform:translateY(46px) scale(.95)}
-[data-theme=mangalam] .hero.rv{transform:translateY(90px) scale(.9)}
-[data-theme=mangalam] .ev:before{content:"";display:block;width:54px;height:54px;margin:0 auto 12px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20fill%3D%22none%22%20stroke%3D%22%231c1c1c%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M30%207H10v34h26V19%22%2F%3E%3Cpath%20d%3D%22M16%2018h8M16%2026h14M16%2034h10%22%2F%3E%3Cpath%20d%3D%22M40%207l-14%2014-2%206%206-2L44%2011z%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;animation:iconPop 1s .2s cubic-bezier(.2,.9,.3,1.3) both}
-@keyframes iconPop{from{transform:scale(.2) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
-[data-theme=mangalam] .gate x-l{animation:none!important;opacity:1!important;transform:none!important}
-[data-theme=mangalam] .sheet h2{font:700 25px/1.2 "Jost",sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--jasmine)}
-[data-theme=mangalam] .ev{border:1px solid rgba(138,106,58,.55);outline:1px solid rgba(138,106,58,.25);outline-offset:-10px;border-radius:44px;background:rgba(255,255,255,.22);padding:36px 18px}
-[data-theme=mangalam] .ev h3{font:700 27px/1.15 "Jost",sans-serif;text-transform:uppercase;color:var(--jasmine)}
-[data-theme=mangalam] .ev .date,[data-theme=mangalam] .ev .time,[data-theme=mangalam] .ev .venue{font:400 17px/1.4 "Jost",sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--jasmine)}
-[data-theme=mangalam] .chapter{display:grid;grid-template-columns:76px 1fr;gap:4px 14px;text-align:left;border-left:1px solid rgba(138,106,58,.5);padding-left:14px;margin:0 0 22px}
-[data-theme=mangalam] .chapter h3{font:400 30px/1 "Cormorant",serif;color:var(--jasmine);margin:0}
-[data-theme=mangalam] .chapter p{font:300 13px/1.5 "Jost",sans-serif;text-transform:uppercase;letter-spacing:.02em;color:#5a2a30}
+/* ---- sheet = flow of pages 2 and 3 ---- */
+[data-theme=mangalam] .sheet{container-type:inline-size;padding:calc(100cqw*130/1080) 0 170px;--u:calc(100cqw/1080)}
+[data-theme=mangalam] .sheet>.block{padding:0}
+[data-theme=mangalam] .rv{transform:translateY(46px) scale(.96)}
+[data-theme=mangalam] .a{position:absolute;text-align:center}
+[data-theme=mangalam] .mg-card{position:relative;width:100%;aspect-ratio:1080/1920;container-type:size;--u:calc(100cqw/1080);margin:0 0 calc(var(--u)*30)}
+[data-theme=mangalam] .mg-card img.a{height:auto}
+[data-theme=mangalam] .mg-card .t{font-weight:400;line-height:1.1;white-space:nowrap}
+[data-theme=mangalam] .mg-card .t.w{white-space:normal}
+[data-theme=mangalam] .mg-h{font:400 calc(var(--u)*60)/1.1 var(--cas);letter-spacing:.1em;color:#810000;padding-left:.1em}
+[data-theme=mangalam] .mg-s{font:400 calc(var(--u)*33.3)/calc(var(--u)*40) var(--cas);letter-spacing:.1em;color:#524727;padding-left:.1em}
+[data-theme=mangalam] .mg-n{font:400 calc(var(--u)*83.5)/calc(var(--u)*90) var(--aar);color:#930000}
+[data-theme=mangalam] .mg-p{font:400 calc(var(--u)*40.8)/calc(var(--u)*44) var(--aar);color:#930000}
+[data-theme=mangalam] .mg-m{font:400 calc(var(--u)*40.8)/1 var(--aar);color:#930000}
+[data-theme=mangalam] .mg-17{font:700 calc(var(--u)*215)/1 var(--cas);color:#930000;letter-spacing:-.06em}
+[data-theme=mangalam] .mg-y{font:700 calc(var(--u)*83)/1 var(--cas);color:#930000}
+[data-theme=mangalam] .mg-wd{font:400 calc(var(--u)*41.7)/1.2 var(--cas);letter-spacing:.1em;color:#000}
+[data-theme=mangalam] .mg-wd sup{font-size:.6em;vertical-align:.5em;letter-spacing:0}
+/* ---- story card (page 3 top) ---- */
+[data-theme=mangalam] .mg-story{margin:0 calc(var(--u)*52);border:calc(var(--u)*2.5) solid #000;border-radius:calc(var(--u)*70);background:rgba(216,207,171,.86);overflow:hidden;text-align:center}
+[data-theme=mangalam] .mg-sh{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent);margin-bottom:calc(var(--u)*-30)}
+[data-theme=mangalam] .mg-sb{padding:0 calc(var(--u)*40) calc(var(--u)*10)}
+[data-theme=mangalam] .mg-dia{position:relative;display:block;height:calc(var(--u)*48);margin:calc(var(--u)*6) auto calc(var(--u)*20);width:calc(var(--u)*540)}
+[data-theme=mangalam] .mg-dia img{position:absolute;top:50%;transform:translateY(-50%)}
+[data-theme=mangalam] .mg-dia img:nth-child(1){left:0;width:38%}[data-theme=mangalam] .mg-dia img:nth-child(2){left:50%;width:9%;transform:translate(-50%,-50%)}[data-theme=mangalam] .mg-dia img:nth-child(3){right:0;width:38%}
+[data-theme=mangalam] .mg-pre{font:400 calc(var(--u)*40.8)/1.2 var(--aar);color:#162d04;text-transform:uppercase}
+[data-theme=mangalam] .mg-story h2{font:400 calc(var(--u)*54)/1.2 var(--bug);letter-spacing:.1em;color:#540505;margin:calc(var(--u)*8) 0 calc(var(--u)*50)}
+[data-theme=mangalam] .mg-msg{font:400 calc(var(--u)*30)/1.25 var(--cas);text-transform:uppercase;color:#162d04;margin:0 0 calc(var(--u)*70)}
+[data-theme=mangalam] .mg-dt{font:italic 400 calc(var(--u)*50)/1.2 var(--kai);text-transform:uppercase;color:#74020d;margin-bottom:calc(var(--u)*40)}
+[data-theme=mangalam] .mg-dt sup{font-size:.55em;vertical-align:.6em}
+[data-theme=mangalam] .mg-tw{font:400 calc(var(--u)*25)/1.3 var(--cal);text-transform:uppercase;color:#162d04;margin-bottom:calc(var(--u)*22)}
+[data-theme=mangalam] .mg-req{font:400 calc(var(--u)*25)/1.35 var(--cas);color:#162d04;margin-bottom:calc(var(--u)*54)}
+[data-theme=mangalam] .mg-story hr{border:0;height:calc(var(--u)*3);background:rgba(20,35,5,.7);margin:0 calc(var(--u)*-6)}
+[data-theme=mangalam] .mg-venue{font:300 calc(var(--u)*50)/1.3 var(--cal);color:#71041d;padding:calc(var(--u)*40) calc(var(--u)*30)}
+[data-theme=mangalam] .mg-jt{font:300 calc(var(--u)*50)/1.2 var(--cal);color:#71041d;margin:calc(var(--u)*56) 0 calc(var(--u)*34);text-transform:uppercase}
+[data-theme=mangalam] .mg-ch{display:grid;grid-template-columns:calc(var(--u)*190) 1fr;align-items:center;margin-bottom:calc(var(--u)*30);text-align:left}
+[data-theme=mangalam] .mg-yr{font:400 calc(var(--u)*50)/1 var(--kai);color:#71041d;text-align:center}
+[data-theme=mangalam] .mg-ch>div{border-left:calc(var(--u)*5) solid #000;padding:calc(var(--u)*6) 0 calc(var(--u)*6) calc(var(--u)*18)}
+[data-theme=mangalam] .mg-ch h3{font:400 calc(var(--u)*50)/1.1 var(--kai);color:#71041d;text-transform:uppercase;margin:0 0 calc(var(--u)*10)}
+[data-theme=mangalam] .mg-ch h3:empty{display:none}
+[data-theme=mangalam] .mg-ch p{font:400 calc(var(--u)*25)/1.35 var(--kai);text-transform:uppercase;color:#4c5b21}
+[data-theme=mangalam] .mg-ch:first-child p{color:#284203}
+[data-theme=mangalam] .mg-sf{display:block;width:100%;height:auto;margin-top:calc(var(--u)*-6)}
+/* ---- events ---- */
+[data-theme=mangalam] #b-events{padding-top:calc(var(--u)*120)!important;text-align:center}
+[data-theme=mangalam] #b-events .mg-pre{font:400 calc(var(--u)*50)/1.2 var(--kai);color:#71041d}
+[data-theme=mangalam] #b-events h2{font:400 calc(var(--u)*75.6)/1.1 var(--bug);color:#74020d;margin:calc(var(--u)*14) 0 calc(var(--u)*110)}
+[data-theme=mangalam] .mg-ev{margin:0 calc(var(--u)*109) calc(var(--u)*130);padding:calc(var(--u)*50) calc(var(--u)*20) calc(var(--u)*50);background:rgba(216,207,171,.86);border:calc(var(--u)*2.5) solid #000;border-radius:calc(var(--u)*120);box-shadow:0 0 0 calc(var(--u)*34) rgba(244,238,222,.78),0 0 0 calc(var(--u)*36.5) #000;position:relative}
+[data-theme=mangalam] .mg-ev:before{display:none}
+[data-theme=mangalam] .mg-note{display:block;width:calc(var(--u)*190);margin:0 auto calc(var(--u)*26)}
+[data-theme=mangalam] .mg-arch{display:block;width:calc(var(--u)*205);margin:calc(var(--u)*-20) auto calc(var(--u)*14)}
+[data-theme=mangalam] .mg-ev h3{font:400 calc(var(--u)*85)/1.1 var(--bug);color:#74020d;text-transform:uppercase;margin:0 0 calc(var(--u)*34)}
+[data-theme=mangalam] .mg-row{font:400 calc(var(--u)*50)/1.2 var(--kai);color:#71041d;text-transform:uppercase;margin:calc(var(--u)*30) 0;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*26)}
+[data-theme=mangalam] .mg-row img{height:calc(var(--u)*50);width:auto;flex:none}
+[data-theme=mangalam] .mg-row sup{font-size:.55em;vertical-align:.6em}
+[data-theme=mangalam] .mg-ev .btns{margin-top:calc(var(--u)*30)}
+/* ---- save the date + rsvp ---- */
+[data-theme=mangalam] .mg-save{padding-top:calc(var(--u)*80)!important;text-align:center}
+[data-theme=mangalam] .mg-save h2{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*34);font:400 calc(var(--u)*85)/1 var(--bug);color:#74020d;text-transform:uppercase}
+[data-theme=mangalam] .mg-save h2 img{height:calc(var(--u)*92);width:auto}
+[data-theme=mangalam] .mg-save .mg-dia{margin:calc(var(--u)*60) auto calc(var(--u)*60);width:calc(var(--u)*780)}
+[data-theme=mangalam] .mg-save p{font:400 calc(var(--u)*50)/1.25 var(--kai);color:#71041d;text-transform:uppercase}
+[data-theme=mangalam] .sheet .block:not(.mg-card):not(.mg-story):not(#b-events):not(.mg-save){padding:calc(var(--u)*40) 28px}
+[data-theme=mangalam] #rsvp label,[data-theme=mangalam] .rv legend{font-family:var(--kai);color:#71041d}
 [data-theme=mangalam] .count div{border:1px solid rgba(138,106,58,.5);border-radius:16px;padding:12px 6px;background:rgba(255,255,255,.3)}
-[data-theme=mangalam] .count b{color:var(--jasmine)}
-[data-theme=mangalam] .hero{border-radius:28px;aspect-ratio:3/2;width:min(88%,360px);margin-top:-4px}
-[data-theme=mangalam] .msg{font:400 18px/1.6 "Jost",sans-serif;font-style:normal;text-transform:uppercase;letter-spacing:.02em;color:#5a2a30}
-[data-theme=mangalam] .foot:before{content:"";display:block;aspect-ratio:1080/220;margin:0 -24px 20px;background:url(/t/mangalam/strip.jpg) center bottom/100% auto no-repeat;-webkit-mask-image:linear-gradient(transparent,#000 40%);mask-image:linear-gradient(transparent,#000 40%)}
-[data-theme=mangalam] .env-back{background:#e9dfc2 url(/t/mangalam/mandala.png) center top/cover no-repeat}
+[data-theme=mangalam] .count b{color:#71041d}
+[data-theme=mangalam] .foot:before{display:none}
+/* envelope */
+[data-theme=mangalam] .env-back{background:#e9dfc2 url(/t/mangalam/bg.jpg) center top/cover no-repeat}
 [data-theme=mangalam] .env-back:after{display:none}
 [data-theme=mangalam] .pocket{background:linear-gradient(180deg,#e6dab9,#dccfa9)}
 [data-theme=mangalam] .flap{background:linear-gradient(180deg,#eee4c9,#e6dbbb)}
 [data-theme=mangalam] .env-txt p{color:var(--brass);letter-spacing:.2em;text-transform:uppercase;font-size:13px}
-[data-theme=mangalam] .env-txt b{color:var(--jasmine);text-transform:uppercase;letter-spacing:.08em;font-weight:300}
-
-/* Mangalam invitation card (page 2 of the film) */
-[data-theme=mangalam] .mg-card{position:relative;margin:0 -8px;padding:34px 18px 26px;border:1px solid rgba(110,80,40,.6);border-radius:30px;background:linear-gradient(180deg,#e0cfa4,#d2bd8c 55%,#d8c699);box-shadow:0 18px 40px rgba(90,60,20,.22)}
-[data-theme=mangalam] .mg-card:before{content:"";position:absolute;inset:9px;border:1px solid rgba(110,80,40,.5);border-radius:22px;pointer-events:none}
-[data-theme=mangalam] .mg-card h1{font:600 21px/1 "Cormorant",serif;letter-spacing:.14em;color:#8a1630;white-space:nowrap}
-[data-theme=mangalam] .mg-s{margin-top:16px;font:400 12px/1.5 "Jost",sans-serif;letter-spacing:.2em;color:#6f5b44}
-[data-theme=mangalam] .mg-dia{display:block;height:24px;margin:8px auto 12px;background:var(--orn) center/contain no-repeat}
-[data-theme=mangalam] .mg-n{font:300 34px/1.15 "Jost",sans-serif;letter-spacing:.07em;color:#8a1630}
-[data-theme=mangalam] .mg-and{font:300 30px/1.1 "Jost",sans-serif;color:#8a1630;margin:2px 0}
-[data-theme=mangalam] .mg-par{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 4px}
-[data-theme=mangalam] .mg-par p{font:400 13px/1.5 "Jost",sans-serif;letter-spacing:.04em;color:#8a1630}
-[data-theme=mangalam] .mg-date{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:22px 0 8px}
-[data-theme=mangalam] .mg-date span{font:400 18px "Jost",sans-serif;color:#8a1630;padding:9px 0;border-top:4px double #8a1630;border-bottom:4px double #8a1630;letter-spacing:.06em}
-[data-theme=mangalam] .mg-date b{font:700 78px/1 "Cormorant",serif;color:#8a1630;min-width:1.4ch}
-[data-theme=mangalam] .mg-wd{font:400 17px "Cormorant",serif;letter-spacing:.05em;color:#2a1a10}
-[data-theme=mangalam] .mg-img{display:block;width:78%;margin:18px auto 0;border-radius:0;mix-blend-mode:multiply}
-[data-theme=mangalam] .mg-card .mg-img{animation:coupleUp 1.4s .6s cubic-bezier(.2,.8,.2,1) both}
-@keyframes coupleUp{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
-[data-theme=mangalam] .sheet{padding-top:120px}
-
-/* ===== Mangalam v3: colours, fonts and layout taken from the film's own pages ===== */
-[data-theme=mangalam]{--jf:"Josefin Sans","Jost",system-ui,sans-serif}
-html[data-theme=mangalam],[data-theme=mangalam] body{background:linear-gradient(#f3ecdc,#e9ddc7 38%,#f1e9d7 66%,#e0c9a4) fixed}
-[data-theme=mangalam] .gate{background:#efe6d0}
-[data-theme=mangalam] .gate .lead{font:400 17px "Cormorant",serif;letter-spacing:.42em;color:#111;margin-top:30vh;max-width:none}
-[data-theme=mangalam] .names{font:300 clamp(30px,8.4vw,44px)/1.25 var(--jf);letter-spacing:.03em;color:#930000;white-space:normal}
-[data-theme=mangalam] .names span,[data-theme=mangalam] .names i{display:inline}
-[data-theme=mangalam] .names span:last-child{display:block}
-[data-theme=mangalam] .names i{font-style:normal;font-size:1em;color:#930000;margin:0 0 0 .3em}
-[data-theme=mangalam] .gate .when{font:400 17px "Cormorant",serif;color:#111;letter-spacing:.05em}
-[data-theme=mangalam] .mg-card{background:linear-gradient(180deg,#c9a469,#e2c79b 42%,#ddc090);border-color:rgba(70,55,30,.7)}
-[data-theme=mangalam] .mg-card:before{border-color:rgba(70,55,30,.55)}
-[data-theme=mangalam] .mg-card h1{font:600 20px/1 "Cormorant",serif;letter-spacing:.14em;color:#930000}
-[data-theme=mangalam] .mg-s{font:300 12px/1.5 var(--jf);color:#5b5b50}
-[data-theme=mangalam] .mg-n{font:300 34px/1.15 var(--jf);letter-spacing:.05em;color:#930000}
-[data-theme=mangalam] .mg-and{font:300 30px/1.1 var(--jf);color:#930000}
-[data-theme=mangalam] .mg-par p,[data-theme=mangalam] .mg-date span{font-family:var(--jf);color:#930000}
-[data-theme=mangalam] .mg-date span{border-color:#930000}
-[data-theme=mangalam] .mg-date b{font:700 84px/1 "Cormorant",serif;color:#930000}
-[data-theme=mangalam] .mg-wd{font:400 17px "Cormorant",serif;color:#111}
-/* story card */
-[data-theme=mangalam] .mg-story{margin:30px -6px 0;padding:0;border:1.5px solid #111;border-radius:36px;background:#ddd3b3;overflow:hidden;text-align:center}
-[data-theme=mangalam] .mg-story.block+.block:before{display:none}
-[data-theme=mangalam] .mg-sh{display:block;width:100%;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent);margin-bottom:-26px}
-[data-theme=mangalam] .mg-sb{padding:0 20px 8px}
-[data-theme=mangalam] .mg-dia.k{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%2016%22%3E%3Cpath%20d%3D%22M2%208h38M60%208h38%22%20stroke%3D%22%23222%22%20stroke-width%3D%221.1%22%2F%3E%3Cpath%20d%3D%22M50%202l6%206-6%206-6-6z%22%20fill%3D%22%238a8248%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;height:20px;margin:6px auto 14px}
-[data-theme=mangalam] .mg-pre{font:300 26px/1.2 var(--jf);letter-spacing:.03em;color:#71041d;text-transform:uppercase}
-[data-theme=mangalam] .mg-story h2{font:700 30px/1.2 var(--jf);letter-spacing:.07em;color:#540505;margin:6px 0 24px}
-[data-theme=mangalam] .mg-msg{font:500 17px/1.5 "Cormorant",serif;text-transform:uppercase;color:#26270f;margin-bottom:26px}
-[data-theme=mangalam] .mg-dt{font:italic 400 27px/1.2 var(--jf);color:#74020d;margin-bottom:18px}
-[data-theme=mangalam] .mg-tw{font:400 12px var(--jf);letter-spacing:.06em;color:#222;margin-bottom:10px}
-[data-theme=mangalam] .mg-req{font:500 14px/1.4 "Cormorant",serif;color:#26270f;margin-bottom:22px}
-[data-theme=mangalam] .mg-story hr{border:0;height:1px;background:rgba(60,50,30,.55);margin:0}
-[data-theme=mangalam] .mg-venue{font:300 25px/1.3 var(--jf);letter-spacing:.04em;color:#71041d;padding:20px 8px}
-[data-theme=mangalam] .mg-jt{font:300 24px var(--jf);letter-spacing:.04em;color:#71041d;margin:26px 0 20px}
-[data-theme=mangalam] .mg-ch{display:grid;grid-template-columns:76px 1fr;align-items:center;margin-bottom:12px;text-align:left}
-[data-theme=mangalam] .mg-yr{font:400 24px var(--jf);color:#71041d;text-align:center}
-[data-theme=mangalam] .mg-ch>div{border-left:1.5px solid #111;padding:6px 0 6px 14px}
-[data-theme=mangalam] .mg-ch h3{font:400 23px/1.15 var(--jf);letter-spacing:.03em;color:#71041d;margin:0 0 4px}
-[data-theme=mangalam] .mg-ch h3:empty{display:none}
-[data-theme=mangalam] .mg-ch p{font:400 13.5px/1.4 var(--jf);letter-spacing:.03em;text-transform:uppercase;color:#3d4f10}
-[data-theme=mangalam] .mg-sf{display:block;width:100%;margin-top:-4px}
-/* events */
-[data-theme=mangalam] #b-events{padding-top:64px}
-[data-theme=mangalam] #b-events h2{font:700 36px/1.1 var(--jf);letter-spacing:.03em;color:#71041d;margin:2px 0 40px}
-[data-theme=mangalam] .mg-ev{margin:0 14px 52px;padding:28px 12px 22px;background:#ded6b7;border:1px solid #1a1a1a;border-radius:42px;box-shadow:0 0 0 12px rgba(239,232,213,.9),0 0 0 13px #1a1a1a;outline:0}
-[data-theme=mangalam] .mg-ev:before{display:none}
-[data-theme=mangalam] .mg-note{width:78px;height:78px;margin:0 auto 8px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20fill%3D%22none%22%20stroke%3D%22%23161616%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M30%207H12a3%203%200%200%200-3%203v28a3%203%200%200%200%203%203h22a3%203%200%200%200%203-3V19%22%2F%3E%3Cpath%20d%3D%22M16%2018h9M16%2026h14M16%2034h9%22%2F%3E%3Cpath%20d%3D%22M40%207l-14%2014-2%206%206-2L44%2011z%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;animation:iconPop 1s .2s cubic-bezier(.2,.9,.3,1.3) both}
-[data-theme=mangalam] .mg-arch{display:block;width:118px;margin:-8px auto -2px}
-[data-theme=mangalam] .mg-ev h3{font:700 31px/1.1 var(--jf);letter-spacing:.03em;text-transform:uppercase;color:#71041d;margin:6px 0 14px}
-[data-theme=mangalam] .mg-row{font:400 21px/1.2 var(--jf);letter-spacing:.03em;color:#71041d;margin:10px 0;text-align:center}
-[data-theme=mangalam] .mg-row:before{content:"";display:inline-block;width:24px;height:24px;margin-right:12px;vertical-align:-5px;background:center/contain no-repeat}
-[data-theme=mangalam] .r-cal:before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23222%22%20stroke-width%3D%221.8%22%3E%3Crect%20x%3D%223%22%20y%3D%225%22%20width%3D%2218%22%20height%3D%2216%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M3%2010h18M8%203v4M16%203v4M7%2014h2M11%2014h2M15%2014h2M7%2017h2M11%2017h2%22%2F%3E%3C%2Fsvg%3E")}
-[data-theme=mangalam] .r-clk:before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23222%22%20stroke-width%3D%221.8%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M12%207v5l3%202%22%2F%3E%3C%2Fsvg%3E")}
-[data-theme=mangalam] .r-pin:before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%202a7%207%200%200%200-7%207c0%205%207%2013%207%2013s7-8%207-13a7%207%200%200%200-7-7z%22%20fill%3D%22%23161616%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%229%22%20r%3D%222.6%22%20fill%3D%22%23ded6b7%22%2F%3E%3C%2Fsvg%3E")}
-/* save the date */
-[data-theme=mangalam] .mg-save{padding-top:36px}
-[data-theme=mangalam] .mg-save h2{display:flex;align-items:center;justify-content:center;gap:14px;font:700 33px/1 var(--jf);letter-spacing:.03em;color:#71041d}
-[data-theme=mangalam] .mg-calic{width:44px;height:44px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23161616%22%20stroke-width%3D%221.6%22%3E%3Crect%20x%3D%223%22%20y%3D%225%22%20width%3D%2218%22%20height%3D%2216%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M3%2010h18M8%203v4M16%203v4M7%2014h2M11%2014h2M15%2014h2M7%2017h2M11%2017h2%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
-[data-theme=mangalam] .mg-save .mg-dia.k{margin:22px auto 24px}
-[data-theme=mangalam] .mg-save p{font:300 21px/1.45 var(--jf);letter-spacing:.02em;color:#71041d}
-[data-theme=mangalam] #rsvp label,[data-theme=mangalam] .rv legend{font-family:var(--jf);color:#71041d}
-[data-theme=mangalam] .mg-card .mg-img,[data-theme=mangalam] .mg-card+.block{}
+[data-theme=mangalam] .env-txt b{color:#930000;text-transform:uppercase;letter-spacing:.08em;font-weight:400;font-family:var(--aar)}
+[data-theme=mangalam] .gate x-l{animation:none!important;opacity:1!important;transform:none!important}

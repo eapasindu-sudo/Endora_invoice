@@ -75,6 +75,7 @@
     if (!evs.length) evs = c.events || [];
     var first = evs[0] || { start: new Date().toISOString() };
     var start0 = new Date(first.start);
+    var mgWhen = '';
     var hasVideo = !!c.video, hasMusic = !!c.music && !hasVideo;
     var order = c.sections || ['events', 'countdown', 'rsvp'];
 
@@ -122,33 +123,42 @@
     var sd = new Intl.DateTimeFormat(t.loc, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).format(start0);
     body += '<div class="block savedate"><p class="sdl">' + t.save + '</p><p class="date">' + esc(sd) + '</p><p class="sdn">' + esc(title) + '</p></div>';
     if (theme === 'mangalam') {
-      var pc = c.parents || {}, dv = {}, ENG = { timeZone: 'Asia/Colombo' };
+      var pc = c.parents || {}, dv = {};
       new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).formatToParts(start0).forEach(function (x) { dv[x.type] = x.value; });
       var up = function (s) { return esc(String(s || '').toUpperCase()); };
       var ord = function (d) { d = +d; var s = (d % 10 == 1 && d != 11) ? 'st' : (d % 10 == 2 && d != 12) ? 'nd' : (d % 10 == 3 && d != 13) ? 'rd' : 'th'; return d + '<sup>' + s + '</sup>'; };
       var wdn = new Intl.DateTimeFormat('en-GB', { weekday: 'long', timeZone: 'Asia/Colombo' }).format(start0);
-      var cardH = '<div class="block mg-card"><h1>SRI SUBA MANGALAM !</h1><p class="mg-s">YOU ARE INVITED TO<br>THE WEDDING OF</p><span class="mg-dia"></span>' +
-        '<p class="mg-n">' + up(names[0]) + '</p><p class="mg-and">&amp;</p><p class="mg-n">' + up(names[1]) + '</p>' +
-        ((pc.bride || pc.groom) ? '<div class="mg-par"><p>' + (pc.bride ? 'DAUGHTER OF<br>' + up(pc.bride) : '') + '</p><p>' + (pc.groom ? 'SON OF<br>' + up(pc.groom) : '') + '</p></div>' : '') +
-        '<div class="mg-date"><span>' + up(dv.month) + '</span><b data-n="' + esc(dv.day) + '">' + esc(dv.day) + '</b><span>' + esc(dv.year) + '</span></div>' +
-        '<p class="mg-wd">' + esc(fd.format(start0)) + '</p>' +
-        (c.gallery && c.gallery[0] ? '<img class="mg-img" src="' + esc(c.gallery[0]) + '" alt="">' : '') + '</div>';
+      var T = '/t/mangalam/';
+      var P = function (x, y, w) { return 'left:' + (x / 10.8) + '%;top:' + (y / 19.2) + '%' + (w ? ';width:' + (w / 10.8) + '%' : ''); };
+      var IM = function (f, x, y, w) { return '<img class="a" src="' + T + f + '" style="' + P(x, y, w) + '" alt="">'; };
+      var TX = function (cls, x, y, w, h) { return '<div class="a t ' + cls + '" style="' + P(x, y, w) + '">' + h + '</div>'; };
+      mgWhen = esc(wdn) + ' ' + ord(dv.day) + ' ' + esc(dv.month) + ' ' + esc(dv.year);
+      var cardH = '<div class="block mg-card">' + IM('card-o.png', 77, 115, 974) + IM('card-i.png', 131, 169, 866) +
+        TX('mg-h', 77, 221, 974, 'SRI SUBA MANGALAM !') + TX('mg-s w', 77, 318, 974, 'YOU ARE INVITED TO<br>THE WEDDING OF') +
+        IM('ln-l.png', 318, 461, 210) + IM('dia.png', 541, 440, 48) + IM('ln-r.png', 597, 459, 210) +
+        TX('mg-n fit', 77, 548, 974, up(names[0]) + '<br>&amp;<br>' + up(names[1])) +
+        ((pc.bride || pc.groom) ? TX('mg-p w', 140, 868, 320, pc.bride ? 'DAUGHTER OF<br>' + up(pc.bride) : '') + TX('mg-p w', 620, 868, 320, pc.groom ? 'SON OF<br>' + up(pc.groom) : '') : '') +
+        IM('rule.png', 155, 1060, 256) + IM('rule.png', 152, 1171, 256) + IM('rule.png', 653, 1064, 256) + IM('rule.png', 644, 1162, 256) +
+        TX('mg-m', 155, 1103, 256, up(dv.month)) + TX('mg-17', 400, 1000, 300, '<span id="mg17" data-n="' + esc(dv.day) + '">' + esc(dv.day) + '</span>') + TX('mg-y', 653, 1092, 256, esc(dv.year)) +
+        TX('mg-wd', 77, 1232, 974, mgWhen) +
+        IM('couple.png', 251, 1300, 646) + IM('ps-a.png', 70, 1708, 473) + IM('ps-b.png', 527, 1685, 542) + '</div>';
       var chs = (c.story || []).map(function (s) { return '<div class="mg-ch"><b class="mg-yr">' + esc(s.title || '') + '</b><div><h3>' + up(s.head || '') + '</h3><p>' + esc(s.text || '') + '</p></div></div>'; }).join('');
       var venue0 = (evs[0] && (evs[0].address || evs[0].venue)) || '';
-      var storyH = '<div class="block mg-story"><img class="mg-sh" src="/t/mangalam/story-head.jpg" alt=""><div class="mg-sb"><span class="mg-dia k"></span><p class="mg-pre">OUR STORY</p><h2>Together Forever</h2>' +
+      var DIA = '<span class="mg-dia"><img src="' + T + 'ln-l.png" alt=""><img src="' + T + 'dia.png" alt=""><img src="' + T + 'ln-r.png" alt=""></span>';
+      var storyH = '<div class="block mg-story"><img class="mg-sh" src="' + T + 'story-head.jpg" alt=""><div class="mg-sb">' + DIA + '<p class="mg-pre">OUR STORY</p><h2>Together Forever</h2>' +
         (c.message ? '<p class="mg-msg">' + esc(c.message) + '</p>' : '') +
-        '<p class="mg-dt">' + up(wdn) + ', ' + ord(dv.day).toUpperCase() + ' ' + up(dv.month) + ' ' + esc(dv.year) + '</p>' +
+        '<p class="mg-dt">' + mgWhen + '</p>' +
         '<p class="mg-tw">TOGETHER WITH THEIR FAMILIES</p><p class="mg-req">REQUEST THE HONOUR OF YOUR PRESENCE<br>AT THE CELEBRATION OF THEIR MARRIAGE.</p>' +
         (venue0 ? '<hr><p class="mg-venue">' + up(venue0) + '</p><hr>' : '') +
-        (chs ? '<p class="mg-jt">A JOURNEY TOGETHER</p><div class="mg-tl">' + chs + '</div>' : '') + '</div><img class="mg-sf" src="/t/mangalam/story-foot.jpg" alt=""></div>';
+        (chs ? '<p class="mg-jt">A Journey Together</p><div class="mg-tl">' + chs + '</div>' : '') + '</div><img class="mg-sf" src="' + T + 'story-foot.jpg" alt=""></div>';
       var evH = '<div class="block" id="b-events"><p class="mg-pre">CELEBRATE WITH US</p><h2>WEDDING EVENTS</h2>' + evs.map(function (e, i) {
         var s = new Date(e.start), q = {}; new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).formatToParts(s).forEach(function (x) { q[x.type] = x.value; });
-        return '<article class="ev mg-ev">' + (/poruwa/i.test(e.title || '') ? '<img class="mg-arch" src="/t/mangalam/arch.png" alt="">' : '<div class="mg-note"></div>') +
-          '<h3>' + esc(e.title || '') + '</h3><p class="mg-row r-cal">' + ord(q.day).toUpperCase() + ' ' + up(q.month) + ' ' + esc(q.year) + '</p><p class="mg-row r-clk">' + up(new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Colombo' }).format(s)) + '</p>' +
-          (e.venue ? '<p class="mg-row r-pin">' + up(e.venue) + '</p>' : '') +
+        return '<article class="ev mg-ev">' + (/poruwa/i.test(e.title || '') ? '<img class="mg-arch" src="' + T + 'arch.png" alt="">' : '<img class="mg-note" src="' + T + 'i-note.png" alt="">') +
+          '<h3>' + esc(e.title || '') + '</h3><p class="mg-row"><img src="' + T + 'i-cal.png" alt=""><span>' + ord(q.day) + ' ' + up(q.month) + ' ' + esc(q.year) + '</span></p><p class="mg-row"><img src="' + T + 'i-clock.png" alt=""><span>' + up(new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Colombo' }).format(s)) + '</span></p>' +
+          (e.venue ? '<p class="mg-row"><img src="' + T + 'i-pin.png" alt=""><span>' + up(e.venue) + '</span></p>' : '') +
           '<div class="btns">' + (e.map ? '<a class="btn" href="' + esc(e.map) + '" target="_blank" rel="noopener">' + t.map + '</a>' : '') + '<button class="btn cal" data-i="' + i + '" type="button">' + t.cal + '</button></div></article>';
       }).join('') + '</div>';
-      var saveH = '<div class="block mg-save"><h2><i class="mg-calic"></i>SAVE THE DATE</h2><span class="mg-dia k"></span><p>WE JOYFULLY AWAIT YOUR PRESENCE.<br>PLEASE LET US KNOW<br>IF YOU WILL BE JOINING US.</p></div>';
+      var saveH = '<div class="block mg-save"><h2><img src="' + T + 'i-calbig.png" alt="">SAVE THE DATE</h2>' + DIA + '<p>WE JOYFULLY AWAIT YOUR PRESENCE.<br>PLEASE LET US KNOW<br>IF YOU WILL BE JOINING US.</p></div>';
       body = cardH + storyH;
       order.forEach(function (k) {
         if (k === 'story') return;
@@ -206,16 +216,31 @@
     function mgHide(sel, root) { Array.prototype.forEach.call((root || document).querySelectorAll(sel), function (el) { el.style.visibility = 'hidden'; }); }
     function mgReveal(box) {
       var i = 0;
-      Array.prototype.forEach.call(box.querySelectorAll('h1,h2,h3,p:not(.note),.date,.time,.venue,small,legend'), function (el) {
+      Array.prototype.forEach.call(box.querySelectorAll('h1,h2,h3,p:not(.note),.date,.time,.venue,small,legend,.mg-h,.mg-m,.mg-y,.mg-wd'), function (el) {
         if (el.closest('.btns,form,.feed')) return; scr(el, 150 + (i++) * 140, 700 + Math.min(900, el.textContent.length * 14));
       });
     }
-    if (mg) { var ld0 = document.querySelector('#gate .lead'); if (ld0) ld0.innerHTML = 'THE WEDDING OF'; }
+    if (mg) {
+      var ld0 = document.querySelector('#gate .lead'); if (ld0) ld0.innerHTML = 'THE WEDDING OF';
+      var wh0 = document.querySelector('#gate .when'); if (wh0) wh0.innerHTML = mgWhen;
+      var gt0 = document.getElementById('gate');
+      if (gt0) gt0.insertAdjacentHTML('beforeend', '<div class="mg-gd"><img src="/t/mangalam/ln-l.png" alt="" style="left:calc(50% - var(--g)*250);top:calc(var(--g)*21);width:calc(var(--g)*210)"><img src="/t/mangalam/dia.png" alt="" style="left:calc(50% - var(--g)*24);top:0;width:calc(var(--g)*48)"><img src="/t/mangalam/ln-r.png" alt="" style="left:calc(50% + var(--g)*29);top:calc(var(--g)*19);width:calc(var(--g)*210)"></div>');
+    }
     if (mg) mgHide('#gate .lead,#gate .names > *,#gate .when');
     function mgCount(box) {
-      var b = box.querySelector && box.querySelector('.mg-date b'); if (!b) return; var n = parseInt(b.getAttribute('data-n'), 10) || 0, t0 = performance.now();
+      var b = box.querySelector && box.querySelector('#mg17'); if (!b) return; var n = parseInt(b.getAttribute('data-n'), 10) || 0, t0 = performance.now();
       (function f(now) { var p = Math.min(1, (now - t0) / 1400); b.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); })(t0);
     }
+    function mgFit() {
+      if (!mg) return;
+      Array.prototype.forEach.call(document.querySelectorAll('.mg-card .t'), function (el) {
+        var box = el.parentNode.getBoundingClientRect(), sz = parseFloat(getComputedStyle(el).fontSize), n = 0;
+        el.style.display = 'inline-block'; el.style.whiteSpace = el.classList.contains('w') ? 'normal' : 'nowrap';
+        el.style.display = '';
+        while (n++ < 12 && el.scrollWidth > el.clientWidth + 1 && sz > 8) { sz *= .93; el.style.fontSize = sz + 'px'; }
+      });
+    }
+    setTimeout(mgFit, 400); window.addEventListener('load', mgFit);
     var mgGateDone = 0;
     function mgGate() {
       if (!mg || mgGateDone) return; mgGateDone = 1;
