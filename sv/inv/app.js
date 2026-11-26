@@ -39,6 +39,8 @@
     return '<svg viewBox="0 0 160 124" aria-hidden="true"><g>' + side + '</g><g transform="translate(160 0) scale(-1 1)">' + side + '</g><path d="M80 112l5 6-5 6-5-6z" fill="currentColor"/></svg>';
   })();
 
+  ORN.mangalam = '';
+
   var app = document.getElementById('app');
   var parts = location.pathname.split('/').filter(Boolean);
   var slug = (parts[0] || 'demo').toLowerCase(), gt = parts[1] || '';

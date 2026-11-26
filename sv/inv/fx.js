@@ -6,7 +6,8 @@ var K={
  jasmine:{n:22,c:'rgba(255,255,255,',t:'petal'},
  kandyan:{n:70,c:'rgba(255,214,140,',t:'star'},
  nelum:{n:20,c:'rgba(232,150,176,',t:'lotus'},
- blush:{n:46,c:'rgba(190,136,80,',t:'star'}
+ blush:{n:46,c:'rgba(190,136,80,',t:'star'},
+ mangalam:{n:34,c:'rgba(138,100,50,',t:'star'}
 };
 window.startFx=function(theme){
  var cfg=K[theme]||K.monsoon,cv=document.getElementById('fx');
