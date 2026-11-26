@@ -121,7 +121,18 @@
     if (c.gallery && c.gallery.length) body = '<div class="hero"><img src="' + esc(c.gallery[0]) + '" alt=""></div>' + body;
     var sd = new Intl.DateTimeFormat(t.loc, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).format(start0);
     body += '<div class="block savedate"><p class="sdl">' + t.save + '</p><p class="date">' + esc(sd) + '</p><p class="sdn">' + esc(title) + '</p></div>';
-    if (theme === 'mangalam') body = '<div class="block mg-h"><h1>SRI SUBA MANGALAM !</h1></div>' + body;
+    if (theme === 'mangalam') {
+      var pc = c.parents || {}, dp = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).formatToParts(start0), dv = {};
+      dp.forEach(function (x) { dv[x.type] = x.value; });
+      var up = function (s) { return esc(String(s || '').toUpperCase()); };
+      body = body.replace(/^<div class="hero">.*?<\/div>/, '');
+      body = '<div class="block mg-card"><h1>SRI SUBA MANGALAM !</h1><p class="mg-s">YOU ARE INVITED TO<br>THE WEDDING OF</p><span class="mg-dia"></span>' +
+        '<p class="mg-n">' + up(names[0]) + '</p><p class="mg-and">&amp;</p><p class="mg-n">' + up(names[1]) + '</p>' +
+        ((pc.bride || pc.groom) ? '<div class="mg-par"><p>' + (pc.bride ? 'DAUGHTER OF<br>' + up(pc.bride) : '') + '</p><p>' + (pc.groom ? 'SON OF<br>' + up(pc.groom) : '') + '</p></div>' : '') +
+        '<div class="mg-date"><span>' + up(dv.month) + '</span><b data-n="' + esc(dv.day) + '">' + esc(dv.day) + '</b><span>' + esc(dv.year) + '</span></div>' +
+        '<p class="mg-wd">' + esc(fd.format(start0)) + '</p>' +
+        (c.gallery && c.gallery[0] ? '<img class="mg-img" src="' + esc(c.gallery[0]) + '" alt="">' : '') + '</div>' + body;
+    }
     var navItems = [['b-events', t.navd], ['b-gallery', t.navm], ['b-wall', t.navw], ['b-rsvp', t.rsvp.length > 14 ? t.navr : t.rsvp]].filter(function (x) { return body.indexOf('id="' + x[0] + '"') > -1; });
     var nav = '<nav class="bnav" aria-label="Sections">' + navItems.map(function (x) { return '<button type="button" data-go="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') + '</nav>';
     var greet = g ? '<p class="dear">' + esc(t.dear.replace('{name}', g.name)) + '</p>' : '';
@@ -176,6 +187,10 @@
       });
     }
     if (mg) mgHide('#gate .lead,#gate .names > *,#gate .when');
+    function mgCount(box) {
+      var b = box.querySelector && box.querySelector('.mg-date b'); if (!b) return; var n = parseInt(b.getAttribute('data-n'), 10) || 0, t0 = performance.now();
+      (function f(now) { var p = Math.min(1, (now - t0) / 1400); b.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); })(t0);
+    }
     var mgGateDone = 0;
     function mgGate() {
       if (!mg || mgGateDone) return; mgGateDone = 1;
@@ -185,7 +200,7 @@
     /* reveal on scroll */
     var rv = document.querySelectorAll('.sheet .block, .sheet .ev, .sheet .chapter, .sheet .gi');
     if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
-      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); if (mg) mgReveal(e.target); io.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); if (mg) { mgReveal(e.target); mgCount(e.target); } io.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
       Array.prototype.forEach.call(rv, function (el) { el.classList.add('rv'); io.observe(el); });
     }
 

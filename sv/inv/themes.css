@@ -211,7 +211,8 @@ html[data-theme=mangalam],[data-theme=mangalam] body{background:#efe6cc radial-g
 [data-theme=mangalam] .mg-h h1{font:500 20px/1 "Cormorant",serif;letter-spacing:.16em;white-space:nowrap;color:var(--jasmine);text-align:center}
 [data-theme=mangalam] .mg-h{padding-bottom:6px!important}
 [data-theme=mangalam].opened:before,[data-theme=mangalam] .opened:before{}
-html[data-theme=mangalam] body.opened:before{content:"";position:fixed;z-index:8;top:0;left:50%;width:min(100%,540px);height:210px;transform:translateX(-50%);pointer-events:none;background:url(/t/mangalam/bg.jpg) center top/100% auto no-repeat,#efe6cc;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent);animation:mandala 2.4s ease-out both}
+html[data-theme=mangalam] body.opened:before{content:"";position:fixed;z-index:8;top:0;left:0;right:0;margin:0 auto;width:min(100%,540px);height:210px;pointer-events:none;background:url(/t/mangalam/bg.jpg) center top/100% auto no-repeat,#efe6cc;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent);animation:mgfade 2.4s ease-out both}
+@keyframes mgfade{from{opacity:0}to{opacity:1}}
 html[data-theme=mangalam] body.opened:after{content:"";position:fixed;z-index:8;bottom:0;left:50%;width:min(100%,540px);aspect-ratio:1080/220;transform:translateX(-50%);pointer-events:none;background:url(/t/mangalam/strip.jpg) center bottom/100% auto no-repeat;-webkit-mask-image:linear-gradient(transparent,#000 40%);mask-image:linear-gradient(transparent,#000 40%)}
 [data-theme=mangalam] .bnav{bottom:calc(64px + env(safe-area-inset-bottom));z-index:12}
 [data-theme=mangalam] .foot:before{display:none}
@@ -238,3 +239,22 @@ html[data-theme=mangalam] body.opened:after{content:"";position:fixed;z-index:8;
 [data-theme=mangalam] .flap{background:linear-gradient(180deg,#eee4c9,#e6dbbb)}
 [data-theme=mangalam] .env-txt p{color:var(--brass);letter-spacing:.2em;text-transform:uppercase;font-size:13px}
 [data-theme=mangalam] .env-txt b{color:var(--jasmine);text-transform:uppercase;letter-spacing:.08em;font-weight:300}
+
+/* Mangalam invitation card (page 2 of the film) */
+[data-theme=mangalam] .mg-card{position:relative;margin:0 -8px;padding:34px 18px 26px;border:1px solid rgba(110,80,40,.6);border-radius:30px;background:linear-gradient(180deg,#e0cfa4,#d2bd8c 55%,#d8c699);box-shadow:0 18px 40px rgba(90,60,20,.22)}
+[data-theme=mangalam] .mg-card:before{content:"";position:absolute;inset:9px;border:1px solid rgba(110,80,40,.5);border-radius:22px;pointer-events:none}
+[data-theme=mangalam] .mg-card h1{font:600 21px/1 "Cormorant",serif;letter-spacing:.14em;color:#8a1630;white-space:nowrap}
+[data-theme=mangalam] .mg-s{margin-top:16px;font:400 12px/1.5 "Jost",sans-serif;letter-spacing:.2em;color:#6f5b44}
+[data-theme=mangalam] .mg-dia{display:block;height:24px;margin:8px auto 12px;background:var(--orn) center/contain no-repeat}
+[data-theme=mangalam] .mg-n{font:300 34px/1.15 "Jost",sans-serif;letter-spacing:.07em;color:#8a1630}
+[data-theme=mangalam] .mg-and{font:300 30px/1.1 "Jost",sans-serif;color:#8a1630;margin:2px 0}
+[data-theme=mangalam] .mg-par{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 4px}
+[data-theme=mangalam] .mg-par p{font:400 13px/1.5 "Jost",sans-serif;letter-spacing:.04em;color:#8a1630}
+[data-theme=mangalam] .mg-date{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:22px 0 8px}
+[data-theme=mangalam] .mg-date span{font:400 18px "Jost",sans-serif;color:#8a1630;padding:9px 0;border-top:4px double #8a1630;border-bottom:4px double #8a1630;letter-spacing:.06em}
+[data-theme=mangalam] .mg-date b{font:700 78px/1 "Cormorant",serif;color:#8a1630;min-width:1.4ch}
+[data-theme=mangalam] .mg-wd{font:400 17px "Cormorant",serif;letter-spacing:.05em;color:#2a1a10}
+[data-theme=mangalam] .mg-img{display:block;width:78%;margin:18px auto 0;border-radius:0;mix-blend-mode:multiply}
+[data-theme=mangalam] .mg-card .mg-img{animation:coupleUp 1.4s .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes coupleUp{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
+[data-theme=mangalam] .sheet{padding-top:120px}
