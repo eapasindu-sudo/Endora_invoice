@@ -300,3 +300,4 @@ html[data-theme=mangalam] body.opened:after{content:"";position:fixed;z-index:8;
 
 /* RSVP choice fieldsets share the class name "rv" with the reveal animation: never hide them */
 fieldset.rv{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
+[data-theme=mangalam] .btn.fill,[data-theme=mangalam] #rsvp .btn.fill{color:#fff!important;background:#71041d;border-color:#71041d}
