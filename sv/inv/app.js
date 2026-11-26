@@ -121,6 +121,7 @@
     if (c.gallery && c.gallery.length) body = '<div class="hero"><img src="' + esc(c.gallery[0]) + '" alt=""></div>' + body;
     var sd = new Intl.DateTimeFormat(t.loc, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).format(start0);
     body += '<div class="block savedate"><p class="sdl">' + t.save + '</p><p class="date">' + esc(sd) + '</p><p class="sdn">' + esc(title) + '</p></div>';
+    if (theme === 'mangalam') body = '<div class="block mg-h"><h1>SRI SUBA MANGALAM !</h1></div>' + body;
     var navItems = [['b-events', t.navd], ['b-gallery', t.navm], ['b-wall', t.navw], ['b-rsvp', t.rsvp.length > 14 ? t.navr : t.rsvp]].filter(function (x) { return body.indexOf('id="' + x[0] + '"') > -1; });
     var nav = '<nav class="bnav" aria-label="Sections">' + navItems.map(function (x) { return '<button type="button" data-go="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') + '</nav>';
     var greet = g ? '<p class="dear">' + esc(t.dear.replace('{name}', g.name)) + '</p>' : '';
@@ -149,10 +150,42 @@
 
     if (window.startFx) window.startFx(theme);
 
+
+    /* Mangalam: text decipher animation, like the film */
+    var mg = theme === 'mangalam' && !noMotion;
+    function scr(el, delay, dur) {
+      if (!el || el._sc) return; el._sc = 1;
+      var src = el.textContent, n = src.length, html0 = el.innerHTML, G = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      if (!n) return;
+      el.style.minHeight = el.offsetHeight + 'px';
+      setTimeout(function () { el.style.visibility = '';
+        var t0 = performance.now();
+        (function f(now) {
+          var p = Math.min(1, (now - t0) / dur), k = Math.floor(p * n), o = esc(src.slice(0, k)), g = '';
+          for (var i = k; i < Math.min(n, k + 3); i++) g += src[i] === ' ' ? ' ' : G[Math.floor(Math.random() * G.length)];
+          o += esc(g) + '<span style="opacity:0">' + esc(src.slice(Math.min(n, k + 3))) + '</span>';
+          if (p < 1) { el.innerHTML = o; requestAnimationFrame(f); } else { el.innerHTML = html0; el.style.minHeight = ''; }
+        })(t0);
+      }, delay);
+    }
+    function mgHide(sel, root) { Array.prototype.forEach.call((root || document).querySelectorAll(sel), function (el) { el.style.visibility = 'hidden'; }); }
+    function mgReveal(box) {
+      var i = 0;
+      Array.prototype.forEach.call(box.querySelectorAll('h1,h2,h3,p:not(.note),.date,.time,.venue,small,legend'), function (el) {
+        if (el.closest('.btns,form,.feed')) return; scr(el, 150 + (i++) * 140, 700 + Math.min(900, el.textContent.length * 14));
+      });
+    }
+    if (mg) mgHide('#gate .lead,#gate .names > *,#gate .when');
+    var mgGateDone = 0;
+    function mgGate() {
+      if (!mg || mgGateDone) return; mgGateDone = 1;
+      scr(gate.querySelector('.lead'), 100, 1300); Array.prototype.forEach.call(gate.querySelectorAll('.names > *'), function (el, k) { scr(el, 900 + k * 500, 1100); }); scr(gate.querySelector('.when'), 2000, 1200);
+    }
+
     /* reveal on scroll */
     var rv = document.querySelectorAll('.sheet .block, .sheet .ev, .sheet .chapter, .sheet .gi');
     if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
-      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); if (mg) mgReveal(e.target); io.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
       Array.prototype.forEach.call(rv, function (el) { el.classList.add('rv'); io.observe(el); });
     }
 
@@ -162,7 +195,7 @@
     function openEnv() {
       if (!env || env.classList.contains('open')) return;
       env.classList.add('open');
-      setTimeout(function () { gate.classList.remove('wait'); env.classList.add('leave'); }, 1300);
+      setTimeout(function () { gate.classList.remove('wait'); env.classList.add('leave'); mgGate(); }, 1300);
       setTimeout(function () { env.remove(); }, 2900);
     }
     if (env) {
