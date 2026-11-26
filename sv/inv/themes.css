@@ -213,7 +213,7 @@ html[data-theme=mangalam],[data-theme=mangalam] body{background:#e9ddc7 url(/t/m
 [data-theme=mangalam] .names span:last-child{display:block}
 [data-theme=mangalam] .gate .when{top:calc(var(--g)*1440);font:400 calc(var(--g)*45.8)/1.2 var(--cas);letter-spacing:.1em;color:#000}
 [data-theme=mangalam] .gate .when sup{font-size:.6em;vertical-align:.5em;letter-spacing:0}
-[data-theme=mangalam] .gate .play{left:50%;right:auto;transform:translateX(-50%);top:calc(var(--g)*1560);width:auto;border-color:#930000;color:#930000;background:rgba(255,255,255,.35)}
+[data-theme=mangalam] .gate .play{left:0;right:0;margin:0 auto;transform:none;top:calc(var(--g)*1560);width:max-content;border-color:#930000;color:#930000;background:rgba(255,255,255,.35)}
 [data-theme=mangalam] .gate .skip{top:calc(var(--g)*1640);color:#6f5b44}
 [data-theme=mangalam] .mg-gd{position:absolute;left:0;right:0;top:calc(var(--g)*845);height:calc(var(--g)*48);z-index:2}
 [data-theme=mangalam] .mg-gd img{position:absolute}
@@ -269,7 +269,7 @@ html[data-theme=mangalam] body.opened:after{content:"";position:fixed;z-index:8;
 [data-theme=mangalam] #b-events{padding-top:calc(var(--u)*120)!important;text-align:center}
 [data-theme=mangalam] #b-events .mg-pre{font:400 calc(var(--u)*50)/1.2 var(--kai);color:#71041d}
 [data-theme=mangalam] #b-events h2{font:400 calc(var(--u)*75.6)/1.1 var(--bug);color:#74020d;margin:calc(var(--u)*14) 0 calc(var(--u)*110)}
-[data-theme=mangalam] .mg-ev{margin:0 calc(var(--u)*109) calc(var(--u)*130);padding:calc(var(--u)*50) calc(var(--u)*20) calc(var(--u)*50);background:rgba(216,207,171,.86);border:calc(var(--u)*2.5) solid #000;border-radius:calc(var(--u)*120);box-shadow:0 0 0 calc(var(--u)*34) rgba(244,238,222,.78),0 0 0 calc(var(--u)*36.5) #000;position:relative}
+[data-theme=mangalam] .mg-ev{margin:0 calc(var(--u)*109) calc(var(--u)*130);padding:calc(var(--u)*50) calc(var(--u)*20) calc(var(--u)*50);background:rgba(216,207,171,.86);border:calc(var(--u)*2.5) solid #000;border-radius:calc(var(--u)*120);box-shadow:0 0 0 calc(var(--u)*34) #f0e9d6,0 0 0 calc(var(--u)*36.5) #000;position:relative}
 [data-theme=mangalam] .mg-ev:before{display:none}
 [data-theme=mangalam] .mg-note{display:block;width:calc(var(--u)*190);margin:0 auto calc(var(--u)*26)}
 [data-theme=mangalam] .mg-arch{display:block;width:calc(var(--u)*205);margin:calc(var(--u)*-20) auto calc(var(--u)*14)}
@@ -297,3 +297,6 @@ html[data-theme=mangalam] body.opened:after{content:"";position:fixed;z-index:8;
 [data-theme=mangalam] .env-txt p{color:var(--brass);letter-spacing:.2em;text-transform:uppercase;font-size:13px}
 [data-theme=mangalam] .env-txt b{color:#930000;text-transform:uppercase;letter-spacing:.08em;font-weight:400;font-family:var(--aar)}
 [data-theme=mangalam] .gate x-l{animation:none!important;opacity:1!important;transform:none!important}
+
+/* RSVP choice fieldsets share the class name "rv" with the reveal animation: never hide them */
+fieldset.rv{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
