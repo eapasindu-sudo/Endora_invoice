@@ -122,16 +122,40 @@
     var sd = new Intl.DateTimeFormat(t.loc, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).format(start0);
     body += '<div class="block savedate"><p class="sdl">' + t.save + '</p><p class="date">' + esc(sd) + '</p><p class="sdn">' + esc(title) + '</p></div>';
     if (theme === 'mangalam') {
-      var pc = c.parents || {}, dp = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).formatToParts(start0), dv = {};
-      dp.forEach(function (x) { dv[x.type] = x.value; });
+      var pc = c.parents || {}, dv = {}, ENG = { timeZone: 'Asia/Colombo' };
+      new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).formatToParts(start0).forEach(function (x) { dv[x.type] = x.value; });
       var up = function (s) { return esc(String(s || '').toUpperCase()); };
-      body = body.replace(/^<div class="hero">.*?<\/div>/, '');
-      body = '<div class="block mg-card"><h1>SRI SUBA MANGALAM !</h1><p class="mg-s">YOU ARE INVITED TO<br>THE WEDDING OF</p><span class="mg-dia"></span>' +
+      var ord = function (d) { d = +d; var s = (d % 10 == 1 && d != 11) ? 'st' : (d % 10 == 2 && d != 12) ? 'nd' : (d % 10 == 3 && d != 13) ? 'rd' : 'th'; return d + '<sup>' + s + '</sup>'; };
+      var wdn = new Intl.DateTimeFormat('en-GB', { weekday: 'long', timeZone: 'Asia/Colombo' }).format(start0);
+      var cardH = '<div class="block mg-card"><h1>SRI SUBA MANGALAM !</h1><p class="mg-s">YOU ARE INVITED TO<br>THE WEDDING OF</p><span class="mg-dia"></span>' +
         '<p class="mg-n">' + up(names[0]) + '</p><p class="mg-and">&amp;</p><p class="mg-n">' + up(names[1]) + '</p>' +
         ((pc.bride || pc.groom) ? '<div class="mg-par"><p>' + (pc.bride ? 'DAUGHTER OF<br>' + up(pc.bride) : '') + '</p><p>' + (pc.groom ? 'SON OF<br>' + up(pc.groom) : '') + '</p></div>' : '') +
         '<div class="mg-date"><span>' + up(dv.month) + '</span><b data-n="' + esc(dv.day) + '">' + esc(dv.day) + '</b><span>' + esc(dv.year) + '</span></div>' +
         '<p class="mg-wd">' + esc(fd.format(start0)) + '</p>' +
-        (c.gallery && c.gallery[0] ? '<img class="mg-img" src="' + esc(c.gallery[0]) + '" alt="">' : '') + '</div>' + body;
+        (c.gallery && c.gallery[0] ? '<img class="mg-img" src="' + esc(c.gallery[0]) + '" alt="">' : '') + '</div>';
+      var chs = (c.story || []).map(function (s) { return '<div class="mg-ch"><b class="mg-yr">' + esc(s.title || '') + '</b><div><h3>' + up(s.head || '') + '</h3><p>' + esc(s.text || '') + '</p></div></div>'; }).join('');
+      var venue0 = (evs[0] && (evs[0].address || evs[0].venue)) || '';
+      var storyH = '<div class="block mg-story"><img class="mg-sh" src="/t/mangalam/story-head.jpg" alt=""><div class="mg-sb"><span class="mg-dia k"></span><p class="mg-pre">OUR STORY</p><h2>Together Forever</h2>' +
+        (c.message ? '<p class="mg-msg">' + esc(c.message) + '</p>' : '') +
+        '<p class="mg-dt">' + up(wdn) + ', ' + ord(dv.day).toUpperCase() + ' ' + up(dv.month) + ' ' + esc(dv.year) + '</p>' +
+        '<p class="mg-tw">TOGETHER WITH THEIR FAMILIES</p><p class="mg-req">REQUEST THE HONOUR OF YOUR PRESENCE<br>AT THE CELEBRATION OF THEIR MARRIAGE.</p>' +
+        (venue0 ? '<hr><p class="mg-venue">' + up(venue0) + '</p><hr>' : '') +
+        (chs ? '<p class="mg-jt">A JOURNEY TOGETHER</p><div class="mg-tl">' + chs + '</div>' : '') + '</div><img class="mg-sf" src="/t/mangalam/story-foot.jpg" alt=""></div>';
+      var evH = '<div class="block" id="b-events"><p class="mg-pre">CELEBRATE WITH US</p><h2>WEDDING EVENTS</h2>' + evs.map(function (e, i) {
+        var s = new Date(e.start), q = {}; new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Colombo' }).formatToParts(s).forEach(function (x) { q[x.type] = x.value; });
+        return '<article class="ev mg-ev">' + (/poruwa/i.test(e.title || '') ? '<img class="mg-arch" src="/t/mangalam/arch.png" alt="">' : '<div class="mg-note"></div>') +
+          '<h3>' + esc(e.title || '') + '</h3><p class="mg-row r-cal">' + ord(q.day).toUpperCase() + ' ' + up(q.month) + ' ' + esc(q.year) + '</p><p class="mg-row r-clk">' + up(new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Colombo' }).format(s)) + '</p>' +
+          (e.venue ? '<p class="mg-row r-pin">' + up(e.venue) + '</p>' : '') +
+          '<div class="btns">' + (e.map ? '<a class="btn" href="' + esc(e.map) + '" target="_blank" rel="noopener">' + t.map + '</a>' : '') + '<button class="btn cal" data-i="' + i + '" type="button">' + t.cal + '</button></div></article>';
+      }).join('') + '</div>';
+      var saveH = '<div class="block mg-save"><h2><i class="mg-calic"></i>SAVE THE DATE</h2><span class="mg-dia k"></span><p>WE JOYFULLY AWAIT YOUR PRESENCE.<br>PLEASE LET US KNOW<br>IF YOU WILL BE JOINING US.</p></div>';
+      body = cardH + storyH;
+      order.forEach(function (k) {
+        if (k === 'story') return;
+        if (k === 'events') { body += evH; return; }
+        if (k === 'rsvp') body += saveH;
+        if (secHtml[k]) body += secHtml[k]();
+      });
     }
     var navItems = [['b-events', t.navd], ['b-gallery', t.navm], ['b-wall', t.navw], ['b-rsvp', t.rsvp.length > 14 ? t.navr : t.rsvp]].filter(function (x) { return body.indexOf('id="' + x[0] + '"') > -1; });
     var nav = '<nav class="bnav" aria-label="Sections">' + navItems.map(function (x) { return '<button type="button" data-go="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') + '</nav>';
@@ -186,6 +210,7 @@
         if (el.closest('.btns,form,.feed')) return; scr(el, 150 + (i++) * 140, 700 + Math.min(900, el.textContent.length * 14));
       });
     }
+    if (mg) { var ld0 = document.querySelector('#gate .lead'); if (ld0) ld0.innerHTML = 'THE WEDDING OF'; }
     if (mg) mgHide('#gate .lead,#gate .names > *,#gate .when');
     function mgCount(box) {
       var b = box.querySelector && box.querySelector('.mg-date b'); if (!b) return; var n = parseInt(b.getAttribute('data-n'), 10) || 0, t0 = performance.now();
